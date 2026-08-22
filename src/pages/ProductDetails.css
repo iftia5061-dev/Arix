@@ -17,7 +17,6 @@
 .product-details-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .product-action-primary, .product-action-secondary { display: inline-block; padding: 11px 16px; border: 1px solid var(--border-hover); border-radius: 9px; color: var(--text-main); font-size: .84rem; font-weight: 700; }
 .product-action-primary { background: var(--gradient-brand); border-color: transparent; }
-.product-details-actions button.product-action-primary:disabled { cursor: wait; opacity: .7; }
 .product-action-primary:hover, .product-action-secondary:hover { transform: translateY(-2px); border-color: var(--color-primary); }
 .product-details-content { display: grid; gap: 64px; margin-top: 88px; }
 .product-details-content section > h2, .product-buy-panel h2 { margin-bottom: 18px; font-size: 1.5rem; }

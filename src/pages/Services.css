@@ -104,3 +104,13 @@
   opacity: 0.9;
   transform: translateY(-2px);
 }
+
+.service-details-page { min-height: 70vh; }
+.service-details-hero { max-width: 820px; margin: 0 auto; padding: 110px 24px 72px; text-align: center; }
+.service-details-back { display: inline-block; margin-bottom: 28px; color: var(--color-primary); font-size: .85rem; font-weight: 600; }
+.service-details-icon { display: block; margin-bottom: 14px; font-size: 3rem; }
+.service-details-hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+.service-details-hero p { max-width: 620px; margin: 16px auto 28px; color: var(--text-secondary); font-size: 1.05rem; }
+.service-details-content { max-width: 760px; margin: 0 auto 110px; padding: 32px; border: 1px solid var(--border-color); border-radius: 16px; background: var(--card-bg); }
+.service-details-content h2 { font-size: 1.35rem; }
+.service-details-content p { margin: 12px 0 20px; color: var(--text-secondary); }

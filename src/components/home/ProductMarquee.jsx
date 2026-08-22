@@ -45,8 +45,6 @@ function ProductMarquee() {
   const { products, loading } = usePublishedProducts()
   const displayProducts = products
 
-  if (loading || displayProducts.length === 0) return null
-
   const rows = chunkIntoRows(displayProducts, ITEMS_PER_ROW)
 
   return (
@@ -54,7 +52,7 @@ function ProductMarquee() {
       <section className="product-marquee">
         <p className="product-marquee-label">Ready to Use — Available Now</p>
 
-        <div className="product-marquee-rows">
+        {loading ? <p className="product-marquee-empty">Loading products…</p> : displayProducts.length === 0 ? <p className="product-marquee-empty">New ARIX products are coming soon.</p> : <div className="product-marquee-rows">
           {rows.map((rowItems, rowIndex) => (
             <MarqueeRow
               key={rowIndex}
@@ -63,7 +61,7 @@ function ProductMarquee() {
               onSelect={setSelectedProduct}
             />
           ))}
-        </div>
+        </div>}
       </section>
 
       {selectedProduct && (

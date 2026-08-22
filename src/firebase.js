@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
-import { getFunctions } from 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: "AIzaSyB15F5r4B70bDHvl9RveQG5EfQwpXMh2G8",
@@ -22,5 +21,3 @@ googleProvider.setCustomParameters({
   prompt: 'select_account',
 })
 export const db = getFirestore(app)
-// Keep callable payment operations in the same region as the Functions backend.
-export const functions = getFunctions(app, 'asia-southeast1')

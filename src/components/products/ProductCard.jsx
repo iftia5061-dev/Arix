@@ -26,7 +26,7 @@ function ProductCard({ product, onQuickView, compact = false }) {
         <div className="marketplace-product-actions">
           <button type="button" onClick={() => onQuickView(product)}>Quick View</button>
           <Link to={`/products/${product.slug}`}>View Product</Link>
-          {saleProduct && <CheckoutButton productId={product.id} className="marketplace-product-primary-action">Buy Now</CheckoutButton>}
+          {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="marketplace-product-primary-action">Buy Now</CheckoutButton>}
         </div>
       </div>
     </article>

@@ -52,7 +52,6 @@
 .preview-modal-features li::first-letter { color: var(--color-success); }
 .preview-modal-actions { display: flex; flex-wrap: wrap; gap: 9px; }
 .preview-modal-actions a { padding: 10px 13px; border: 1px solid var(--border-hover); border-radius: 8px; color: var(--text-main); font-size: .8rem; font-weight: 600; text-align: center; }
-.preview-modal-actions button { padding: 10px 13px; border: 1px solid var(--border-hover); border-radius: 8px; color: var(--text-main); font-size: .8rem; font-weight: 600; text-align: center; }
 .preview-btn-primary { background: var(--gradient-brand); border-color: transparent !important; }
 .preview-btn-buy { background: #25D366; border-color: transparent !important; }
 .preview-btn-details { margin-left: auto; }

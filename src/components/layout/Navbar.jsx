@@ -42,7 +42,7 @@ function Navbar() {
 
           <li className="navbar-cta-mobile">
             {user ? (
-              <><Link to="/my-purchases" onClick={closeMenu}>My Purchases</Link><button onClick={handleLogout} className="navbar-auth-btn-mobile">Logout ({user.displayName?.split(' ')[0]})</button></>
+              <button onClick={handleLogout} className="navbar-auth-btn-mobile">Logout ({user.displayName?.split(' ')[0]})</button>
             ) : (
               <button onClick={handleLogin} className="navbar-auth-btn-mobile">
                 Login with Google
@@ -61,7 +61,6 @@ function Navbar() {
                   {user.displayName?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
-              <Link to="/my-purchases" className="navbar-purchases-link">My Purchases</Link>
               <button onClick={handleLogout} className="navbar-logout-btn">
                 Logout
               </button>

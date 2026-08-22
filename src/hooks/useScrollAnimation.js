@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export function useScrollAnimation(threshold = 0.15) {
-  const ref = useRef(null)
+  const [element, setElement] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
+  const ref = useCallback((node) => setElement(node), [])
 
   useEffect(() => {
-    const element = ref.current
     if (!element) return
 
     const observer = new IntersectionObserver(
@@ -21,7 +21,7 @@ export function useScrollAnimation(threshold = 0.15) {
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [threshold])
+  }, [element, threshold])
 
   return [ref, isVisible]
 }

@@ -1,29 +1,5 @@
 {
-  "functions": [
-    {
-      "codebase": "default",
-      "source": "functions"
-    },
-    {
-      "source": "gumroad",
-      "codebase": "gumroad",
-      "disallowLegacyRuntimeConfig": true,
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
-      ]
-    }
-  ],
   "firestore": {
     "rules": "firestore.rules"
-  },
-  "storage": {
-    "rules": "storage.rules"
   }
 }

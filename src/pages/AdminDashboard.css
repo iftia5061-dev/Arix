@@ -17,7 +17,7 @@
 .admin-card-heading button:hover { color: var(--color-primary); }
 .admin-message, .admin-readiness { margin-bottom: 18px; padding: 10px 12px; border-radius: 8px; color: var(--text-secondary); background: var(--bg-secondary); font-size: .82rem; }
 .admin-readiness { color: #fcd34d; background: rgba(245, 158, 11, .09); }
-.admin-form-row, .admin-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.admin-form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .admin-form-group { display: grid; gap: 6px; margin-bottom: 15px; }
 .admin-form-group > span { color: var(--text-secondary); font-size: .78rem; font-weight: 600; }
 .admin-form-group em { color: var(--color-error); font-style: normal; }
@@ -27,8 +27,6 @@
 .admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: 0; border-color: var(--color-primary); }
 .admin-checkbox { display: flex; align-items: center; gap: 8px; margin: 3px 0 18px; color: var(--text-secondary); font-size: .8rem; }
 .admin-checkbox input { accent-color: var(--color-primary); }
-.admin-private-box { margin: 4px 0 18px; padding: 16px; border: 1px solid rgba(91, 140, 255, .4); border-radius: 10px; background: rgba(91, 140, 255, .06); }
-.admin-private-box h3 { font-size: .9rem; }.admin-private-box > p { margin: 6px 0 15px; color: var(--text-secondary); font-size: .76rem; line-height: 1.45; }
 .admin-submit-btn { width: 100%; padding: 13px; border-radius: 9px; background: var(--gradient-brand); color: var(--text-main); font-weight: 700; }
 .admin-submit-btn:disabled { cursor: wait; opacity: .65; }
 .admin-product-list { display: grid; gap: 11px; margin-top: 20px; }
@@ -48,4 +46,4 @@
 .admin-empty { padding: 26px 0; color: var(--text-muted); font-size: .85rem; text-align: center; }
 
 @media (max-width: 950px) { .admin-layout { grid-template-columns: 1fr; } .admin-list-card { order: 2; } }
-@media (max-width: 540px) { .admin-dashboard { padding-inline: 14px; } .admin-form-card, .admin-list-card { padding: 20px; } .admin-page-heading { display: block; } .admin-role-badge { display: inline-block; margin-top: 12px; } .admin-form-row, .admin-link-grid { grid-template-columns: 1fr; } }
+@media (max-width: 540px) { .admin-dashboard { padding-inline: 14px; } .admin-form-card, .admin-list-card { padding: 20px; } .admin-page-heading { display: block; } .admin-role-badge { display: inline-block; margin-top: 12px; } .admin-form-row { grid-template-columns: 1fr; } }

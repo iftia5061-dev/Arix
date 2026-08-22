@@ -14,9 +14,26 @@ const validUrl = (value) => {
   }
 }
 
+export const isGumroadCheckoutUrl = (value) => {
+  if (!validUrl(value)) return false
+  const hostname = new URL(string(value)).hostname.toLowerCase()
+  return hostname === 'gumroad.com' || hostname.endsWith('.gumroad.com')
+}
+
+const priceToCents = (value) => {
+  const raw = Number(value)
+  if (!Number.isFinite(raw) || raw <= 0 || raw > 1000000) return null
+  const cents = Math.round(raw * 100)
+  return Math.abs(raw - cents / 100) < 0.000001 ? cents : null
+}
+
+const validStoredAmount = (value) => Number.isInteger(value) && value > 0 && value <= 100000000
+
 export const PRODUCT_CATEGORIES = [
   { value: 'software', label: 'Software' },
+  { value: 'saas', label: 'SaaS' },
   { value: 'ai', label: 'AI' },
+  { value: 'mobile-apps', label: 'Mobile apps' },
   { value: 'tools', label: 'Tools' },
   { value: 'web-design', label: 'Web design' },
 ]
@@ -29,9 +46,7 @@ export const emptyProductForm = {
   name: '', slug: '', status: 'draft', productType: 'sale', category: 'software',
   platforms: '', shortDescription: '', description: '', coverImage: '', images: '',
   features: '', requirements: '', included: '', faq: '', version: '', license: '',
-  priceAmount: '', currency: 'USD', pricingType: 'one-time', demoUrl: '', checkoutUrl: '',
-  gumroadProductId: '', gumroadProductPermalink: '', deliveryType: 'download',
-  downloadStoragePath: '', accessUrl: '', releaseName: '', featured: false,
+  price: '', currency: 'USD', pricingType: 'one-time', demoUrl: '', checkoutUrl: '', featured: false,
 }
 
 export function slugify(value) {
@@ -41,16 +56,17 @@ export function slugify(value) {
 }
 
 export function normalizeProduct(value = {}, id = '') {
+  const productType = value.productType === 'showcase' ? 'showcase' : 'sale'
   const rawImages = lines(value.images)
   const coverImage = string(value.coverImage)
   const images = [...new Set([coverImage, ...rawImages].filter(validUrl))]
   const rawPricing = value.pricing && typeof value.pricing === 'object' ? value.pricing : {}
-  const amount = Number(rawPricing.amount)
-  const pricing = Number.isInteger(amount) && amount >= 0
-    ? { amount, currency: string(rawPricing.currency).toUpperCase(), type: string(rawPricing.type) }
-    : null
   const rawLinks = value.links && typeof value.links === 'object' ? value.links : {}
-  const rawGumroad = value.gumroad && typeof value.gumroad === 'object' ? value.gumroad : {}
+  const amount = Number(rawPricing.amount)
+  const currency = string(rawPricing.currency).toUpperCase()
+  const pricing = productType === 'sale' && validStoredAmount(amount) && /^[A-Z]{3}$/.test(currency)
+    ? { amount, currency, type: PRICING_TYPES.includes(rawPricing.type) ? rawPricing.type : 'one-time' }
+    : null
 
   return {
     id,
@@ -58,7 +74,7 @@ export function normalizeProduct(value = {}, id = '') {
     slug: slugify(value.slug),
     status: PRODUCT_STATUSES.includes(value.status) ? value.status : 'draft',
     visibility: value.visibility === 'public' ? 'public' : 'private',
-    productType: value.productType === 'showcase' ? 'showcase' : 'sale',
+    productType,
     category: string(value.category) || 'software',
     platforms: lines(value.platforms),
     shortDescription: string(value.shortDescription),
@@ -74,8 +90,10 @@ export function normalizeProduct(value = {}, id = '') {
       ? value.faq.map((item) => ({ question: string(item?.question), answer: string(item?.answer) })).filter((item) => item.question && item.answer)
       : [],
     pricing,
-    links: { demoUrl: validUrl(rawLinks.demoUrl) ? string(rawLinks.demoUrl) : '', checkoutUrl: validUrl(rawLinks.checkoutUrl) ? string(rawLinks.checkoutUrl) : '' },
-    gumroad: { productId: string(rawGumroad.productId), permalink: string(rawGumroad.permalink) },
+    links: {
+      demoUrl: validUrl(rawLinks.demoUrl) ? string(rawLinks.demoUrl) : '',
+      checkoutUrl: productType === 'sale' && isGumroadCheckoutUrl(rawLinks.checkoutUrl) ? string(rawLinks.checkoutUrl) : '',
+    },
     featured: Boolean(value.featured),
   }
 }
@@ -83,7 +101,7 @@ export function normalizeProduct(value = {}, id = '') {
 export const isSaleProduct = (product) => product?.productType === 'sale'
 
 export function formatPrice(pricing) {
-  if (!pricing || !Number.isInteger(pricing.amount) || !pricing.currency) return ''
+  if (!pricing || !validStoredAmount(pricing.amount) || !pricing.currency) return ''
   try {
     return new Intl.NumberFormat(undefined, { style: 'currency', currency: pricing.currency }).format(pricing.amount / 100)
   } catch {
@@ -99,11 +117,11 @@ export function pricingLabel(pricing) {
 
 function hasText(value) { return Boolean(string(value)) }
 
-export function getProductReadiness(product, asset = {}) {
+export function getProductReadiness(product) {
   const missing = []
   if (!hasText(product.name)) missing.push('product name')
   if (!hasText(product.slug)) missing.push('URL slug')
-  if (!validUrl(product.coverImage)) missing.push('real cover screenshot')
+  if (!validUrl(product.coverImage)) missing.push('cover image')
   if (!hasText(product.shortDescription)) missing.push('short description')
   if (!hasText(product.description)) missing.push('product overview')
   if (!product.platforms?.length) missing.push('platform')
@@ -111,55 +129,56 @@ export function getProductReadiness(product, asset = {}) {
   if (!product.links?.demoUrl) missing.push('demo URL')
 
   if (isSaleProduct(product)) {
-    if (!product.pricing || !Number.isInteger(product.pricing.amount) || product.pricing.amount < 1 || !product.pricing.currency || !PRICING_TYPES.includes(product.pricing.type)) missing.push('price')
+    if (!product.pricing || !validStoredAmount(product.pricing.amount) || !/^[A-Z]{3}$/.test(product.pricing.currency) || !PRICING_TYPES.includes(product.pricing.type)) missing.push('price')
     if (!product.links?.checkoutUrl) missing.push('Gumroad checkout URL')
-    if (!product.gumroad?.productId) missing.push('Gumroad product ID')
-    if (asset.deliveryType === 'access') {
-      if (!validUrl(asset.accessUrl)) missing.push('private access URL')
-    } else if (!hasText(asset.storagePath)) {
-      missing.push('private Firebase Storage file path')
-    }
   }
   return { ready: missing.length === 0, missing }
 }
 
 export function isPublicProduct(product) {
-  return product.status === 'published' && product.visibility === 'public' && getProductReadiness(product, { storagePath: 'checked-server-side' }).ready
+  return product.status === 'published' && product.visibility === 'public' && getProductReadiness(product).ready
 }
 
 export function formToProduct(form) {
   const productType = form.productType === 'showcase' ? 'showcase' : 'sale'
   const images = [...new Set([string(form.coverImage), ...lines(form.images)].filter(validUrl))]
   const product = {
-    name: string(form.name), slug: slugify(form.slug), status: PRODUCT_STATUSES.includes(form.status) ? form.status : 'draft', visibility: form.status === 'published' ? 'public' : 'private', productType,
-    category: string(form.category) || 'software', platforms: lines(form.platforms), shortDescription: string(form.shortDescription),
-    description: string(form.description), coverImage: images[0] || '', images, features: lines(form.features),
-    requirements: lines(form.requirements), included: lines(form.included), version: string(form.version), license: string(form.license),
+    name: string(form.name),
+    slug: slugify(form.slug),
+    status: PRODUCT_STATUSES.includes(form.status) ? form.status : 'draft',
+    visibility: form.status === 'published' ? 'public' : 'private',
+    productType,
+    category: string(form.category) || 'software',
+    platforms: lines(form.platforms),
+    shortDescription: string(form.shortDescription),
+    description: string(form.description),
+    coverImage: images[0] || '',
+    images,
+    features: lines(form.features),
+    requirements: lines(form.requirements),
+    included: lines(form.included),
+    version: string(form.version),
+    license: string(form.license),
     faq: string(form.faq).split(/\r?\n/).map((row) => {
       const [question, ...answer] = row.split('|')
       return { question: string(question), answer: string(answer.join('|')) }
     }).filter((item) => item.question && item.answer),
-    links: { demoUrl: string(form.demoUrl), ...(productType === 'sale' ? { checkoutUrl: string(form.checkoutUrl) } : {}) },
+    links: { demoUrl: string(form.demoUrl) },
     featured: Boolean(form.featured),
   }
+
   if (productType === 'sale') {
-    product.pricing = { amount: Number(form.priceAmount), currency: string(form.currency).toUpperCase(), type: string(form.pricingType) }
-    product.gumroad = { productId: string(form.gumroadProductId), permalink: string(form.gumroadProductPermalink) }
+    product.pricing = {
+      amount: priceToCents(form.price),
+      currency: string(form.currency).toUpperCase(),
+      type: PRICING_TYPES.includes(form.pricingType) ? form.pricingType : 'one-time',
+    }
+    product.links.checkoutUrl = string(form.checkoutUrl)
   }
   return product
 }
 
-export function formToAsset(form) {
-  if (form.productType !== 'sale') return null
-  return {
-    deliveryType: form.deliveryType === 'access' ? 'access' : 'download',
-    storagePath: string(form.downloadStoragePath).replace(/^\/+/, ''),
-    accessUrl: string(form.accessUrl),
-    releaseName: string(form.releaseName),
-  }
-}
-
-export function productToForm(product, asset = {}) {
+export function productToForm(product) {
   const isSale = isSaleProduct(product)
   return {
     ...emptyProductForm,
@@ -169,9 +188,8 @@ export function productToForm(product, asset = {}) {
     requirements: product.requirements.join('\n'), included: product.included.join('\n'), faq: product.faq.map((item) => `${item.question} | ${item.answer}`).join('\n'),
     version: product.version, license: product.license, demoUrl: product.links.demoUrl, featured: product.featured,
     ...(isSale ? {
-      priceAmount: String(product.pricing?.amount ?? ''), currency: product.pricing?.currency || 'USD', pricingType: product.pricing?.type || 'one-time',
-      checkoutUrl: product.links.checkoutUrl, gumroadProductId: product.gumroad?.productId || '', gumroadProductPermalink: product.gumroad?.permalink || '',
-      deliveryType: asset.deliveryType === 'access' ? 'access' : 'download', downloadStoragePath: asset.storagePath || '', accessUrl: asset.accessUrl || '', releaseName: asset.releaseName || '',
+      price: product.pricing?.amount ? String(product.pricing.amount / 100) : '', currency: product.pricing?.currency || 'USD', pricingType: product.pricing?.type || 'one-time',
+      checkoutUrl: product.links.checkoutUrl,
     } : {}),
   }
 }

@@ -16,8 +16,10 @@ service cloud.firestore {
       return value is string && value.size() > 0;
     }
 
-    function hasCommonPublishedFields(data) {
-      return data.keys().hasAll(['name', 'slug', 'productType', 'platforms', 'shortDescription', 'description', 'coverImage', 'features', 'links'])
+    function hasPublishedContent(data) {
+      return data.status == 'published'
+        && data.visibility == 'public'
+        && data.keys().hasAll(['name', 'slug', 'productType', 'platforms', 'shortDescription', 'description', 'coverImage', 'features', 'links'])
         && nonEmptyString(data.name)
         && nonEmptyString(data.slug)
         && nonEmptyString(data.shortDescription)
@@ -28,43 +30,26 @@ service cloud.firestore {
         && data.links is map && nonEmptyString(data.links.demoUrl);
     }
 
-    function validDelivery(asset) {
-      return (asset.deliveryType == 'download' && nonEmptyString(asset.storagePath))
-        || (asset.deliveryType == 'access' && nonEmptyString(asset.accessUrl));
-    }
-
-    function publishableProduct(data) {
-      return data.status == 'published'
-        && hasCommonPublishedFields(data)
+    function validPublicProduct(data) {
+      return hasPublishedContent(data)
         && (
           (data.productType == 'showcase'
             && !data.keys().hasAny(['pricing', 'gumroad'])
             && !data.links.keys().hasAny(['checkoutUrl']))
           || (data.productType == 'sale'
-            && data.keys().hasAll(['pricing', 'gumroad'])
+            && data.keys().hasAll(['pricing'])
             && data.pricing is map
             && data.pricing.amount is int && data.pricing.amount > 0
             && nonEmptyString(data.pricing.currency)
             && (data.pricing.type == 'one-time' || data.pricing.type == 'subscription' || data.pricing.type == 'lifetime')
-            && data.gumroad is map && nonEmptyString(data.gumroad.productId)
             && nonEmptyString(data.links.checkoutUrl))
         );
     }
 
-    function hasPrivateDeliveryAfter(productId) {
-      return existsAfter(/databases/$(database)/documents/productAssets/$(productId))
-        && validDelivery(getAfter(/databases/$(database)/documents/productAssets/$(productId)).data);
-    }
-
-    // `visibility` makes the public query provably safe in Firestore Rules.
-    // It is set only by this project's product form and can be set to public
-    // only alongside the full publish validation below.
     match /products/{productId} {
-      allow get, list: if resource.data.visibility == 'public';
+      allow get, list: if resource.data.visibility == 'public' || isAdmin();
       allow create, update: if isAdmin()
-        && (request.resource.data.visibility != 'public'
-          || (publishableProduct(request.resource.data)
-            && (request.resource.data.productType == 'showcase' || hasPrivateDeliveryAfter(productId))));
+        && (request.resource.data.visibility != 'public' || validPublicProduct(request.resource.data));
       allow delete: if isAdmin();
     }
 
@@ -76,23 +61,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow get, create, update: if signedIn() && request.auth.uid == userId;
-    }
-
-    match /productAssets/{productId} {
-      allow read, write: if isAdmin();
-    }
-
-    // Functions use the Admin SDK and bypass these rules. A browser never gets
-    // permission to manufacture a pending/paid order or inspect another user.
-    match /orders/{orderId} {
-      allow get, list: if signedIn() && resource.data.userId == request.auth.uid;
-      allow get, list: if isAdmin();
-      allow create, update, delete: if false;
-    }
-
-    match /paymentEvents/{eventId} {
-      allow read, write: if isAdmin();
+      allow get, create, update, delete: if signedIn() && request.auth.uid == userId;
     }
   }
 }

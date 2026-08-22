@@ -22,8 +22,6 @@ const AdminDashboard = lazy(() => import('../pages/AdminDashboard'))
 const AIBot = lazy(() => import('../pages/AIBot'))
 const Software = lazy(() => import('../pages/Software'))
 const Tools = lazy(() => import('../pages/Tools'))
-const MyPurchases = lazy(() => import('../pages/MyPurchases'))
-const PaymentComplete = lazy(() => import('../pages/PaymentComplete'))
 
 function AppRoutes() {
   return (
@@ -39,9 +37,8 @@ function AppRoutes() {
             <Route path="/tools" element={<Tools />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:slug" element={<ProductDetails />} />
-            <Route path="/my-purchases" element={<MyPurchases />} />
-            <Route path="/payment/complete" element={<PaymentComplete />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/:slug" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/pricing" element={<Pricing />} />

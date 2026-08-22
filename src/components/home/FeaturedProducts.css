@@ -83,3 +83,14 @@
   font-weight: 600;
   color: var(--color-primary);
 }
+
+.featured-products-empty {
+  display: grid;
+  min-height: 220px;
+  place-items: center;
+  border: 1px dashed var(--border-color);
+  border-radius: 14px;
+  color: var(--text-secondary);
+  font-size: .9rem;
+  text-align: center;
+}

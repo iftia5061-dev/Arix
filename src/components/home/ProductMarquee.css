@@ -91,6 +91,16 @@
   object-fit: cover;
 }
 
+.product-marquee-empty {
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 0 24px;
+  color: var(--text-secondary);
+  font-size: .85rem;
+  text-align: center;
+}
+
 .marquee-product-image {
   display: block;
   width: 34px;

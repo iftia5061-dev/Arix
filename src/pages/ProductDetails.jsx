@@ -64,7 +64,7 @@ function ProductDetails() {
             </div>
             <div className="product-details-actions">
               {product.links.demoUrl && <ExternalAction href={product.links.demoUrl} primary={!saleProduct}>View Demo</ExternalAction>}
-              {saleProduct && <CheckoutButton productId={product.id} className="product-action-primary">Buy Now</CheckoutButton>}
+              {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton>}
             </div>
           </div>
         </section>
@@ -81,7 +81,7 @@ function ProductDetails() {
           {product.faq.length > 0 && <section id="faq"><h2>FAQ</h2><div className="product-faq-list">{product.faq.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div></section>}
         </div>
 
-        {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Checkout is securely handled by Gumroad.</p></div><div className="product-details-actions"><CheckoutButton productId={product.id} className="product-action-primary">Buy Now</CheckoutButton><ExternalAction href={product.links.demoUrl}>View Demo</ExternalAction></div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by ARIX</h2><p>This is a showcase project. It is not available for sale or download.</p></div><ExternalAction href={product.links.demoUrl} primary>View Demo</ExternalAction></section>}
+        {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Gumroad securely handles payment and delivery.</p></div><div className="product-details-actions"><CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton><ExternalAction href={product.links.demoUrl}>View Demo</ExternalAction></div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by ARIX</h2><p>This is a showcase project. It is not available for sale or download.</p></div><ExternalAction href={product.links.demoUrl} primary>View Demo</ExternalAction></section>}
       </div>
     </main>
   )

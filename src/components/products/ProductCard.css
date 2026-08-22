@@ -103,7 +103,6 @@
 }
 
 .marketplace-product-primary-action { grid-column: 1 / -1; background: var(--gradient-brand); border-color: transparent !important; }
-.marketplace-product-primary-action:disabled { cursor: wait; opacity: .7; }
 .marketplace-product-actions button:hover,
 .marketplace-product-actions a:nth-child(2):hover { border-color: var(--color-primary); }
 

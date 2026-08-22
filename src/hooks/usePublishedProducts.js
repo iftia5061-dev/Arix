@@ -10,9 +10,16 @@ export function usePublishedProducts() {
 
   useEffect(() => {
     const publishedProducts = query(collection(db, 'products'), where('visibility', '==', 'public'))
+    let initialResultReceived = false
+    const loadingTimeout = window.setTimeout(() => {
+      if (initialResultReceived) return
+      setError(new Error('Product loading timed out.'))
+      setLoading(false)
+    }, 10000)
     const unsubscribe = onSnapshot(
       publishedProducts,
       (snapshot) => {
+        initialResultReceived = true
         const nextProducts = snapshot.docs
           .map((docItem) => normalizeProduct(docItem.data(), docItem.id))
           .filter(isPublicProduct)
@@ -20,15 +27,21 @@ export function usePublishedProducts() {
         setProducts(nextProducts)
         setError(null)
         setLoading(false)
+        window.clearTimeout(loadingTimeout)
       },
       (snapshotError) => {
+        initialResultReceived = true
         console.error('Could not load published products:', snapshotError)
         setError(snapshotError)
         setLoading(false)
+        window.clearTimeout(loadingTimeout)
       }
     )
 
-    return unsubscribe
+    return () => {
+      window.clearTimeout(loadingTimeout)
+      unsubscribe()
+    }
   }, [])
 
   return { products, loading, error }

@@ -231,5 +231,3 @@
   font-size: 13px;
   font-weight: 700;
 }
-.navbar-purchases-link { color: var(--text-secondary); font-size: .78rem; font-weight: 600; }
-.navbar-purchases-link:hover { color: var(--color-primary); }
