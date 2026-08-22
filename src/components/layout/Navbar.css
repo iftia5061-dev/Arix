@@ -1,0 +1,235 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 1px;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navbar-menu li a {
+  position: relative;
+  font-size: 15px;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.navbar-menu li a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-brand);
+  transition: width 0.25s ease;
+}
+
+.navbar-menu li a:hover {
+  color: var(--text-main);
+}
+
+.navbar-menu li a:hover::after {
+  width: 100%;
+}
+
+.navbar-cta {
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.navbar-cta:hover {
+  opacity: 0.9;
+}
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 28px;
+  height: 22px;
+  z-index: 200;
+}
+
+.navbar-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-main);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggle.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-toggle.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.navbar-cta-mobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .navbar-toggle {
+    display: flex;
+  }
+
+  .navbar-cta {
+    display: none;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 75%;
+    max-width: 320px;
+    height: 100vh;
+    background-color: var(--bg-secondary);
+    border-left: 1px solid var(--border-color);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 100px 32px 32px;
+    transition: right 0.35s ease;
+    z-index: 150;
+  }
+
+  .navbar-menu.active {
+    right: 0;
+  }
+
+  .navbar-menu li {
+    width: 100%;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .navbar-menu li a {
+    font-size: 16px;
+    display: block;
+  }
+
+  .navbar-cta-mobile {
+    display: block;
+    margin-top: 24px;
+    width: 100%;
+  }
+
+  .navbar-cta-mobile a {
+    display: block;
+    text-align: center;
+    padding: 12px 20px;
+    background-color: var(--color-primary);
+    color: var(--text-main);
+    font-weight: 600;
+    border-radius: 8px;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-login-btn {
+  padding: 9px 18px;
+  background-color: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.navbar-login-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+}
+
+.navbar-logout-btn {
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.navbar-logout-btn:hover {
+  color: var(--color-error);
+}
+
+.navbar-auth-btn-mobile {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 900px) {
+  .navbar-right {
+    display: none;
+  }
+}
+.navbar-user-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-brand);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+}
+.navbar-purchases-link { color: var(--text-secondary); font-size: .78rem; font-weight: 600; }
+.navbar-purchases-link:hover { color: var(--color-primary); }

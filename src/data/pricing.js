@@ -1,0 +1,46 @@
+export const pricingPlans = [
+  {
+    id: 1,
+    name: 'Starter',
+    price: '$49',
+    period: '/month',
+    description: 'Perfect for small businesses just getting started.',
+    features: [
+      '1 Product License',
+      'Basic Support',
+      'Monthly Updates',
+      'Community Access',
+    ],
+    highlighted: false,
+  },
+  {
+    id: 2,
+    name: 'Professional',
+    price: '$149',
+    period: '/month',
+    description: 'Best for growing businesses that need more power.',
+    features: [
+      '5 Product Licenses',
+      'Priority Support',
+      'Weekly Updates',
+      'API Access',
+      'Custom Integrations',
+    ],
+    highlighted: true,
+  },
+  {
+    id: 3,
+    name: 'Enterprise',
+    price: 'Custom',
+    period: '',
+    description: 'Tailored solutions for large-scale organizations.',
+    features: [
+      'Unlimited Licenses',
+      'Dedicated Support Manager',
+      'Custom Development',
+      'SLA Guarantee',
+      'On-premise Deployment',
+    ],
+    highlighted: false,
+  },
+]

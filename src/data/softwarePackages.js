@@ -1,0 +1,92 @@
+export const softwareCategories = [
+  {
+    id: 'desktop',
+    label: 'Desktop Software',
+    icon: '🖥️',
+    description: 'Windows/Mac standalone software — POS, accounting, HR management, and more.',
+    packages: [
+      {
+        name: 'Starter',
+        priceBDT: '৳12,000',
+        priceUSD: '~$110',
+        delivery: '10 Days',
+        features: ['Single-user License', 'Core Features Only', 'Offline Support', 'Basic Setup Help'],
+      },
+      {
+        name: 'Growth',
+        priceBDT: '৳28,000',
+        priceUSD: '~$255',
+        delivery: '18 Days',
+        features: ['Multi-user License', 'Custom Modules', 'Cloud Backup', 'Priority Setup Support'],
+        highlighted: true,
+      },
+      {
+        name: 'Enterprise',
+        priceBDT: '৳60,000+',
+        priceUSD: '~$545+',
+        delivery: '30 Days',
+        features: ['Unlimited Licenses', 'Fully Custom Build', 'White Label / Resell Rights', 'Dedicated Support'],
+      },
+    ],
+  },
+  {
+    id: 'mobile',
+    label: 'Mobile App (Android/iOS)',
+    icon: '📱',
+    description: 'Native or cross-platform mobile apps for Android and iOS.',
+    packages: [
+      {
+        name: 'Starter',
+        priceBDT: '৳20,000',
+        priceUSD: '~$180',
+        delivery: '14 Days',
+        features: ['Android Only', 'Up to 5 Screens', 'Basic UI', 'Play Store Submission'],
+      },
+      {
+        name: 'Growth',
+        priceBDT: '৳45,000',
+        priceUSD: '~$410',
+        delivery: '25 Days',
+        features: ['Android + iOS', 'Up to 15 Screens', 'Custom UI/UX', 'API/Backend Integration'],
+        highlighted: true,
+      },
+      {
+        name: 'Enterprise',
+        priceBDT: '৳90,000+',
+        priceUSD: '~$820+',
+        delivery: '45 Days',
+        features: ['Android + iOS', 'Unlimited Screens', 'Full Custom Backend', 'White Label / Resell Rights'],
+      },
+    ],
+  },
+  {
+    id: 'saas',
+    label: 'SaaS Website',
+    icon: '☁️',
+    description: 'Subscription-based web platforms with recurring revenue built in.',
+    packages: [
+      {
+        name: 'Starter',
+        priceBDT: '৳35,000',
+        priceUSD: '~$320',
+        delivery: '20 Days',
+        features: ['Single Plan Tier', 'Basic User Dashboard', 'Payment Gateway', 'Email Notifications'],
+      },
+      {
+        name: 'Growth',
+        priceBDT: '৳75,000',
+        priceUSD: '~$685',
+        delivery: '35 Days',
+        features: ['Multiple Pricing Tiers', 'Admin + User Dashboards', 'Subscription Billing', 'Analytics'],
+        highlighted: true,
+      },
+      {
+        name: 'Enterprise',
+        priceBDT: '৳1,50,000+',
+        priceUSD: '~$1,370+',
+        delivery: '60 Days',
+        features: ['Fully Custom SaaS', 'Multi-tenant Architecture', 'White Label / Resell Rights', 'Dedicated Support'],
+      },
+    ],
+  },
+]

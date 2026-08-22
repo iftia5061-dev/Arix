@@ -1,0 +1,100 @@
+.product-marquee {
+  padding: 40px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.product-marquee-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.product-marquee-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.product-marquee-track-wrapper {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.product-marquee-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: marquee-scroll 25s linear infinite;
+}
+
+.product-marquee-track.reverse {
+  animation-name: marquee-scroll-reverse;
+}
+
+.product-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes marquee-scroll-reverse {
+  from {
+    transform: translateX(-33.333%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border-radius: 14px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.marquee-item:hover {
+  background-color: var(--card-bg);
+  transform: translateY(-4px);
+}
+
+.marquee-icon {
+  font-size: 32px;
+}
+
+.marquee-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.marquee-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.marquee-product-image {
+  display: block;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 7px;
+}

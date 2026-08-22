@@ -1,0 +1,44 @@
+.why-arix {
+  padding: 80px 24px;
+  background-color: var(--bg-secondary);
+}
+
+.why-arix-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.why-arix-title {
+  font-size: 32px;
+  text-align: center;
+  color: var(--text-main);
+  margin-bottom: 48px;
+}
+
+.why-arix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.why-arix-card {
+  text-align: center;
+  padding: 20px;
+}
+
+.why-arix-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.why-arix-name {
+  font-size: 17px;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.why-arix-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}

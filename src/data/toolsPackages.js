@@ -1,0 +1,92 @@
+export const toolsCategories = [
+  {
+    id: 'invoice',
+    label: 'ARIX Invoice',
+    icon: '🧾',
+    description: 'Smart invoicing software to create, send, and track invoices effortlessly.',
+    packages: [
+      {
+        name: 'Starter',
+        priceBDT: '৳500',
+        priceUSD: '~$5',
+        period: '/month',
+        features: ['Up to 20 Invoices/month', '1 User', 'Basic Templates', 'Email Support'],
+      },
+      {
+        name: 'Growth',
+        priceBDT: '৳1,500',
+        priceUSD: '~$14',
+        period: '/month',
+        features: ['Unlimited Invoices', 'Up to 5 Users', 'Custom Branding', 'Payment Reminders'],
+        highlighted: true,
+      },
+      {
+        name: 'Enterprise',
+        priceBDT: '৳4,000+',
+        priceUSD: '~$36+',
+        period: '/month',
+        features: ['Unlimited Everything', 'API Access', 'White Label / Resell Rights', 'Dedicated Support'],
+      },
+    ],
+  },
+  {
+    id: 'pos',
+    label: 'ARIX POS',
+    icon: '🛒',
+    description: 'Modern point-of-sale system for retail stores, cafes, and small businesses.',
+    packages: [
+      {
+        name: 'Starter',
+        priceBDT: '৳800',
+        priceUSD: '~$7',
+        period: '/month',
+        features: ['1 Store Location', 'Basic Inventory Sync', 'Sales Reports', 'Email Support'],
+      },
+      {
+        name: 'Growth',
+        priceBDT: '৳2,200',
+        priceUSD: '~$20',
+        period: '/month',
+        features: ['Up to 3 Store Locations', 'Real-time Inventory', 'Staff Accounts', 'Priority Support'],
+        highlighted: true,
+      },
+      {
+        name: 'Enterprise',
+        priceBDT: '৳5,500+',
+        priceUSD: '~$50+',
+        period: '/month',
+        features: ['Unlimited Locations', 'Multi-store Analytics', 'White Label / Resell Rights', 'Dedicated Support'],
+      },
+    ],
+  },
+  {
+    id: 'inventory',
+    label: 'ARIX Inventory',
+    icon: '📦',
+    description: 'Real-time inventory management for businesses that need full stock visibility.',
+    packages: [
+      {
+        name: 'Starter',
+        priceBDT: '৳600',
+        priceUSD: '~$5',
+        period: '/month',
+        features: ['Up to 200 Products', '1 Warehouse', 'Low-stock Alerts', 'Email Support'],
+      },
+      {
+        name: 'Growth',
+        priceBDT: '৳1,800',
+        priceUSD: '~$16',
+        period: '/month',
+        features: ['Unlimited Products', 'Up to 3 Warehouses', 'Supplier Management', 'Priority Support'],
+        highlighted: true,
+      },
+      {
+        name: 'Enterprise',
+        priceBDT: '৳4,500+',
+        priceUSD: '~$41+',
+        period: '/month',
+        features: ['Unlimited Warehouses', 'Advanced Forecasting', 'White Label / Resell Rights', 'Dedicated Support'],
+      },
+    ],
+  },
+]

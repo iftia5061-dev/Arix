@@ -1,0 +1,132 @@
+.ai-solutions {
+  position: relative;
+  padding: 100px 24px;
+  background-color: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.ai-solutions-glow {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(91, 140, 255, 0.15) 50%, transparent 75%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.ai-solutions-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.ai-solutions-title {
+  font-size: 36px;
+  color: var(--text-main);
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.ai-highlight {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ai-solutions-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.ai-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.ai-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.ai-feature-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  flex-shrink: 0;
+}
+
+.ai-solutions-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--gradient-brand);
+  color: var(--text-main);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: opacity 0.2s ease;
+}
+
+.ai-solutions-btn:hover {
+  opacity: 0.9;
+}
+
+.ai-solutions-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-orb {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  opacity: 0.15;
+  filter: blur(2px);
+  position: relative;
+}
+
+.ai-orb::before {
+  content: '';
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hover);
+  opacity: 0.5;
+}
+
+.ai-orb::after {
+  content: '';
+  position: absolute;
+  inset: 60px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .ai-solutions-container {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-solutions-visual {
+    order: -1;
+  }
+}

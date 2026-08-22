@@ -1,0 +1,271 @@
+.aibot-page {
+  min-height: 60vh;
+}
+
+.aibot-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px 80px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.aibot-eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: rgba(91, 140, 255, 0.1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.aibot-hero-title {
+  font-size: 40px;
+  line-height: 1.25;
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+
+.aibot-highlight {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.aibot-hero-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.aibot-hero-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--gradient-brand);
+  color: var(--text-main);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.aibot-hero-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.aibot-section-title {
+  font-size: 30px;
+  text-align: center;
+  color: var(--text-main);
+  margin-bottom: 44px;
+}
+
+.aibot-packages {
+  padding: 60px 24px;
+  background-color: var(--bg-secondary);
+}
+
+.aibot-packages-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.aibot-card {
+  position: relative;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.aibot-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-hover);
+}
+
+.aibot-card.highlighted {
+  border-color: var(--color-primary);
+  background-color: var(--card-hover);
+  transform: scale(1.03);
+}
+
+.aibot-card.highlighted:hover {
+  transform: scale(1.03) translateY(-6px);
+}
+
+.aibot-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gradient-brand);
+  color: var(--text-main);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.aibot-card-name {
+  font-size: 20px;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.aibot-card-description {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  min-height: 60px;
+}
+
+.aibot-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.aibot-price-bdt {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.aibot-price-usd {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.aibot-delivery {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--color-success);
+  margin-bottom: 24px;
+}
+
+.aibot-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-grow: 1;
+}
+
+.aibot-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.aibot-features .feature-yes {
+  color: var(--text-main);
+}
+
+.aibot-features .feature-yes span {
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.aibot-features .feature-no {
+  color: var(--text-muted);
+}
+
+.aibot-features .feature-no span {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.aibot-btn-primary,
+.aibot-btn-secondary {
+  display: block;
+  text-align: center;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.aibot-btn-primary {
+  background-color: var(--color-primary);
+  color: var(--text-main);
+}
+
+.aibot-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.aibot-btn-secondary {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-hover);
+}
+
+.aibot-btn-secondary:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.aibot-reseller {
+  padding: 80px 24px 120px;
+  text-align: center;
+}
+
+.aibot-reseller-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.aibot-reseller h2 {
+  font-size: 26px;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.aibot-reseller p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.aibot-reseller-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--gradient-brand);
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.aibot-reseller-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .aibot-hero {
+    grid-template-columns: 1fr;
+  }
+}

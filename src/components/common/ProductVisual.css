@@ -1,0 +1,17 @@
+.product-visual-image,
+.product-visual-fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-visual-fallback {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #172554, #312e81);
+  color: var(--text-main);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}

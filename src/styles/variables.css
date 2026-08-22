@@ -1,0 +1,29 @@
+:root {
+  /* Backgrounds */
+  --bg-primary: #070A12;
+  --bg-secondary: #0D1220;
+  --bg-footer: #05070D;
+
+  /* Cards */
+  --card-bg: #111827;
+  --card-hover: #151D2E;
+
+  /* Brand Colors */
+  --color-primary: #5B8CFF;
+  --color-secondary: #8B5CF6;
+  --gradient-brand: linear-gradient(135deg, #5B8CFF, #8B5CF6);
+
+  /* Text */
+  --text-main: #F8FAFC;
+  --text-secondary: #A7B0C0;
+  --text-muted: #667085;
+
+  /* Borders */
+  --border-color: #1E293B;
+  --border-hover: #334155;
+
+  /* Status */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+}

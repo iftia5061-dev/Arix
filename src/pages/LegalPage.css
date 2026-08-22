@@ -1,0 +1,33 @@
+.legal-page {
+  padding: 100px 24px 120px;
+}
+
+.legal-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.legal-container h1 {
+  font-size: 36px;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.legal-updated {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+
+.legal-container h2 {
+  font-size: 19px;
+  color: var(--text-main);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.legal-container p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
