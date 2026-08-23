@@ -121,6 +121,16 @@ function hasText(value) { return Boolean(string(value)) }
 // tools can be presented through their screenshots instead.
 export const CATEGORIES_REQUIRING_DEMO = ['web-design', 'saas']
 export const requiresDemoUrl = (category) => CATEGORIES_REQUIRING_DEMO.includes(category)
+export const hasWebPlatform = (platforms) => Array.isArray(platforms) && platforms.some((platform) => {
+  const normalizedPlatform = string(platform).toLowerCase()
+  return normalizedPlatform === 'web' || normalizedPlatform === 'website' || normalizedPlatform === 'browser'
+})
+export const requiresLiveDemo = (product) => requiresDemoUrl(product?.category)
+export const supportsLivePreview = (product) => (
+  isSaleProduct(product)
+  && validUrl(product?.links?.demoUrl)
+  && requiresLiveDemo(product)
+)
 
 export function getProductReadiness(product) {
   const missing = []
@@ -131,7 +141,7 @@ export function getProductReadiness(product) {
   if (!hasText(product.description)) missing.push('product overview')
   if (!product.platforms?.length) missing.push('platform')
   if (!product.features?.length) missing.push('features')
-  if (requiresDemoUrl(product.category) && !validUrl(product.links?.demoUrl)) missing.push('demo URL')
+  if (requiresLiveDemo(product) && !validUrl(product.links?.demoUrl)) missing.push('demo URL')
 
   if (isSaleProduct(product)) {
     if (!product.pricing || !validStoredAmount(product.pricing.amount) || !/^[A-Z]{3}$/.test(product.pricing.currency) || !PRICING_TYPES.includes(product.pricing.type)) missing.push('price')

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ProductVisual from './ProductVisual'
-import { formatPrice, isSaleProduct } from '../../data/productSchema'
+import { formatPrice, isSaleProduct, supportsLivePreview } from '../../data/productSchema'
 import CheckoutButton from '../products/CheckoutButton'
 import DemoAction from '../products/DemoAction'
 import './ProductPreviewModal.css'
@@ -24,6 +24,7 @@ function ProductPreviewModal({ product, onClose }) {
 
   const activeProduct = { ...product, coverImage: images[activeImage] || product.coverImage }
   const saleProduct = isSaleProduct(product)
+  const demoBehavior = saleProduct ? (supportsLivePreview(product) ? 'preview' : null) : 'direct'
 
   return (
     <div className="preview-modal-overlay" onMouseDown={onClose} role="presentation">
@@ -67,7 +68,7 @@ function ProductPreviewModal({ product, onClose }) {
           )}
 
           <div className="preview-modal-actions">
-            <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} images={images} className="preview-btn-primary" />
+            {demoBehavior && <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior={demoBehavior} className="preview-btn-primary" />}
             <Link to={`/products/${product.slug}`} onClick={onClose} className="preview-btn-details">View Product Details</Link>
             {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="preview-btn-buy">Buy Now</CheckoutButton>}
           </div>

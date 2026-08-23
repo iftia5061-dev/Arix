@@ -28,9 +28,10 @@ service cloud.firestore {
         && data.platforms is list && data.platforms.size() > 0
         && data.features is list && data.features.size() > 0
         && data.links is map
-        // Only web-based products need a live demo. Software, tools and apps
-        // use their screenshots, so an empty demo URL is valid for them.
-        && ((data.category == 'web-design' || data.category == 'saas')
+        // Web, Website and SaaS products need a live demo. Software, tools
+        // and apps use their screenshots, so an empty demo URL is valid.
+        && ((data.category == 'web-design' || data.category == 'saas'
+          || data.platforms.hasAny(['Web', 'web', 'Website', 'website', 'Browser', 'browser']))
           ? nonEmptyString(data.links.demoUrl)
           : true);
     }
