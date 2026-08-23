@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import ProductVisual from './ProductVisual'
 import { formatPrice, isSaleProduct } from '../../data/productSchema'
 import CheckoutButton from '../products/CheckoutButton'
+import DemoAction from '../products/DemoAction'
 import './ProductPreviewModal.css'
 
 function ProductPreviewModal({ product, onClose }) {
@@ -66,7 +67,7 @@ function ProductPreviewModal({ product, onClose }) {
           )}
 
           <div className="preview-modal-actions">
-            {product.links.demoUrl && <a href={product.links.demoUrl} target="_blank" rel="noopener noreferrer" className="preview-btn-primary">Demo</a>}
+            <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} images={images} className="preview-btn-primary" />
             <Link to={`/products/${product.slug}`} onClick={onClose} className="preview-btn-details">View Product Details</Link>
             {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="preview-btn-buy">Buy Now</CheckoutButton>}
           </div>

@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useScrollAnimation } from '../../hooks/useScrollAnimation'
 import { usePublishedProducts } from '../../hooks/usePublishedProducts'
 import ProductCard from '../products/ProductCard'
 import ProductPreviewModal from '../common/ProductPreviewModal'
 import './FeaturedProducts.css'
 
 function FeaturedProducts() {
-  const [ref, isVisible] = useScrollAnimation()
   const [selectedProduct, setSelectedProduct] = useState(null)
   const { products, loading } = usePublishedProducts()
   const featuredProducts = products.filter((product) => product.featured)
@@ -23,7 +21,7 @@ function FeaturedProducts() {
           </Link>
         </div>
 
-        {loading ? <p className="featured-products-empty">Loading featured products…</p> : displayProducts.length === 0 ? <p className="featured-products-empty">New featured products are coming soon.</p> : <div ref={ref} className={`featured-products-grid reveal ${isVisible ? 'visible' : ''}`}>
+        {loading ? <p className="featured-products-empty">Loading featured products…</p> : displayProducts.length === 0 ? <p className="featured-products-empty">New featured products are coming soon.</p> : <div className="featured-products-grid">
           {displayProducts.map((product) => (
             <ProductCard
               key={product.id}

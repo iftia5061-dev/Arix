@@ -117,6 +117,11 @@ export function pricingLabel(pricing) {
 
 function hasText(value) { return Boolean(string(value)) }
 
+// Only live, browsable website products need a demo link. Apps, software and
+// tools can be presented through their screenshots instead.
+export const CATEGORIES_REQUIRING_DEMO = ['web-design', 'saas']
+export const requiresDemoUrl = (category) => CATEGORIES_REQUIRING_DEMO.includes(category)
+
 export function getProductReadiness(product) {
   const missing = []
   if (!hasText(product.name)) missing.push('product name')
@@ -126,11 +131,11 @@ export function getProductReadiness(product) {
   if (!hasText(product.description)) missing.push('product overview')
   if (!product.platforms?.length) missing.push('platform')
   if (!product.features?.length) missing.push('features')
-  if (!product.links?.demoUrl) missing.push('demo URL')
+  if (requiresDemoUrl(product.category) && !validUrl(product.links?.demoUrl)) missing.push('demo URL')
 
   if (isSaleProduct(product)) {
     if (!product.pricing || !validStoredAmount(product.pricing.amount) || !/^[A-Z]{3}$/.test(product.pricing.currency) || !PRICING_TYPES.includes(product.pricing.type)) missing.push('price')
-    if (!product.links?.checkoutUrl) missing.push('Gumroad checkout URL')
+    if (!isGumroadCheckoutUrl(product.links?.checkoutUrl)) missing.push('Gumroad checkout URL')
   }
   return { ready: missing.length === 0, missing }
 }

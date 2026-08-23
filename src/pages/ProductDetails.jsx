@@ -2,14 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ProductVisual from '../components/common/ProductVisual'
 import CheckoutButton from '../components/products/CheckoutButton'
+import DemoAction from '../components/products/DemoAction'
 import { formatPrice, isSaleProduct, pricingLabel } from '../data/productSchema'
 import { usePublishedProducts } from '../hooks/usePublishedProducts'
 import './ProductDetails.css'
-
-function ExternalAction({ href, children, primary = false }) {
-  if (!href) return null
-  return <a href={href} target="_blank" rel="noopener noreferrer" className={primary ? 'product-action-primary' : 'product-action-secondary'}>{children}</a>
-}
 
 function ProductDetails() {
   const { slug } = useParams()
@@ -63,7 +59,7 @@ function ProductDetails() {
               {saleProduct && <span><b>Price</b>{formatPrice(product.pricing)}</span>}
             </div>
             <div className="product-details-actions">
-              {product.links.demoUrl && <ExternalAction href={product.links.demoUrl} primary={!saleProduct}>View Demo</ExternalAction>}
+              <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} images={product.images} className="product-action-secondary" />
               {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton>}
             </div>
           </div>
@@ -81,7 +77,7 @@ function ProductDetails() {
           {product.faq.length > 0 && <section id="faq"><h2>FAQ</h2><div className="product-faq-list">{product.faq.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div></section>}
         </div>
 
-        {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Gumroad securely handles payment and delivery.</p></div><div className="product-details-actions"><CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton><ExternalAction href={product.links.demoUrl}>View Demo</ExternalAction></div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by ARIX</h2><p>This is a showcase project. It is not available for sale or download.</p></div><ExternalAction href={product.links.demoUrl} primary>View Demo</ExternalAction></section>}
+        {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Gumroad securely handles payment and delivery.</p></div><div className="product-details-actions"><CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton><DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} images={product.images} className="product-action-secondary" /></div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by ARIX</h2><p>This is a showcase project. It is not available for sale or download.</p></div><DemoAction demoUrl={product.links.demoUrl} productName={product.name} images={product.images} className="product-action-secondary" /></section>}
       </div>
     </main>
   )

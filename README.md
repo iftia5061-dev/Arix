@@ -14,7 +14,7 @@ The frontend never calls a payment API, Cloud Function, webhook, or success-page
 
 All product normalization, validation, form conversion, price formatting, and public visibility checks live in `src/data/productSchema.js`.
 
-- **For sale** products require a price, demo URL, and Gumroad checkout URL.
+- **For sale** products require a price and Gumroad checkout URL. Web design and SaaS products also require a demo URL; software, mobile apps, AI, and tools can use screenshots without a demo.
 - **Showcase** products have no price or checkout URL and never display a Buy Now action.
 - In the Admin form, enter normal prices: `20` means `$20.00`; `29.99` means `$29.99`. Do not enter cents.
 - Cover and gallery images must use externally hosted `http` or `https` URLs.

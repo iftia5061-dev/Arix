@@ -27,7 +27,12 @@ service cloud.firestore {
         && nonEmptyString(data.coverImage)
         && data.platforms is list && data.platforms.size() > 0
         && data.features is list && data.features.size() > 0
-        && data.links is map && nonEmptyString(data.links.demoUrl);
+        && data.links is map
+        // Only web-based products need a live demo. Software, tools and apps
+        // use their screenshots, so an empty demo URL is valid for them.
+        && ((data.category == 'web-design' || data.category == 'saas')
+          ? nonEmptyString(data.links.demoUrl)
+          : true);
     }
 
     function validPublicProduct(data) {
