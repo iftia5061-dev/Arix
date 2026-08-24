@@ -86,7 +86,7 @@ function PreviewModal({ demoUrl, previewHtml, checkoutUrl, productName, coverIma
               srcDoc={previewHtml}
               title={`${productName} live preview`}
               className="demo-preview-iframe"
-              sandbox="allow-same-origin"
+              sandbox="allow-same-origin allow-scripts allow-forms"
             />
           ) : (
             <iframe
