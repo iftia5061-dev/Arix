@@ -2,21 +2,19 @@ import { useEffect, useRef, useState } from 'react'
 import CheckoutButton from './CheckoutButton'
 import './PreviewModal.css'
 
-// X-Frame-Options/CSP blocks can't be reliably detected client-side: Chrome
-// renders its "refused to connect" page as if it were the target's own
-// origin, so reading contentWindow.location throws a SecurityError exactly
-// like a real successful cross-origin load — the about:blank check alone
-// works in Firefox but not Chrome. As a second signal we also treat a very
-// fast load (the local error page has no real network fetch) as blocked.
-// Neither signal is 100% reliable without a server-side proxy, so a manual
-// "open live site" link is always shown too as a guaranteed escape hatch.
+// X-Frame-Options/CSP blocks can't be reliably detected client-side for a
+// real external demoUrl (see notes below). This detection is only needed
+// for the demoUrl branch — an uploaded previewHtml is always same-origin
+// (srcDoc), so it can never be blocked and skips this entirely.
 const LOAD_TIMEOUT_MS = 6000
 const FAST_LOAD_THRESHOLD_MS = 400
 
-function PreviewModal({ demoUrl, checkoutUrl, productName, coverImage, onClose }) {
+function PreviewModal({ demoUrl, previewHtml, checkoutUrl, productName, coverImage, onClose }) {
   const iframeRef = useRef(null)
   const mountTimeRef = useRef(Date.now())
-  const [previewState, setPreviewState] = useState('loading') // 'loading' | 'loaded' | 'blocked'
+  // An uploaded previewHtml is guaranteed to render (same-origin), so start
+  // it straight at 'loaded' and never run the blocked-detection heuristics.
+  const [previewState, setPreviewState] = useState(previewHtml ? 'loaded' : 'loading')
 
   useEffect(() => {
     function handleEscape(e) {
@@ -32,13 +30,15 @@ function PreviewModal({ demoUrl, checkoutUrl, productName, coverImage, onClose }
   }, [onClose])
 
   useEffect(() => {
+    if (previewHtml) return undefined // no detection needed for same-origin content
     const timeoutId = window.setTimeout(() => {
       setPreviewState((current) => (current === 'loading' ? 'blocked' : current))
     }, LOAD_TIMEOUT_MS)
     return () => window.clearTimeout(timeoutId)
-  }, [demoUrl])
+  }, [demoUrl, previewHtml])
 
   function handleIframeLoad() {
+    if (previewHtml) return // not applicable to same-origin srcDoc content
     let blockedSignal = false
     try {
       const frameHref = iframeRef.current?.contentWindow?.location?.href
@@ -77,17 +77,30 @@ function PreviewModal({ demoUrl, checkoutUrl, productName, coverImage, onClose }
               <p>Live preview isn't available for this product right now.</p>
             </div>
           )}
-          <iframe
-            ref={iframeRef}
-            src={demoUrl}
-            title={`${productName} live preview`}
-            className="demo-preview-iframe"
-            style={previewState === 'blocked' ? { display: 'none' } : undefined}
-            loading="lazy"
-            sandbox="allow-scripts allow-same-origin"
-            referrerPolicy="strict-origin-when-cross-origin"
-            onLoad={handleIframeLoad}
-          />
+
+          {previewHtml ? (
+            // Self-contained HTML (from an uploaded zip) — same-origin, so
+            // X-Frame-Options / CSP frame-ancestors never apply to this.
+            // No allow-scripts on purpose: homepage previews are HTML/CSS only.
+            <iframe
+              srcDoc={previewHtml}
+              title={`${productName} live preview`}
+              className="demo-preview-iframe"
+              sandbox="allow-same-origin"
+            />
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={demoUrl}
+              title={`${productName} live preview`}
+              className="demo-preview-iframe"
+              style={previewState === 'blocked' ? { display: 'none' } : undefined}
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin"
+              referrerPolicy="strict-origin-when-cross-origin"
+              onLoad={handleIframeLoad}
+            />
+          )}
         </div>
 
         {checkoutUrl && <footer className="demo-preview-footer"><CheckoutButton checkoutUrl={checkoutUrl}>Buy Now</CheckoutButton></footer>}

@@ -60,7 +60,7 @@ function ProductDetails() {
               {saleProduct && <span><b>Price</b>{formatPrice(product.pricing)}</span>}
             </div>
             <div className="product-details-actions">
-              {(livePreviewProduct || !saleProduct) && <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior={saleProduct ? 'preview' : 'direct'} className="product-action-secondary" />}
+              {(livePreviewProduct || !saleProduct) && <DemoAction demoUrl={product.links.demoUrl} previewHtml={product.links.previewHtml} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior={saleProduct ? 'preview' : 'direct'} className="product-action-secondary" />}
               {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton>}
             </div>
           </div>
@@ -78,7 +78,7 @@ function ProductDetails() {
           {product.faq.length > 0 && <section id="faq"><h2>FAQ</h2><div className="product-faq-list">{product.faq.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div></section>}
         </div>
 
-        {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Gumroad securely handles payment and delivery.</p></div><div className="product-details-actions"><CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton>{livePreviewProduct && <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior="preview" className="product-action-secondary" />}</div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by ARIX</h2><p>This is a showcase project. It is not available for sale or download.</p></div><DemoAction demoUrl={product.links.demoUrl} productName={product.name} behavior="direct" className="product-action-secondary" /></section>}
+        {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Gumroad securely handles payment and delivery.</p></div><div className="product-details-actions"><CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton>{livePreviewProduct && <DemoAction demoUrl={product.links.demoUrl} previewHtml={product.links.previewHtml} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior="preview" className="product-action-secondary" />}</div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by ARIX</h2><p>This is a showcase project. It is not available for sale or download.</p></div><DemoAction demoUrl={product.links.demoUrl} productName={product.name} behavior="direct" className="product-action-secondary" /></section>}
       </div>
     </main>
   )

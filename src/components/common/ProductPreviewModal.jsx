@@ -68,7 +68,7 @@ function ProductPreviewModal({ product, onClose }) {
           )}
 
           <div className="preview-modal-actions">
-            {demoBehavior && <DemoAction demoUrl={product.links.demoUrl} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior={demoBehavior} className="preview-btn-primary" />}
+            {demoBehavior && <DemoAction demoUrl={product.links.demoUrl} previewHtml={product.links.previewHtml} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior={demoBehavior} className="preview-btn-primary" />}
             <Link to={`/products/${product.slug}`} onClick={onClose} className="preview-btn-details">View Product Details</Link>
             {saleProduct && <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="preview-btn-buy">Buy Now</CheckoutButton>}
           </div>

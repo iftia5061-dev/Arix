@@ -93,6 +93,9 @@ export function normalizeProduct(value = {}, id = '') {
     links: {
       demoUrl: validUrl(rawLinks.demoUrl) ? string(rawLinks.demoUrl) : '',
       checkoutUrl: productType === 'sale' && isGumroadCheckoutUrl(rawLinks.checkoutUrl) ? string(rawLinks.checkoutUrl) : '',
+      // Self-contained homepage HTML (from an uploaded zip) — not a URL,
+      // so it's just passed through as raw text, not validated as a link.
+      previewHtml: typeof rawLinks.previewHtml === 'string' ? rawLinks.previewHtml : '',
     },
     featured: Boolean(value.featured),
   }
@@ -128,8 +131,8 @@ export const hasWebPlatform = (platforms) => Array.isArray(platforms) && platfor
 export const requiresLiveDemo = (product) => requiresDemoUrl(product?.category)
 export const supportsLivePreview = (product) => (
   isSaleProduct(product)
-  && validUrl(product?.links?.demoUrl)
   && requiresLiveDemo(product)
+  && (validUrl(product?.links?.demoUrl) || Boolean(product?.links?.previewHtml))
 )
 
 export function getProductReadiness(product) {
@@ -141,7 +144,7 @@ export function getProductReadiness(product) {
   if (!hasText(product.description)) missing.push('product overview')
   if (!product.platforms?.length) missing.push('platform')
   if (!product.features?.length) missing.push('features')
-  if (requiresLiveDemo(product) && !validUrl(product.links?.demoUrl)) missing.push('demo URL')
+  if (requiresLiveDemo(product) && !validUrl(product.links?.demoUrl) && !product.links?.previewHtml) missing.push('demo URL (or an uploaded homepage zip)')
 
   if (isSaleProduct(product)) {
     if (!product.pricing || !validStoredAmount(product.pricing.amount) || !/^[A-Z]{3}$/.test(product.pricing.currency) || !PRICING_TYPES.includes(product.pricing.type)) missing.push('price')

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from '../firebase'
+import { zipToInlineHtml } from '../utils/zipToHtml'
 import { useAuth } from '../context/authStore'
 import {
   emptyProductForm, formToProduct, formatPrice, getProductReadiness,
@@ -18,6 +19,36 @@ function AdminDashboard() {
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
   const [saving, setSaving] = useState(false)
+
+  // --- Locked website preview (zip upload) state ---
+  const [previewZipStatus, setPreviewZipStatus] = useState('idle') // idle | processing | ready | error
+  const [previewHtml, setPreviewHtml] = useState('')
+  const [previewZipError, setPreviewZipError] = useState('')
+
+  async function handleZipUpload(e) {
+    const file = e.target.files[0]
+    if (!file) return
+
+    setPreviewZipStatus('processing')
+    setPreviewZipError('')
+
+    try {
+      const html = await zipToInlineHtml(file)
+      setPreviewHtml(html)
+      setPreviewZipStatus('ready')
+    } catch (err) {
+      console.error('Zip processing error:', err)
+      setPreviewZipError(err.message || 'Could not process this zip file.')
+      setPreviewZipStatus('error')
+      setPreviewHtml('')
+    }
+  }
+
+  function clearPreviewHtml() {
+    setPreviewHtml('')
+    setPreviewZipStatus('idle')
+    setPreviewZipError('')
+  }
 
   useEffect(() => {
     if (!user) { setAccessStatus('idle'); return undefined }
@@ -59,6 +90,7 @@ function AdminDashboard() {
   const resetForm = (clearMessage = true) => {
     setFormData(emptyProductForm)
     setEditingId(null)
+    clearPreviewHtml()
     if (clearMessage) setMessage('')
   }
 
@@ -72,11 +104,21 @@ function AdminDashboard() {
     if (duplicateSlug) return setMessage('This URL slug is already being used by another product.')
     if (product.status === 'published' && !productReadiness.ready) return setMessage(`Cannot publish yet. Add or correct: ${productReadiness.missing.join(', ')}.`)
 
+    // Attach the uploaded, self-contained homepage preview (if any) directly
+    // onto product.links — done here so we don't need to touch productSchema.js.
+    const productWithPreview = {
+      ...product,
+      links: {
+        ...product.links,
+        ...(previewHtml ? { previewHtml } : {}),
+      },
+    }
+
     setSaving(true)
     setMessage('')
     try {
       const productRef = editingId ? doc(db, 'products', editingId) : doc(collection(db, 'products'))
-      await setDoc(productRef, { ...product, ...(editingId ? {} : { createdAt: serverTimestamp() }), updatedAt: serverTimestamp() })
+      await setDoc(productRef, { ...productWithPreview, ...(editingId ? {} : { createdAt: serverTimestamp() }), updatedAt: serverTimestamp() })
       setMessage(editingId ? 'Product updated successfully.' : 'Product added successfully.')
       resetForm(false)
     } catch (error) {
@@ -91,6 +133,14 @@ function AdminDashboard() {
     setFormData(productToForm(product))
     setEditingId(product.id)
     setMessage('')
+    // Restore any previously uploaded locked-preview HTML into local state too,
+    // since it lives on product.links.previewHtml but productToForm may not carry it.
+    if (product.links?.previewHtml) {
+      setPreviewHtml(product.links.previewHtml)
+      setPreviewZipStatus('ready')
+    } else {
+      clearPreviewHtml()
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -110,7 +160,7 @@ function AdminDashboard() {
   if (accessStatus !== 'granted') return <div className="admin-gate"><h1>Access denied</h1><p>{user.email} is not an ARIX admin. An owner must add this user to the Firestore <code>admins</code> collection first.</p></div>
 
   return <main className="admin-dashboard"><div className="admin-container">
-    <div className="admin-page-heading"><div><h1>Product management</h1><p>For-sale Web, Website, and SaaS products need a live demo URL for the protected preview. For-sale apps, software, and tools use screenshots. Showcase product demo links open the live website directly. Gumroad handles payment and delivery.</p></div><span className="admin-role-badge">Admin</span></div>
+    <div className="admin-page-heading"><div><h1>Product management</h1><p>For-sale Web, Website, and SaaS products need a live demo URL or an uploaded homepage zip for the protected preview. For-sale apps, software, and tools use screenshots. Showcase product demo links open the live website directly. Gumroad handles payment and delivery.</p></div><span className="admin-role-badge">Admin</span></div>
     <div className="admin-layout"><section className="admin-form-card">
       <div className="admin-card-heading"><h2>{editingId ? 'Edit product' : 'Add product'}</h2>{editingId && <button type="button" onClick={resetForm}>Cancel edit</button>}</div>
       {message && <p className="admin-message" role="status">{message}</p>}
@@ -129,7 +179,20 @@ function AdminDashboard() {
         <Field label="What&apos;s included" hint="One item per line"><textarea name="included" value={formData.included} onChange={handleChange} rows="2" /></Field>
         <div className="admin-form-row"><Field label="Version"><input name="version" value={formData.version} onChange={handleChange} placeholder="1.0.0" /></Field><Field label="License"><input name="license" value={formData.license} onChange={handleChange} placeholder="Single-site commercial" /></Field></div>
         <Field label="FAQ" hint="One question and answer per line: Question | Answer"><textarea name="faq" value={formData.faq} onChange={handleChange} rows="3" /></Field>
-        <Field label="Demo URL" hint="Required for Web, Website, Web design, and SaaS products. For sale: opens protected live preview. Showcase: opens the live website directly. Apps/software use screenshots."><input type="url" name="demoUrl" value={formData.demoUrl} onChange={handleChange} placeholder="https://..." /></Field>
+        <Field label="Demo URL (external link)" hint="Use this only if the site allows embedding. Otherwise, upload a homepage zip below instead."><input type="url" name="demoUrl" value={formData.demoUrl} onChange={handleChange} placeholder="https://..." /></Field>
+
+        <Field label="OR: Upload Website Homepage (.zip with index.html + .css) — click-locked live preview, always embeddable">
+          <input type="file" accept=".zip" onChange={handleZipUpload} />
+          {previewZipStatus === 'processing' && <p className="admin-hint">Processing zip file…</p>}
+          {previewZipStatus === 'ready' && (
+            <p className="admin-hint admin-hint-success">
+              ✓ Homepage code ready — will be saved with this product.{' '}
+              <button type="button" className="admin-hint-clear" onClick={clearPreviewHtml}>Remove</button>
+            </p>
+          )}
+          {previewZipStatus === 'error' && <p className="admin-hint admin-hint-error">{previewZipError}</p>}
+        </Field>
+
         {saleProduct && <>
           <div className="admin-form-row"><Field label="Price (USD)" hint="Enter 20 or 29.99 — never cents"><input type="number" min="0.01" step="0.01" name="price" value={formData.price} onChange={handleChange} placeholder="29.99" /></Field><Field label="Currency"><input name="currency" maxLength="3" value={formData.currency} onChange={handleChange} /></Field></div>
           <Field label="Pricing model"><select name="pricingType" value={formData.pricingType} onChange={handleChange}>{PRICING_TYPES.map((pricingType) => <option key={pricingType} value={pricingType}>{pricingType}</option>)}</select></Field>
