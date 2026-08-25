@@ -120,18 +120,29 @@ export function pricingLabel(pricing) {
 
 function hasText(value) { return Boolean(string(value)) }
 
-// Only live, browsable website products need a demo link. Apps, software and
-// tools can be presented through their screenshots instead.
+// Web design and SaaS products are ALWAYS a live browsable website — a demo
+// link (or an uploaded homepage zip) is mandatory to publish these.
 export const CATEGORIES_REQUIRING_DEMO = ['web-design', 'saas']
 export const requiresDemoUrl = (category) => CATEGORIES_REQUIRING_DEMO.includes(category)
+export const requiresLiveDemo = (product) => requiresDemoUrl(product?.category)
+
+// AI and Tools products are OFTEN also HTML/CSS/JS websites (not just apps),
+// so they're allowed to show the same locked live preview — but it's
+// optional, not mandatory, since some AI/Tools products are plain apps with
+// only screenshots and no demo at all.
+export const CATEGORIES_WITH_OPTIONAL_LIVE_PREVIEW = ['ai', 'tools']
+export const canShowLivePreview = (category) => (
+  CATEGORIES_REQUIRING_DEMO.includes(category) || CATEGORIES_WITH_OPTIONAL_LIVE_PREVIEW.includes(category)
+)
+
 export const hasWebPlatform = (platforms) => Array.isArray(platforms) && platforms.some((platform) => {
   const normalizedPlatform = string(platform).toLowerCase()
   return normalizedPlatform === 'web' || normalizedPlatform === 'website' || normalizedPlatform === 'browser'
 })
-export const requiresLiveDemo = (product) => requiresDemoUrl(product?.category)
+
 export const supportsLivePreview = (product) => (
   isSaleProduct(product)
-  && requiresLiveDemo(product)
+  && canShowLivePreview(product?.category)
   && (validUrl(product?.links?.demoUrl) || Boolean(product?.links?.previewHtml))
 )
 
