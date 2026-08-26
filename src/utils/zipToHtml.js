@@ -11,25 +11,31 @@ export async function zipToInlineHtml(file) {
   const zip = await JSZip.loadAsync(file)
   const allFiles = Object.values(zip.files).filter((f) => !f.dir)
 
-  // Prefer an exact "index.html" (case-insensitive, any folder depth).
+  const isHtmlFile = (name) => {
+    const lower = name.toLowerCase()
+    return lower.endsWith('.html') || lower.endsWith('.htm')
+  }
+
+  // Prefer an exact "index.html" or "index.htm" (case-insensitive, any folder depth).
   let htmlFile = allFiles.find((f) => {
     const lowerName = f.name.toLowerCase()
     return lowerName === 'index.html' || lowerName.endsWith('/index.html')
+      || lowerName === 'index.htm' || lowerName.endsWith('/index.htm')
   })
 
-  // Fallback: ANY .html file in the zip — some export tools name it
-  // differently (e.g. "home.html", "main.html"). Pick the shortest path,
+  // Fallback: ANY .html/.htm file in the zip — some export tools name it
+  // differently (e.g. "home.html", "main.htm"). Pick the shortest path,
   // since that's most likely the root-level file.
   if (!htmlFile) {
     const anyHtml = allFiles
-      .filter((f) => f.name.toLowerCase().endsWith('.html'))
+      .filter((f) => isHtmlFile(f.name))
       .sort((a, b) => a.name.length - b.name.length)
     htmlFile = anyHtml[0]
   }
 
   if (!htmlFile) {
     const fileList = allFiles.map((f) => f.name).join(', ') || '(zip appears empty)'
-    throw new Error(`No .html file found in the zip. Files found: ${fileList}`)
+    throw new Error(`No .html or .htm file found in the zip. Files found: ${fileList}`)
   }
 
   let html = await htmlFile.async('text')
