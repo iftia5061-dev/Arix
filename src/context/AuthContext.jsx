@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, getDoc, setDoc, serverTimestamp, increment, updateDoc } from 'firebase/firestore'
 import { auth, googleProvider, db } from '../firebase'
 import { AuthContext } from './authStore'
 
