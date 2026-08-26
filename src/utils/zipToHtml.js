@@ -1,7 +1,7 @@
 import JSZip from 'jszip'
 
 /**
- * Reads a .zip file (containing an index.html and optionally .css/.js files),
+ * Reads a .zip file (containing an HTML file and optionally .css/.js files),
  * and returns a single self-contained HTML string with all CSS and JS inlined.
  * This lets us preview a static homepage inside an <iframe srcDoc="..."> without
  * ever fetching anything from an external server (avoids X-Frame-Options issues
@@ -9,30 +9,39 @@ import JSZip from 'jszip'
  */
 export async function zipToInlineHtml(file) {
   const zip = await JSZip.loadAsync(file)
+  const allFiles = Object.values(zip.files).filter((f) => !f.dir)
 
-  // Find index.html anywhere in the zip (handles zips with a wrapper folder)
-  const htmlFile = Object.values(zip.files).find(
-    (f) => !f.dir && f.name.toLowerCase().endsWith('index.html')
-  )
+  // Prefer an exact "index.html" (case-insensitive, any folder depth).
+  let htmlFile = allFiles.find((f) => {
+    const lowerName = f.name.toLowerCase()
+    return lowerName === 'index.html' || lowerName.endsWith('/index.html')
+  })
+
+  // Fallback: ANY .html file in the zip — some export tools name it
+  // differently (e.g. "home.html", "main.html"). Pick the shortest path,
+  // since that's most likely the root-level file.
+  if (!htmlFile) {
+    const anyHtml = allFiles
+      .filter((f) => f.name.toLowerCase().endsWith('.html'))
+      .sort((a, b) => a.name.length - b.name.length)
+    htmlFile = anyHtml[0]
+  }
 
   if (!htmlFile) {
-    throw new Error('No index.html found in the zip file.')
+    const fileList = allFiles.map((f) => f.name).join(', ') || '(zip appears empty)'
+    throw new Error(`No .html file found in the zip. Files found: ${fileList}`)
   }
 
   let html = await htmlFile.async('text')
 
   // --- Inline all CSS files ---
-  const cssFiles = Object.values(zip.files).filter(
-    (f) => !f.dir && f.name.toLowerCase().endsWith('.css')
-  )
-
+  const cssFiles = allFiles.filter((f) => f.name.toLowerCase().endsWith('.css'))
   let combinedCss = ''
   for (const cssFile of cssFiles) {
     const cssText = await cssFile.async('text')
     combinedCss += `\n/* ${cssFile.name} */\n${cssText}\n`
   }
 
-  // Remove <link rel="stylesheet" ...> tags (since we're inlining CSS instead)
   html = html.replace(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi, '')
 
   const styleTag = `<style>${combinedCss}</style>`
@@ -43,19 +52,13 @@ export async function zipToInlineHtml(file) {
   }
 
   // --- Inline all local JS files ---
-  const jsFiles = Object.values(zip.files).filter(
-    (f) => !f.dir && f.name.toLowerCase().endsWith('.js')
-  )
-
+  const jsFiles = allFiles.filter((f) => f.name.toLowerCase().endsWith('.js'))
   let combinedJs = ''
   for (const jsFile of jsFiles) {
     const jsText = await jsFile.async('text')
     combinedJs += `\n/* ${jsFile.name} */\n${jsText}\n`
   }
 
-  // Remove <script src="local-file.js"></script> tags that point to local
-  // files (they won't exist once bundled) — but leave external CDN scripts
-  // (http/https/protocol-relative URLs) untouched.
   html = html.replace(/<script\b[^>]*\bsrc=["'](?!https?:\/\/|\/\/)[^"']*["'][^>]*><\/script>/gi, '')
 
   if (combinedJs.trim()) {
