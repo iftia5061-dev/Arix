@@ -120,21 +120,9 @@ export function pricingLabel(pricing) {
 
 function hasText(value) { return Boolean(string(value)) }
 
-// Web design and SaaS products are ALWAYS a live browsable website — a demo
-// link (or an uploaded homepage zip) is mandatory to publish these.
-export const CATEGORIES_REQUIRING_DEMO = ['web-design', 'saas']
-export const requiresDemoUrl = (category) => CATEGORIES_REQUIRING_DEMO.includes(category)
-export const requiresLiveDemo = (product) => requiresDemoUrl(product?.category)
-
-// AI and Tools products are OFTEN also HTML/CSS/JS websites (not just apps),
-// so they're allowed to show the same locked live preview — but it's
-// optional, not mandatory, since some AI/Tools products are plain apps with
-// only screenshots and no demo at all.
-export const CATEGORIES_WITH_OPTIONAL_LIVE_PREVIEW = ['ai', 'tools']
-export const canShowLivePreview = (category) => (
-  CATEGORIES_REQUIRING_DEMO.includes(category) || CATEGORIES_WITH_OPTIONAL_LIVE_PREVIEW.includes(category)
-)
-
+// Demo (a link OR an uploaded homepage zip) is fully OPTIONAL for every
+// category now. It's never required to publish a product — whichever
+// products happen to have one get a "Demo" button, the rest simply don't.
 export const hasWebPlatform = (platforms) => Array.isArray(platforms) && platforms.some((platform) => {
   const normalizedPlatform = string(platform).toLowerCase()
   return normalizedPlatform === 'web' || normalizedPlatform === 'website' || normalizedPlatform === 'browser'
@@ -142,7 +130,6 @@ export const hasWebPlatform = (platforms) => Array.isArray(platforms) && platfor
 
 export const supportsLivePreview = (product) => (
   isSaleProduct(product)
-  && canShowLivePreview(product?.category)
   && (validUrl(product?.links?.demoUrl) || Boolean(product?.links?.previewHtml))
 )
 
@@ -155,7 +142,7 @@ export function getProductReadiness(product) {
   if (!hasText(product.description)) missing.push('product overview')
   if (!product.platforms?.length) missing.push('platform')
   if (!product.features?.length) missing.push('features')
-  if (requiresLiveDemo(product) && !validUrl(product.links?.demoUrl) && !product.links?.previewHtml) missing.push('demo URL (or an uploaded homepage zip)')
+  // Demo link/zip is fully optional — never blocks publishing.
 
   if (isSaleProduct(product)) {
     if (!product.pricing || !validStoredAmount(product.pricing.amount) || !/^[A-Z]{3}$/.test(product.pricing.currency) || !PRICING_TYPES.includes(product.pricing.type)) missing.push('price')
