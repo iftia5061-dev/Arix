@@ -57,7 +57,7 @@ function ProductPreviewModal({ product, onClose }) {
               <span className="preview-modal-platform">{product.platforms.join(' · ')}</span>
               <h2 id="preview-modal-title">{product.name}</h2>
             </div>
-            <strong>{saleProduct ? formatPrice(product.pricing) : 'Built by ARIX'}</strong>
+            <strong>{saleProduct ? formatPrice(product.pricing) : 'Built by Orofex'}</strong>
           </div>
           <p>{product.shortDescription}</p>
 

@@ -14,7 +14,7 @@ function FAQ() {
       <section className="faq-hero">
         <h1 className="faq-hero-title">Frequently Asked Questions</h1>
         <p className="faq-hero-subtitle">
-          Everything you need to know about working with ARIX.
+          Everything you need to know about working with Orofex.
         </p>
       </section>
 

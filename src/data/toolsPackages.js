@@ -1,7 +1,7 @@
 export const toolsCategories = [
   {
     id: 'invoice',
-    label: 'ARIX Invoice',
+    label: 'Orofex Invoice',
     icon: '🧾',
     description: 'Smart invoicing software to create, send, and track invoices effortlessly.',
     packages: [
@@ -31,7 +31,7 @@ export const toolsCategories = [
   },
   {
     id: 'pos',
-    label: 'ARIX POS',
+    label: 'Orofex POS',
     icon: '🛒',
     description: 'Modern point-of-sale system for retail stores, cafes, and small businesses.',
     packages: [
@@ -61,7 +61,7 @@ export const toolsCategories = [
   },
   {
     id: 'inventory',
-    label: 'ARIX Inventory',
+    label: 'Orofex Inventory',
     icon: '📦',
     description: 'Real-time inventory management for businesses that need full stock visibility.',
     packages: [

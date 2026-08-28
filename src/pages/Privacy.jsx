@@ -34,7 +34,7 @@ function Privacy() {
 
         <h2>6. Contact Us</h2>
         <p>
-          If you have questions about this Privacy Policy, please contact us at hello@arix.com.
+          If you have questions about this Privacy Policy, please contact us at hello@Orofex.com.
         </p>
       </div>
     </div>

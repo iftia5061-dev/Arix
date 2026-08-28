@@ -13,7 +13,7 @@ function ServiceDetails({ service }) {
         <Link to="/contact" className="services-cta-btn">Get a Quote</Link>
       </section>
       <section className="service-details-content">
-        <h2>How ARIX can help</h2>
+        <h2>How Orofex can help</h2>
         <p>We plan, design, build, and support a solution around your business goals, users, and workflow.</p>
         <Link to="/contact" className="service-list-link">Discuss your project →</Link>
       </section>
@@ -32,7 +32,7 @@ function Services() {
     <main className="services-page">
       <section className="services-hero">
         <h1 className="services-hero-title">Our Services</h1>
-        <p className="services-hero-subtitle">From custom software to AI-driven automation, ARIX delivers end-to-end digital solutions tailored to your business.</p>
+        <p className="services-hero-subtitle">From custom software to AI-driven automation, Orofex delivers end-to-end digital solutions tailored to your business.</p>
       </section>
 
       <section className="services-list">
@@ -50,7 +50,7 @@ function Services() {
 
       <section className="services-cta">
         <h2>Have a project in mind?</h2>
-        <p>Let&apos;s discuss how ARIX can bring your idea to life.</p>
+        <p>Let&apos;s discuss how Orofex can bring your idea to life.</p>
         <Link to="/contact" className="services-cta-btn">Start a Project</Link>
       </section>
     </main>

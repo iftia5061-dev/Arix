@@ -54,7 +54,7 @@ function Contact() {
               <span className="contact-info-icon">📧</span>
               <div>
                 <h4>Email</h4>
-                <p>ceo.arix.info@gmail.com</p>
+                <p>ceo.Orofex.info@gmail.com</p>
               </div>
             </div>
 

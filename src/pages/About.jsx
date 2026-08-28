@@ -4,7 +4,7 @@ function About() {
   return (
     <div className="about-page">
       <section className="about-hero">
-        <h1 className="about-hero-title">About ARIX</h1>
+        <h1 className="about-hero-title">About Orofex</h1>
         <p className="about-hero-subtitle">
           We're a team of builders creating software, SaaS, AI, and mobile products that help businesses grow.
         </p>

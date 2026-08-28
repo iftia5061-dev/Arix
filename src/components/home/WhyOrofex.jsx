@@ -1,5 +1,5 @@
 import { useScrollAnimation } from '../../hooks/useScrollAnimation'
-import './WhyArix.css'
+import './WhyOrofex.css'
 
 const reasons = [
   {
@@ -24,20 +24,20 @@ const reasons = [
   },
 ]
 
-function WhyArix() {
+function WhyOrofex() {
   const [ref, isVisible] = useScrollAnimation()
 
   return (
-    <section className="why-arix">
-      <div className="why-arix-container">
-        <h2 className="why-arix-title">Why Choose ARIX</h2>
+    <section className="why-Orofex">
+      <div className="why-Orofex-container">
+        <h2 className="why-Orofex-title">Why Choose Orofex</h2>
 
-        <div ref={ref} className={`why-arix-grid reveal ${isVisible ? 'visible' : ''}`}>
+        <div ref={ref} className={`why-Orofex-grid reveal ${isVisible ? 'visible' : ''}`}>
           {reasons.map((reason, index) => (
-            <div className="why-arix-card" key={index}>
-              <div className="why-arix-icon">{reason.icon}</div>
-              <h3 className="why-arix-name">{reason.title}</h3>
-              <p className="why-arix-description">{reason.description}</p>
+            <div className="why-Orofex-card" key={index}>
+              <div className="why-Orofex-icon">{reason.icon}</div>
+              <h3 className="why-Orofex-name">{reason.title}</h3>
+              <p className="why-Orofex-description">{reason.description}</p>
             </div>
           ))}
         </div>
@@ -46,4 +46,4 @@ function WhyArix() {
   )
 }
 
-export default WhyArix
+export default WhyOrofex

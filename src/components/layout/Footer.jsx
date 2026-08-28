@@ -7,7 +7,7 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-top">
           <div className="footer-brand">
-            <h3 className="footer-logo">ARIX</h3>
+            <h3 className="footer-logo">Orofex</h3>
             <p className="footer-tagline">Digital Products & Solutions</p>
           </div>
 
@@ -48,7 +48,7 @@ function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} ARIX. All rights reserved. · <Link to="/admin" className="footer-admin-link">Admin</Link></p>
+          <p>&copy; {new Date().getFullYear()} Orofex. All rights reserved. · <Link to="/admin" className="footer-admin-link">Admin</Link></p>
         </div>
       </div>
     </footer>

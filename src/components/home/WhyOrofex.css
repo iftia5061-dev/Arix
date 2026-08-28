@@ -1,43 +1,43 @@
-.why-arix {
+.why-Orofex {
   padding: 80px 24px;
   background-color: var(--bg-secondary);
 }
 
-.why-arix-container {
+.why-Orofex-container {
   max-width: 1280px;
   margin: 0 auto;
 }
 
-.why-arix-title {
+.why-Orofex-title {
   font-size: 32px;
   text-align: center;
   color: var(--text-main);
   margin-bottom: 48px;
 }
 
-.why-arix-grid {
+.why-Orofex-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
 }
 
-.why-arix-card {
+.why-Orofex-card {
   text-align: center;
   padding: 20px;
 }
 
-.why-arix-icon {
+.why-Orofex-icon {
   font-size: 36px;
   margin-bottom: 16px;
 }
 
-.why-arix-name {
+.why-Orofex-name {
   font-size: 17px;
   color: var(--text-main);
   margin-bottom: 10px;
 }
 
-.why-arix-description {
+.why-Orofex-description {
   font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.6;

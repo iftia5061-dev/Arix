@@ -20,7 +20,7 @@ function WebDesign() {
           <span className="webdesign-proof-icon">✨</span>
           <div>
             <h3>This site is our portfolio piece</h3>
-            <p>The website you're browsing right now — animations, design, everything — was built by ARIX. This is the quality you get.</p>
+            <p>The website you're browsing right now — animations, design, everything — was built by Orofex. This is the quality you get.</p>
           </div>
         </div>
       </section>

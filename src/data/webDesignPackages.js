@@ -46,7 +46,7 @@ export const webDesignPackages = [
     features: [
       'Unlimited Pages',
       'Fully Custom Premium Design',
-      'Advanced Animation (like ARIX.com)',
+      'Advanced Animation (like Orofex.com)',
       'CMS / Admin Panel',
       'Unlimited Revisions',
       'Full SEO Setup',

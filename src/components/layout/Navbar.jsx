@@ -14,7 +14,7 @@ function Navbar() {
       const { isNewUser } = await loginWithGoogle()
       closeMenu()
       if (isNewUser) {
-        alert('Welcome to ARIX! 🎉 Check your inbox for a welcome email (please check Spam/Promotions folder too).')
+        alert('Welcome to Orofex! 🎉 Check your inbox for a welcome email (please check Spam/Promotions folder too).')
       }
     } catch (error) {
       console.error('Login error:', error)
@@ -30,7 +30,12 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
-          ARIX
+          <span className="navbar-logo-letter">O</span>
+          <span className="navbar-logo-letter">r</span>
+          <span className="navbar-logo-letter">o</span>
+          <span className="navbar-logo-letter">F</span>
+          <span className="navbar-logo-letter">e</span>
+          <span className="navbar-logo-letter">X</span>
         </Link>
 
         <ul className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>

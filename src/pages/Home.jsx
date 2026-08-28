@@ -3,7 +3,7 @@ import ProductMarquee from '../components/home/ProductMarquee'
 import Categories from '../components/home/Categories'
 import FeaturedProducts from '../components/home/FeaturedProducts'
 import ServicesPreview from '../components/home/ServicesPreview'
-import WhyArix from '../components/home/WhyArix'
+import WhyOrofex from '../components/home/WhyOrofex'
 import AISolutions from '../components/home/AISolutions'
 import Stats from '../components/home/Stats'
 import PortfolioPreview from '../components/home/PortfolioPreview'
@@ -18,7 +18,7 @@ function Home() {
       <Categories />
       <FeaturedProducts />
       <ServicesPreview />
-      <WhyArix />
+      <WhyOrofex />
       <AISolutions />
       <Stats />
       <PortfolioPreview />

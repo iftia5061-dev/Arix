@@ -20,7 +20,7 @@ function ProductCard({ product, onQuickView, compact = false }) {
         </div>
         <p>{product.shortDescription}</p>
         <div className="marketplace-product-bottom">
-          <strong>{saleProduct ? formatPrice(product.pricing) : 'Built by ARIX'}</strong>
+          <strong>{saleProduct ? formatPrice(product.pricing) : 'Built by Orofex'}</strong>
           <span className="marketplace-product-action-label">{saleProduct ? product.pricing?.type?.replace('-', ' ') : 'Showcase'}</span>
         </div>
         <div className="marketplace-product-actions">

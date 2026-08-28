@@ -6,7 +6,7 @@ function Blog() {
   return (
     <div className="blog-page">
       <section className="blog-hero">
-        <h1 className="blog-hero-title">ARIX Blog</h1>
+        <h1 className="blog-hero-title">Orofex Blog</h1>
         <p className="blog-hero-subtitle">
           Insights on software, AI, and building digital products that last.
         </p>

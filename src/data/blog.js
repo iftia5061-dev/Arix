@@ -8,10 +8,10 @@ export const blogPosts = [
 
 Custom software is built around your exact workflows, not the other way around. Instead of forcing your team to adapt to rigid, one-size-fits-all systems, custom solutions adapt to how your business actually operates.
 
-At ARIX, we've seen firsthand how custom software eliminates repetitive manual work, reduces errors, and gives businesses a real competitive advantage. From inventory systems built for a specific supply chain, to internal tools that automate reporting, the impact compounds over time.
+At Orofex, we've seen firsthand how custom software eliminates repetitive manual work, reduces errors, and gives businesses a real competitive advantage. From inventory systems built for a specific supply chain, to internal tools that automate reporting, the impact compounds over time.
 
 If you're spending hours every week working around the limitations of generic software, it might be time to consider a custom solution built specifically for you.`,
-    author: 'ARIX Team',
+    author: 'Orofex Team',
     date: 'March 12, 2026',
     category: 'Software',
     image: '💻',
@@ -27,8 +27,8 @@ Today, small and medium businesses are using AI-powered chatbots to handle custo
 
 The key isn't adopting AI for the sake of it — it's identifying the specific bottlenecks in your business where intelligent automation actually saves time and money.
 
-At ARIX, we help businesses start small: automating one repetitive workflow, then expanding from there as the value becomes clear. This approach reduces risk and lets you see real ROI before scaling up.`,
-    author: 'ARIX Team',
+At Orofex, we help businesses start small: automating one repetitive workflow, then expanding from there as the value becomes clear. This approach reduces risk and lets you see real ROI before scaling up.`,
+    author: 'Orofex Team',
     date: 'February 28, 2026',
     category: 'AI',
     image: '🤖',
@@ -45,7 +45,7 @@ SaaS products are great when your needs are standard — accounting, project man
 Custom software makes sense when your business has unique processes that generic tools can't accommodate, when you need to own your data and infrastructure, or when you're planning to scale in ways that off-the-shelf tools won't support.
 
 Many of our clients actually use both — SaaS tools for standard operations, and custom software for the parts of their business that make them unique. The right answer depends entirely on your specific situation, which is exactly what we help businesses figure out.`,
-    author: 'ARIX Team',
+    author: 'Orofex Team',
     date: 'February 10, 2026',
     category: 'SaaS',
     image: '☁️',

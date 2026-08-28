@@ -1,8 +1,8 @@
 export const faqs = [
   {
     id: 1,
-    question: 'What services does ARIX offer?',
-    answer: 'ARIX offers custom software development, SaaS platforms, AI solutions, mobile apps, web development, and UI/UX design services tailored to your business needs.',
+    question: 'What services does Orofex offer?',
+    answer: 'Orofex offers custom software development, SaaS platforms, AI solutions, mobile apps, web development, and UI/UX design services tailored to your business needs.',
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ export const faqs = [
   },
   {
     id: 6,
-    question: 'How do I get started with ARIX?',
+    question: 'How do I get started with Orofex?',
     answer: 'Simply reach out through our contact form. We\'ll schedule a discovery call to understand your needs and propose the best solution for your business.',
   },
 ]

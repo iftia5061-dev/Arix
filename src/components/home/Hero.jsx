@@ -11,7 +11,7 @@ function Hero() {
         </h1>
 
         <p className="hero-subtitle">
-          ARIX creates powerful software, SaaS platforms, mobile apps, and AI-driven solutions to help your business grow.
+          Orofex creates powerful software, SaaS platforms, mobile apps, and AI-driven solutions to help your business grow.
         </p>
 
         <div className="hero-actions">

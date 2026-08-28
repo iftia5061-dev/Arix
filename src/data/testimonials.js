@@ -3,7 +3,7 @@ export const testimonials = [
     id: 1,
     name: 'Rahim Ahmed',
     role: 'CEO, TechNova',
-    quote: 'ARIX transformed our business with their custom software solution. Fast, reliable, and truly professional.',
+    quote: 'Orofex transformed our business with their custom software solution. Fast, reliable, and truly professional.',
   },
   {
     id: 2,

@@ -52,7 +52,7 @@ function ProductMarquee() {
       <section className="product-marquee">
         <p className="product-marquee-label">Ready to Use — Available Now</p>
 
-        {loading ? <p className="product-marquee-empty">Loading products…</p> : displayProducts.length === 0 ? <p className="product-marquee-empty">New ARIX products are coming soon.</p> : <div className="product-marquee-rows">
+        {loading ? <p className="product-marquee-empty">Loading products…</p> : displayProducts.length === 0 ? <p className="product-marquee-empty">New Orofex products are coming soon.</p> : <div className="product-marquee-rows">
           {rows.map((rowItems, rowIndex) => (
             <MarqueeRow
               key={rowIndex}

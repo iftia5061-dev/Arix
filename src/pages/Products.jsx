@@ -35,7 +35,7 @@ function Products() {
       <section className="products-hero">
         <h1 className="products-hero-title">Our Products</h1>
         <p className="products-hero-subtitle">
-          Explore ARIX's full range of software, SaaS, AI, and mobile solutions built to power your business.
+          Explore Orofex's full range of software, SaaS, AI, and mobile solutions built to power your business.
         </p>
       </section>
 

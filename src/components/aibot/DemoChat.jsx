@@ -8,7 +8,7 @@ const botReplies = [
   },
   {
     keywords: ['hello', 'hi', 'hey', 'salam', 'হাই', 'হ্যালো'],
-    reply: "Hi there! 👋 I'm the ARIX demo assistant. Ask me about pricing, features, or how AI bots can help your business.",
+    reply: "Hi there! 👋 I'm the Orofex demo assistant. Ask me about pricing, features, or how AI bots can help your business.",
   },
   {
     keywords: ['feature', 'do', 'can you', 'what'],
@@ -43,7 +43,7 @@ function getBotReply(userMessage) {
 
 function DemoChat() {
   const [messages, setMessages] = useState([
-    { sender: 'bot', text: "Hi! I'm a live demo of an ARIX AI bot. Try asking me about pricing, features, or WhatsApp integration." },
+    { sender: 'bot', text: "Hi! I'm a live demo of an Orofex AI bot. Try asking me about pricing, features, or WhatsApp integration." },
   ])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -74,7 +74,7 @@ function DemoChat() {
     <div className="demo-chat">
       <div className="demo-chat-header">
         <span className="demo-chat-dot"></span>
-        ARIX Demo Assistant
+        Orofex Demo Assistant
       </div>
 
       <div className="demo-chat-messages">
