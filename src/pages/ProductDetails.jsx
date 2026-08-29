@@ -29,6 +29,44 @@ function ProductDetails() {
     }
   }, [product])
 
+  // Google Search Console requires "offers" (or review/rating) on Product
+  // structured data. We inject a JSON-LD <script> tag with real pricing
+  // (for sale products) or just basic product info (for showcase products,
+  // which have no price — Google's rule only requires this for products
+  // that ARE for sale).
+  useEffect(() => {
+    if (!product) return undefined
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: product.shortDescription || product.description,
+      image: product.coverImage ? [product.coverImage] : undefined,
+      brand: { '@type': 'Brand', name: 'Orofex' },
+      ...(isSaleProduct(product) && product.pricing
+        ? {
+            offers: {
+              '@type': 'Offer',
+              url: `${window.location.origin}/products/${product.slug}`,
+              priceCurrency: product.pricing.currency,
+              price: (product.pricing.amount / 100).toFixed(2),
+              availability: 'https://schema.org/InStock',
+            },
+          }
+        : {}),
+    }
+
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.text = JSON.stringify(jsonLd)
+    document.head.appendChild(script)
+
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [product])
+
   if (loading) return <div className="product-page-state">Loading product…</div>
   if (error) return <div className="product-page-state">This product could not be loaded. Please try again shortly.</div>
   if (!product) return <div className="product-not-found"><h1>Product not found</h1><p>This product is not currently available.</p><Link to="/products" className="product-action-secondary">Back to Products</Link></div>
