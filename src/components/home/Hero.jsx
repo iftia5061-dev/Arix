@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import useMagnetic from '../../hooks/useMagnetic'
 import useTypewriterLines from '../../hooks/useTypewriterLines'
-import GyroModel from '../common/GyroModel'
 import './Hero.css'
 
 const heroLines = [
@@ -33,9 +32,6 @@ function Hero() {
       </h1>
 
       <div className="hero-glow"></div>
-      <div className="hero-gyro">
-        <GyroModel />
-      </div>
       <div className="hero-container fade-up-stagger">
         <div className="hero-badge glass-panel">
           <span className="hero-badge-dot"></span>

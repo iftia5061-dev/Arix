@@ -13,6 +13,10 @@
   text-align: center;
   color: var(--text-main);
   margin-bottom: 48px;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .why-Orofex-grid {
@@ -23,12 +27,24 @@
 
 .why-Orofex-card {
   text-align: center;
-  padding: 20px;
+  padding: 32px 24px;
+}
+
+.why-Orofex-icon-wrap {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.15), rgba(176, 38, 255, 0.08));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.15);
 }
 
 .why-Orofex-icon {
-  font-size: 36px;
-  margin-bottom: 16px;
+  font-size: 28px;
 }
 
 .why-Orofex-name {

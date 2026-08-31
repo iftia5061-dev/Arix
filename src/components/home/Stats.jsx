@@ -10,7 +10,7 @@ const stats = [
 function Stats() {
   return (
     <section className="stats">
-      <div className="stats-container">
+      <div className="stats-container fade-up-stagger">
         {stats.map((stat, index) => (
           <div className="stat-item" key={index}>
             <h3 className="stat-number">{stat.number}</h3>

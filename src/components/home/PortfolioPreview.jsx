@@ -1,6 +1,21 @@
 import { Link } from 'react-router-dom'
 import { portfolioItems } from '../../data/portfolio'
+import useTilt from '../../hooks/useTilt'
 import './PortfolioPreview.css'
+
+function PortfolioCard({ item }) {
+  const tiltRef = useTilt(5)
+
+  return (
+    <div ref={tiltRef} className="portfolio-card glass-panel glow-hover">
+      <div className="portfolio-image">{item.image}</div>
+      <div className="portfolio-overlay">
+        <span className="portfolio-category">{item.category}</span>
+        <h3 className="portfolio-title">{item.title}</h3>
+      </div>
+    </div>
+  )
+}
 
 function PortfolioPreview() {
   return (
@@ -13,15 +28,9 @@ function PortfolioPreview() {
           </Link>
         </div>
 
-        <div className="portfolio-preview-grid">
+        <div className="portfolio-preview-grid fade-up-stagger">
           {portfolioItems.map((item) => (
-            <div className="portfolio-card" key={item.id}>
-              <div className="portfolio-image">{item.image}</div>
-              <div className="portfolio-overlay">
-                <span className="portfolio-category">{item.category}</span>
-                <h3 className="portfolio-title">{item.title}</h3>
-              </div>
-            </div>
+            <PortfolioCard key={item.id} item={item} />
           ))}
         </div>
       </div>

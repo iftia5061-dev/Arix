@@ -11,8 +11,11 @@
 .testimonials-title {
   font-size: 32px;
   text-align: center;
-  color: var(--text-main);
   margin-bottom: 48px;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .testimonials-grid {
@@ -22,10 +25,20 @@
 }
 
 .testimonial-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 32px;
+  position: relative;
+  padding: 36px 32px 32px;
+}
+
+.testimonial-quote-mark {
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--neon-cyan);
+  opacity: 0.3;
+  font-family: Georgia, serif;
 }
 
 .testimonial-quote {
@@ -33,6 +46,8 @@
   color: var(--text-main);
   line-height: 1.7;
   margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .testimonial-name {

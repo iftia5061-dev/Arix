@@ -31,4 +31,28 @@ export const portfolioItems = [
     description: 'An online learning platform with course management, video streaming, and progress tracking for students and instructors.',
     technologies: ['React', 'Node.js', 'AWS'],
   },
+  {
+    id: 5,
+    title: 'InvoicePro Software',
+    category: 'Software',
+    image: '💻',
+    description: 'A desktop-class invoicing and billing software built for small businesses to manage clients, invoices, and payments in one place.',
+    technologies: ['Electron', 'React', 'SQLite'],
+  },
+  {
+    id: 6,
+    title: 'DevKit Utility Suite',
+    category: 'Web Tool',
+    image: '🛠️',
+    description: 'A collection of browser-based developer tools for formatting, converting, and debugging code without leaving the tab.',
+    technologies: ['React', 'TypeScript', 'Vite'],
+  },
+  {
+    id: 7,
+    title: 'Lumora Brand Website',
+    category: 'Web Design',
+    image: '🎨',
+    description: 'A fully custom, animation-rich marketing website built to elevate a lifestyle brand\'s online presence.',
+    technologies: ['React', 'Framer Motion', 'Tailwind'],
+  },
 ]

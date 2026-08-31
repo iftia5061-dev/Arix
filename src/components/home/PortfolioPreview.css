@@ -17,7 +17,10 @@
 
 .portfolio-preview-header h2 {
   font-size: 32px;
-  color: var(--text-main);
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .portfolio-preview-grid {
@@ -28,19 +31,11 @@
 
 .portfolio-card {
   position: relative;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
   overflow: hidden;
   height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.25s ease;
-}
-
-.portfolio-card:hover {
-  border-color: var(--color-primary);
 }
 
 .portfolio-image {
@@ -59,7 +54,8 @@
 .portfolio-category {
   font-size: 12px;
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
 }
 
 .portfolio-title {

@@ -209,15 +209,3 @@
   z-index: 1;
 }
 
-.hero-gyro {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 480px;
-  height: 480px;
-  max-width: 90vw;
-  opacity: 0.45;
-  pointer-events: none;
-  z-index: 1;
-}

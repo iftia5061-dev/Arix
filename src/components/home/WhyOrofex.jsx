@@ -34,8 +34,10 @@ function WhyOrofex() {
 
         <div ref={ref} className={`why-Orofex-grid reveal ${isVisible ? 'visible' : ''}`}>
           {reasons.map((reason, index) => (
-            <div className="why-Orofex-card" key={index}>
-              <div className="why-Orofex-icon">{reason.icon}</div>
+            <div className="why-Orofex-card glass-panel glow-hover" key={index}>
+              <div className="why-Orofex-icon-wrap">
+                <span className="why-Orofex-icon">{reason.icon}</span>
+              </div>
               <h3 className="why-Orofex-name">{reason.title}</h3>
               <p className="why-Orofex-description">{reason.description}</p>
             </div>
