@@ -10,7 +10,7 @@ function ServiceDetails({ service }) {
         <span className="service-details-icon" aria-hidden="true">{service.icon}</span>
         <h1>{service.name}</h1>
         <p>{service.description}</p>
-        <Link to="/contact" className="services-cta-btn">Get a Quote</Link>
+        <Link to="/contact" className="services-cta-btn btn-neon-primary">Get a Quote</Link>
       </section>
       <section className="service-details-content">
         <h2>How Orofex can help</h2>
@@ -25,7 +25,7 @@ function Services() {
   const { slug } = useParams()
   const selectedService = slug ? services.find((service) => service.slug === slug) : null
 
-  if (slug && !selectedService) return <main className="services-page service-details-page"><section className="service-details-hero"><h1>Service not found</h1><p>This service is not currently available.</p><Link to="/services" className="services-cta-btn">View all services</Link></section></main>
+  if (slug && !selectedService) return <main className="services-page service-details-page"><section className="service-details-hero"><h1>Service not found</h1><p>This service is not currently available.</p><Link to="/services" className="services-cta-btn btn-neon-primary">View all services</Link></section></main>
   if (selectedService) return <ServiceDetails service={selectedService} />
 
   return (
@@ -51,7 +51,7 @@ function Services() {
       <section className="services-cta">
         <h2>Have a project in mind?</h2>
         <p>Let&apos;s discuss how Orofex can bring your idea to life.</p>
-        <Link to="/contact" className="services-cta-btn">Start a Project</Link>
+        <Link to="/contact" className="services-cta-btn btn-neon-primary">Start a Project</Link>
       </section>
     </main>
   )

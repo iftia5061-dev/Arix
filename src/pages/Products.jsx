@@ -65,7 +65,7 @@ function Products() {
         ) : error ? (
           <div className="products-empty"><p>Products could not be loaded right now. Please try again shortly.</p></div>
         ) : filteredProducts.length > 0 ? (
-          <div className="products-list-grid">
+          <div className="products-list-grid fade-up-stagger">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}

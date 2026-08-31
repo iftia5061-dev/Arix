@@ -1,18 +1,23 @@
+/* --- Neon Glassmorphism upgrade --- */
 .marketplace-product-card {
+  /* glassmorphism base */
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border) !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
   border-radius: 16px;
-  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
 }
 
 .marketplace-product-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--color-primary);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, .25);
+  border-color: var(--glass-border-hover) !important;
+  box-shadow:
+    0 0 24px rgba(0, 240, 255, 0.15),
+    0 0 48px rgba(176, 38, 255, 0.08);
 }
 
 .marketplace-product-media {
@@ -43,6 +48,7 @@
   font-weight: 700;
   line-height: 1.2;
   text-transform: capitalize;
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 
@@ -60,7 +66,7 @@
   gap: 12px;
 }
 
-.marketplace-product-heading h3 { font-size: 1.08rem; }
+.marketplace-product-heading h3 { font-size: 1.08rem; font-family: var(--font-heading); }
 .marketplace-product-heading h3 a:hover { color: var(--color-primary); }
 .marketplace-product-heading span { color: var(--text-muted); font-size: .72rem; text-align: right; }
 

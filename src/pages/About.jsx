@@ -10,7 +10,7 @@ function About() {
         </p>
       </section>
 
-      <section className="about-mission-vision">
+      <section className="about-mission-vision fade-up-stagger">
         <div className="about-mv-card">
           <span className="about-mv-icon">🎯</span>
           <h2>Our Mission</h2>

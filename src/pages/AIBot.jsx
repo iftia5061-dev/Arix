@@ -15,7 +15,7 @@ function AIBot() {
           <p className="aibot-hero-subtitle">
             Try our live demo below — this is a real, working chatbot. Your custom bot will be trained specifically on your business.
           </p>
-          <Link to="/contact" className="aibot-hero-btn">
+          <Link to="/contact" className="aibot-hero-btn btn-neon-primary">
             Get Your Custom Bot
           </Link>
         </div>
@@ -61,7 +61,7 @@ function AIBot() {
 
               <Link
                 to="/contact"
-                className={pkg.highlighted ? 'aibot-btn-primary' : 'aibot-btn-secondary'}
+                className={pkg.highlighted ? 'aibot-btn-primary btn-neon-primary' : 'aibot-btn-secondary btn-neon-secondary'}
               >
                 Get Started
               </Link>
@@ -76,7 +76,7 @@ function AIBot() {
           <p>
             Enterprise package includes white-label rights — deploy AI bots for your clients under your own brand.
           </p>
-          <Link to="/contact" className="aibot-reseller-btn">
+          <Link to="/contact" className="aibot-reseller-btn btn-neon-primary">
             Ask About Reseller Pricing
           </Link>
         </div>

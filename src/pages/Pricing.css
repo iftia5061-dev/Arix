@@ -36,28 +36,9 @@
 
 .pricing-card {
   position: relative;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
   padding: 36px 32px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.pricing-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-hover);
-}
-
-.pricing-card.highlighted {
-  border-color: var(--color-primary);
-  background-color: var(--card-hover);
-  transform: scale(1.03);
-}
-
-.pricing-card.highlighted:hover {
-  transform: scale(1.03) translateY(-6px);
 }
 
 .pricing-badge {

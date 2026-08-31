@@ -52,7 +52,7 @@ function AI() {
         <p className="ai-hero-subtitle">
           We design and build AI systems that automate workflows, understand data, and help your business make smarter decisions.
         </p>
-        <Link to="/contact" className="ai-hero-btn">
+        <Link to="/contact" className="ai-hero-btn btn-neon-primary">
           Talk to Our AI Team
         </Link>
       </section>
@@ -86,7 +86,7 @@ function AI() {
       <section className="ai-cta">
         <h2>Ready to bring AI into your business?</h2>
         <p>Let's discuss how intelligent automation can transform your workflows.</p>
-        <Link to="/contact" className="ai-cta-btn">
+        <Link to="/contact" className="ai-cta-btn btn-neon-primary">
           Start a Project
         </Link>
       </section>

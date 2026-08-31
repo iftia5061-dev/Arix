@@ -61,7 +61,7 @@ function WebDesign() {
 
               <Link
                 to="/contact"
-                className={pkg.highlighted ? 'webdesign-btn-primary' : 'webdesign-btn-secondary'}
+                className={pkg.highlighted ? 'webdesign-btn-primary btn-neon-primary' : 'webdesign-btn-secondary btn-neon-secondary'}
               >
                 Get Started
               </Link>
@@ -76,7 +76,7 @@ function WebDesign() {
           <p>
             Enterprise package includes white-label rights — buy at wholesale price, deliver under your own brand, keep the margin.
           </p>
-          <Link to="/contact" className="webdesign-reseller-btn">
+          <Link to="/contact" className="webdesign-reseller-btn btn-neon-primary">
             Ask About Reseller Pricing
           </Link>
         </div>

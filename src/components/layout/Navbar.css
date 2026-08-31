@@ -6,8 +6,12 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(13, 18, 32, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 1px 24px rgba(0, 240, 255, 0.06);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .navbar-container {
@@ -85,16 +89,18 @@
 
 .navbar-cta {
   padding: 10px 20px;
-  background-color: var(--color-primary);
-  color: var(--text-main);
+  background: var(--gradient-brand);
+  color: var(--surface);
   font-size: 14px;
   font-weight: 600;
   border-radius: 8px;
-  transition: opacity 0.2s ease;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
 }
 
 .navbar-cta:hover {
-  opacity: 0.9;
+  box-shadow: 0 0 28px rgba(0, 240, 255, 0.45), 0 0 48px rgba(176, 38, 255, 0.2);
+  transform: translateY(-2px);
 }
 .navbar-toggle {
   display: none;

@@ -22,9 +22,9 @@
 .admin-form-group > span { color: var(--text-secondary); font-size: .78rem; font-weight: 600; }
 .admin-form-group em { color: var(--color-error); font-style: normal; }
 .admin-form-group small { color: var(--text-muted); font-size: .7rem; line-height: 1.35; }
-.admin-form-group input, .admin-form-group textarea, .admin-form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-main); font: inherit; font-size: .82rem; }
+.admin-form-group input, .admin-form-group textarea, .admin-form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--glass-border); border-radius: 10px; background: var(--surface); box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), inset -2px -2px 6px rgba(255, 255, 255, 0.02); color: var(--text-main); font: inherit; font-size: .82rem; transition: box-shadow 0.2s ease, border-color 0.2s ease; }
 .admin-form-group textarea { resize: vertical; }
-.admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: 0; border-color: var(--color-primary); }
+.admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: 0; border-color: var(--neon-cyan); box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(0, 240, 255, 0.15); }
 .admin-checkbox { display: flex; align-items: center; gap: 8px; margin: 3px 0 18px; color: var(--text-secondary); font-size: .8rem; }
 .admin-checkbox input { accent-color: var(--color-primary); }
 .admin-submit-btn { width: 100%; padding: 13px; border-radius: 9px; background: var(--gradient-brand); color: var(--text-main); font-weight: 700; }

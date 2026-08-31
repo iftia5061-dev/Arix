@@ -57,7 +57,7 @@ function Tools() {
 
               <Link
                 to="/contact"
-                className={pkg.highlighted ? 'tools-btn-primary' : 'tools-btn-secondary'}
+                className={pkg.highlighted ? 'tools-btn-primary btn-neon-primary' : 'tools-btn-secondary btn-neon-secondary'}
               >
                 Subscribe
               </Link>
@@ -72,7 +72,7 @@ function Tools() {
           <p>
             Enterprise tier includes white-label rights — offer these tools to your own clients under your own brand.
           </p>
-          <Link to="/contact" className="tools-reseller-btn">
+          <Link to="/contact" className="tools-reseller-btn btn-neon-primary">
             Ask About Reseller Pricing
           </Link>
         </div>

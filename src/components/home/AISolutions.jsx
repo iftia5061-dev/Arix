@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import GyroModel from '../common/GyroModel'
 import './AISolutions.css'
 
 const aiFeatures = [
@@ -31,13 +32,13 @@ function AISolutions() {
             ))}
           </ul>
 
-          <Link to="/ai" className="ai-solutions-btn">
+          <Link to="/ai" className="ai-solutions-btn btn-neon-primary">
             Explore AI Solutions
           </Link>
         </div>
 
         <div className="ai-solutions-visual">
-          <div className="ai-orb"></div>
+          <GyroModel />
         </div>
       </div>
     </section>

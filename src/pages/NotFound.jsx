@@ -9,7 +9,7 @@ function NotFound() {
       <p className="not-found-text">
         The page you're looking for doesn't exist or has been moved.
       </p>
-      <Link to="/" className="not-found-btn">
+      <Link to="/" className="not-found-btn btn-neon-primary">
         Back to Home
       </Link>
     </div>

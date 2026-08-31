@@ -58,7 +58,7 @@ function Software() {
 
               <Link
                 to="/contact"
-                className={pkg.highlighted ? 'software-btn-primary' : 'software-btn-secondary'}
+                className={pkg.highlighted ? 'software-btn-primary btn-neon-primary' : 'software-btn-secondary btn-neon-secondary'}
               >
                 Get Started
               </Link>
@@ -73,7 +73,7 @@ function Software() {
           <p>
             Enterprise tier across all our software includes white-label rights — build once with us, sell under your own brand.
           </p>
-          <Link to="/contact" className="software-reseller-btn">
+          <Link to="/contact" className="software-reseller-btn btn-neon-primary">
             Ask About Reseller Pricing
           </Link>
         </div>

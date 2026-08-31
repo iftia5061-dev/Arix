@@ -37,7 +37,7 @@ function Portfolio() {
       <section className="portfolio-cta">
         <h2>Want to see your project here next?</h2>
         <p>Let's build something great together.</p>
-        <Link to="/contact" className="portfolio-cta-btn">
+        <Link to="/contact" className="portfolio-cta-btn btn-neon-primary">
           Start a Project
         </Link>
       </section>

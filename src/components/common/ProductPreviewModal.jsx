@@ -28,7 +28,7 @@ function ProductPreviewModal({ product, onClose }) {
 
   return (
     <div className="preview-modal-overlay" onMouseDown={onClose} role="presentation">
-      <section className="preview-modal" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title" onMouseDown={(event) => event.stopPropagation()}>
+      <section className="preview-modal blur-pop-enter" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title" onMouseDown={(event) => event.stopPropagation()}>
         <button className="preview-modal-close" type="button" onClick={onClose} aria-label="Close quick view">×</button>
 
         <div className="preview-modal-media">

@@ -54,7 +54,7 @@ function Contact() {
               <span className="contact-info-icon">📧</span>
               <div>
                 <h4>Email</h4>
-                <p>ceo.Orofex.info@gmail.com</p>
+                <p>iftia5061@gmail.com</p>
               </div>
             </div>
 
@@ -104,6 +104,7 @@ function Contact() {
                     type="text"
                     id="name"
                     name="from_name"
+                    className="neumorphic-input"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Your name"
@@ -117,6 +118,7 @@ function Contact() {
                     type="email"
                     id="email"
                     name="from_email"
+                    className="neumorphic-input"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="you@example.com"
@@ -131,6 +133,7 @@ function Contact() {
                   type="text"
                   id="subject"
                   name="subject"
+                  className="neumorphic-input"
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder="What is this about?"
@@ -143,6 +146,7 @@ function Contact() {
                 <textarea
                   id="message"
                   name="message"
+                  className="neumorphic-input"
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="Tell us about your project..."

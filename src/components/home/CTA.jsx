@@ -11,7 +11,7 @@ function CTA() {
         <p className="cta-subtitle">
           Let's build something powerful together. Tell us about your idea and we'll bring it to life.
         </p>
-        <Link to="/contact" className="cta-btn">
+        <Link to="/contact" className="cta-btn btn-neon-primary">
           Start a Project
         </Link>
       </div>

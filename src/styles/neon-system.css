@@ -1,0 +1,139 @@
+/* =========================================================
+   OROFEX NEON DESIGN SYSTEM — reusable utility classes
+   Apply these classes to existing cards/buttons to migrate
+   them to the new look without rewriting their layout CSS.
+   ========================================================= */
+
+/* --- Glassmorphism card base --- */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* --- Neon glow on hover (for cards) --- */
+.glow-hover:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow:
+    0 0 24px rgba(0, 240, 255, 0.15),
+    0 0 48px rgba(176, 38, 255, 0.08);
+  transform: translateY(-4px);
+}
+
+/* --- Scale + elevation hover (pricing-style cards) --- */
+.elevate-hover:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 0 32px rgba(0, 240, 255, 0.2),
+    0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Neon glow border, always on (highlighted/featured cards) --- */
+.glow-active {
+  border-color: var(--neon-cyan);
+  box-shadow:
+    0 0 24px rgba(0, 240, 255, 0.25),
+    0 0 48px rgba(176, 38, 255, 0.12);
+}
+
+/* --- Buttons: neon glow + magnetic-ready --- */
+.btn-neon-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--surface);
+  background: var(--gradient-brand);
+  border: none;
+  border-radius: 10px;
+  padding: 13px 32px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+
+.btn-neon-primary:hover {
+  box-shadow: 0 0 32px rgba(0, 240, 255, 0.45), 0 0 60px rgba(176, 38, 255, 0.25);
+}
+
+.btn-neon-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 13px 32px;
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.btn-neon-secondary:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* --- Neumorphic form controls --- */
+.neumorphic-input {
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), inset -2px -2px 6px rgba(255, 255, 255, 0.02);
+  color: var(--text-main);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.neumorphic-input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(0, 240, 255, 0.15);
+}
+
+/* --- Staggered fade-up entrance (apply to a container; children get delays via nth-child) --- */
+.fade-up-stagger > * {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fade-up-in 0.7s ease forwards;
+}
+
+.fade-up-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.fade-up-stagger > *:nth-child(2) { animation-delay: 0.15s; }
+.fade-up-stagger > *:nth-child(3) { animation-delay: 0.25s; }
+.fade-up-stagger > *:nth-child(4) { animation-delay: 0.35s; }
+.fade-up-stagger > *:nth-child(5) { animation-delay: 0.45s; }
+
+@keyframes fade-up-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Blur-pop modal entrance --- */
+.blur-pop-enter {
+  animation: blur-pop-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes blur-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
