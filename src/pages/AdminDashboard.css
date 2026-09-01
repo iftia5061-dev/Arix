@@ -47,3 +47,40 @@
 
 @media (max-width: 950px) { .admin-layout { grid-template-columns: 1fr; } .admin-list-card { order: 2; } }
 @media (max-width: 540px) { .admin-dashboard { padding-inline: 14px; } .admin-form-card, .admin-list-card { padding: 20px; } .admin-page-heading { display: block; } .admin-role-badge { display: inline-block; margin-top: 12px; } .admin-form-row { grid-template-columns: 1fr; } }
+
+.admin-avg-rating {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--neon-cyan, var(--color-primary));
+}
+
+.admin-rating-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.admin-rating-item {
+  padding: 12px;
+  background-color: var(--bg-primary);
+  border-radius: 10px;
+}
+
+.admin-rating-stars {
+  color: var(--neon-cyan, var(--color-primary));
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.admin-rating-comment {
+  font-size: 13px;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.admin-rating-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}

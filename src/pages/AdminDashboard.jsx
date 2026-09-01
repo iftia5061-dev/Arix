@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { collection, deleteDoc, doc, getDoc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { zipToInlineHtml } from '../utils/zipToHtml'
 import { useAuth } from '../context/authStore'
@@ -15,6 +15,7 @@ function AdminDashboard() {
   const [accessStatus, setAccessStatus] = useState('idle')
   const [products, setProducts] = useState([])
   const [loadingProducts, setLoadingProducts] = useState(false)
+  const [ratings, setRatings] = useState([])
   const [formData, setFormData] = useState(emptyProductForm)
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
@@ -76,6 +77,20 @@ function AdminDashboard() {
     })
   }, [accessStatus])
 
+  useEffect(() => {
+    if (accessStatus !== 'granted') return undefined
+    const q = query(collection(db, 'ratings'), orderBy('createdAt', 'desc'))
+    return onSnapshot(q, (snapshot) => {
+      setRatings(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
+    }, (error) => {
+      console.error('Could not load ratings:', error)
+    })
+  }, [accessStatus])
+
+  const averageRating = ratings.length > 0
+    ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
+    : null
+
   const draftProduct = useMemo(() => formToProduct(formData), [formData])
   const readiness = getProductReadiness(draftProduct)
   const isPublishing = formData.status === 'published'
@@ -104,8 +119,6 @@ function AdminDashboard() {
     if (duplicateSlug) return setMessage('This URL slug is already being used by another product.')
     if (product.status === 'published' && !productReadiness.ready) return setMessage(`Cannot publish yet. Add or correct: ${productReadiness.missing.join(', ')}.`)
 
-    // Attach the uploaded, self-contained homepage preview (if any) directly
-    // onto product.links — done here so we don't need to touch productSchema.js.
     const productWithPreview = {
       ...product,
       links: {
@@ -133,8 +146,6 @@ function AdminDashboard() {
     setFormData(productToForm(product))
     setEditingId(product.id)
     setMessage('')
-    // Restore any previously uploaded locked-preview HTML into local state too,
-    // since it lives on product.links.previewHtml but productToForm may not carry it.
     if (product.links?.previewHtml) {
       setPreviewHtml(product.links.previewHtml)
       setPreviewZipStatus('ready')
@@ -145,7 +156,7 @@ function AdminDashboard() {
   }
 
   const handleDelete = async (product) => {
-    if (!window.confirm(`Delete “${product.name}”? This cannot be undone.`)) return
+    if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return
     try {
       await deleteDoc(doc(db, 'products', product.id))
       if (editingId === product.id) resetForm()
@@ -202,7 +213,29 @@ function AdminDashboard() {
         <button type="submit" className="admin-submit-btn" disabled={saving}>{saving ? 'Saving…' : editingId ? 'Save product' : 'Add product'}</button>
       </form>
     </section>
-    <section className="admin-list-card"><h2>All products ({products.length})</h2>{loadingProducts ? <p className="admin-empty">Loading…</p> : products.length === 0 ? <p className="admin-empty">No products yet. Start with a draft and publish when it is ready.</p> : <div className="admin-product-list">{products.map((product) => { const productReadiness = getProductReadiness(product); return <article key={product.id} className="admin-product-item"><div className="admin-product-image">{product.coverImage ? <img src={product.coverImage} alt="" /> : <span>{product.name.slice(0, 2).toUpperCase()}</span>}</div><div className="admin-product-info"><h3>{product.name || 'Untitled product'}</h3><p><span className={`admin-status ${product.status}`}>{product.status}</span> {product.productType === 'showcase' ? 'showcase · Built by Orofex' : `${product.category} · ${formatPrice(product.pricing) || 'No price'}`}</p>{product.status === 'published' && !productReadiness.ready && <small>Not public: {productReadiness.missing.join(', ')}</small>}</div><div className="admin-product-actions"><button type="button" onClick={() => handleEdit(product)}>Edit</button><button type="button" onClick={() => handleDelete(product)} className="admin-delete-btn">Delete</button></div></article> })}</div>}</section>
+
+    <section className="admin-list-card">
+      <h2>All products ({products.length})</h2>
+      {loadingProducts ? <p className="admin-empty">Loading…</p> : products.length === 0 ? <p className="admin-empty">No products yet. Start with a draft and publish when it is ready.</p> : <div className="admin-product-list">{products.map((product) => { const productReadiness = getProductReadiness(product); return <article key={product.id} className="admin-product-item"><div className="admin-product-image">{product.coverImage ? <img src={product.coverImage} alt="" /> : <span>{product.name.slice(0, 2).toUpperCase()}</span>}</div><div className="admin-product-info"><h3>{product.name || 'Untitled product'}</h3><p><span className={`admin-status ${product.status}`}>{product.status}</span> {product.productType === 'showcase' ? 'showcase · Built by Orofex' : `${product.category} · ${formatPrice(product.pricing) || 'No price'}`}</p>{product.status === 'published' && !productReadiness.ready && <small>Not public: {productReadiness.missing.join(', ')}</small>}</div><div className="admin-product-actions"><button type="button" onClick={() => handleEdit(product)}>Edit</button><button type="button" onClick={() => handleDelete(product)} className="admin-delete-btn">Delete</button></div></article> })}</div>}
+    </section>
+
+    <section className="admin-list-card">
+      <h2>Visitor Ratings ({ratings.length}){averageRating && <span className="admin-avg-rating"> · Avg: {averageRating} ★</span>}</h2>
+      {ratings.length === 0 ? (
+        <p className="admin-empty">No ratings yet.</p>
+      ) : (
+        <div className="admin-rating-list">
+          {ratings.map((r) => (
+            <article key={r.id} className="admin-rating-item">
+              <div className="admin-rating-stars">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
+              {r.comment && <p className="admin-rating-comment">{r.comment}</p>}
+              <p className="admin-rating-meta">{r.page} · {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : ''}</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
     </div>
   </div></main>
 }

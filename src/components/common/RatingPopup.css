@@ -1,0 +1,124 @@
+.rating-popup {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 300px;
+  background: var(--glass-bg, var(--card-bg));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border, var(--border-color));
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 800;
+  animation: rating-popup-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes rating-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.rating-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.rating-popup-close:hover {
+  color: var(--text-main);
+}
+
+.rating-popup-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 14px;
+  padding-right: 16px;
+}
+
+.rating-popup-stars {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.rating-star {
+  font-size: 26px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.rating-star.active {
+  color: var(--neon-cyan, var(--color-primary));
+  transform: scale(1.1);
+}
+
+.rating-popup-comment {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 12px;
+  font-family: inherit;
+  resize: none;
+  margin-bottom: 12px;
+}
+
+.rating-popup-comment:focus {
+  outline: none;
+  border-color: var(--neon-cyan, var(--color-primary));
+}
+
+.rating-popup-submit {
+  width: 100%;
+  padding: 10px;
+  background: var(--gradient-brand);
+  color: var(--surface, #070A12);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.rating-popup-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.rating-popup-submit:not(:disabled):hover {
+  opacity: 0.9;
+}
+
+.rating-popup-thanks {
+  font-size: 14px;
+  color: var(--text-main);
+  text-align: center;
+  padding: 10px 0;
+}
+
+@media (max-width: 480px) {
+  .rating-popup {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    bottom: 16px;
+  }
+}
