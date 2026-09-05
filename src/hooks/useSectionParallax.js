@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { throttle } from '../utils/debounce'
 
 export default function useSectionParallax(intensity = 0.02) {
   const ref = useRef(null)
@@ -7,7 +8,7 @@ export default function useSectionParallax(intensity = 0.02) {
     const el = ref.current
     if (!el) return
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       const rect = el.getBoundingClientRect()
       const centerX = rect.width / 2
       const centerY = rect.height / 2
@@ -18,7 +19,7 @@ export default function useSectionParallax(intensity = 0.02) {
       const rotateY = ((mouseX - centerX) / centerX) * intensity
 
       el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
-    }
+    }, 16)
 
     const handleMouseLeave = () => {
       el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)'

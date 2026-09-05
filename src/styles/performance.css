@@ -1,0 +1,63 @@
+/* Performance Optimizations */
+
+/* Hardware Acceleration for Heavy Animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Image Loading States */
+img.loading {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+img.loaded {
+  opacity: 1;
+}
+
+/* Contain for Better Performance */
+.animating-element {
+  contain: layout style paint;
+}
+
+/* Optimize Heavy Blur Filters */
+.heavy-blur {
+  will-change: filter;
+}
+
+/* Optimize Transform Animations */
+.animating-transform {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Optimize Opacity Animations */
+.animating-opacity {
+  will-change: opacity;
+}
+
+/* Optimize Composite Animations */
+.animating-composite {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}

@@ -272,29 +272,45 @@
 }
 
 .social-icon {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(15, 22, 32, 0.8);
-  border: 1px solid rgba(42, 53, 69, 0.5);
+  background: rgba(15, 22, 32, 0.9);
+  border: 2px solid rgba(42, 53, 69, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #a0aec0;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .social-icon:hover {
-  background: rgba(6, 182, 212, 0.2);
+  background: rgba(6, 182, 212, 0.25);
   border-color: #06b6d4;
   color: #06b6d4;
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
 }
 
 .social-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+}
+
+.social-icon-whatsapp {
+  background: rgba(37, 211, 102, 0.15);
+  border: 2px solid rgba(37, 211, 102, 0.4);
+  color: #25D366;
+}
+
+.social-icon-whatsapp:hover {
+  background: rgba(37, 211, 102, 0.25);
+  border-color: #25D366;
+  color: #25D366;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+  transform: translateY(-3px);
 }
 
 .footer-contact {

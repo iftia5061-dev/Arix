@@ -123,6 +123,7 @@
   transform: translateY(20px);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  will-change: transform, opacity;
 }
 
 .category-card::before {
@@ -169,6 +170,7 @@
   position: relative;
   transition: all 0.4s ease;
   z-index: 2;
+  will-change: transform, border-color, box-shadow;
 }
 
 .category-card:hover .category-icon-circle {

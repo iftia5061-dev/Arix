@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import useMagnetic from '../../hooks/useMagnetic'
 import ParticleGrid from './ParticleGrid'
@@ -12,6 +12,7 @@ function Hero() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [currentCharIndex, setCurrentCharIndex] = useState(0)
   const [titleComplete, setTitleComplete] = useState(false)
+  const typingTimeoutRef = useRef(null)
 
   const words = [
     "Building",
@@ -31,23 +32,26 @@ function Hero() {
   const [isTyping, setIsTyping] = useState(false)
   const [isZooming, setIsZooming] = useState(false)
   const [colorIndex, setColorIndex] = useState(0)
+  const descriptionTimeoutRef = useRef(null)
 
   useEffect(() => {
     if (currentWordIndex < words.length) {
       const currentWord = words[currentWordIndex]
 
       if (currentCharIndex < currentWord.length) {
-        const timeout = setTimeout(() => {
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+        typingTimeoutRef.current = setTimeout(() => {
           setCurrentCharIndex(prev => prev + 1)
         }, 100)
-        return () => clearTimeout(timeout)
+        return () => clearTimeout(typingTimeoutRef.current)
       } else {
-        const timeout = setTimeout(() => {
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+        typingTimeoutRef.current = setTimeout(() => {
           setTypedWords(prev => [...prev, currentWord])
           setCurrentWordIndex(prev => prev + 1)
           setCurrentCharIndex(0)
         }, 200)
-        return () => clearTimeout(timeout)
+        return () => clearTimeout(typingTimeoutRef.current)
       }
     } else {
       setTitleComplete(true)
@@ -57,22 +61,24 @@ function Hero() {
 
   useEffect(() => {
     if (isTyping && descriptionCharIndex < descriptionText.length) {
-      const timeout = setTimeout(() => {
+      if (descriptionTimeoutRef.current) clearTimeout(descriptionTimeoutRef.current)
+      descriptionTimeoutRef.current = setTimeout(() => {
         setTypedDescription(prev => prev + descriptionText[descriptionCharIndex])
         setDescriptionCharIndex(prev => prev + 1)
       }, 50)
-      return () => clearTimeout(timeout)
+      return () => clearTimeout(descriptionTimeoutRef.current)
     } else if (isTyping && descriptionCharIndex >= descriptionText.length) {
       setIsTyping(false)
       setIsZooming(true)
-      const timeout = setTimeout(() => {
+      if (descriptionTimeoutRef.current) clearTimeout(descriptionTimeoutRef.current)
+      descriptionTimeoutRef.current = setTimeout(() => {
         setIsZooming(false)
         setTypedDescription('')
         setDescriptionCharIndex(0)
         setColorIndex(prev => (prev + 1) % 2)
         setIsTyping(true)
       }, 3500)
-      return () => clearTimeout(timeout)
+      return () => clearTimeout(descriptionTimeoutRef.current)
     }
   }, [descriptionCharIndex, descriptionText, isTyping])
 

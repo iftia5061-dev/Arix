@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/authStore'
+import { debounce } from '../../utils/debounce'
 import './Navbar.css'
 
 function Navbar() {
@@ -9,9 +10,9 @@ function Navbar() {
   const { user, loginWithGoogle, logout } = useAuth()
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = debounce(() => {
       setIsScrolled(window.scrollY > 20)
-    }
+    }, 16)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])

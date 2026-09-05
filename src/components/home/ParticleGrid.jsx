@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { throttle } from '../../utils/debounce'
 import './ParticleGrid.css'
 
 function ParticleGrid() {
@@ -116,11 +117,11 @@ function ParticleGrid() {
       animationId = requestAnimationFrame(animate)
     }
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       const rect = canvas.getBoundingClientRect()
       mouseRef.current.x = e.clientX - rect.left
       mouseRef.current.y = e.clientY - rect.top
-    }
+    }, 16)
 
     const handleMouseLeave = () => {
       mouseRef.current.x = null
