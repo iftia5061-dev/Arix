@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { softwareCategories } from '../data/softwarePackages'
+import { buildOrderLink, getOrderPlanId } from '../data/pricingLookup'
 import './Software.css'
 
 function Software() {
@@ -57,8 +58,8 @@ function Software() {
               </ul>
 
               <Link
-                to="/contact"
-                className={pkg.highlighted ? 'software-btn-primary btn-neon-primary' : 'software-btn-secondary btn-neon-secondary'}
+                to={buildOrderLink(getOrderPlanId({ category: 'software', subService: activeCategory.id, tier: pkg.name }))}
+                className="software-btn-new"
               >
                 Get Started
               </Link>

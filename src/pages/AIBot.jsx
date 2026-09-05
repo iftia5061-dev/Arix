@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { aiBotPackages } from '../data/aiBotPackages'
+import { buildOrderLink, getOrderPlanId } from '../data/pricingLookup'
 import DemoChat from '../components/aibot/DemoChat'
 import './AIBot.css'
 
@@ -60,8 +61,8 @@ function AIBot() {
               </ul>
 
               <Link
-                to="/contact"
-                className={pkg.highlighted ? 'aibot-btn-primary btn-neon-primary' : 'aibot-btn-secondary btn-neon-secondary'}
+                to={buildOrderLink(getOrderPlanId({ category: 'ai-bot', tier: pkg.name }))}
+                className="aibot-btn-new"
               >
                 Get Started
               </Link>

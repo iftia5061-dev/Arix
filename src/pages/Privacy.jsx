@@ -5,7 +5,7 @@ function Privacy() {
     <div className="legal-page">
       <div className="legal-container">
         <h1>Privacy Policy</h1>
-        <p className="legal-updated">Last updated: March 2026</p>
+        <p className="legal-updated">Last updated: September 2026</p>
 
         <h2>1. Information We Collect</h2>
         <p>
@@ -24,7 +24,7 @@ function Privacy() {
 
         <h2>4. Third-Party Services</h2>
         <p>
-          We may use third-party services (such as email providers) to operate our website. These services have their own privacy policies governing the use of your information.
+          We may use third-party services (such as Google for authentication and Firebase for data storage) to operate our website. These services have their own privacy policies governing the use of your information.
         </p>
 
         <h2>5. Your Rights</h2>
@@ -34,7 +34,7 @@ function Privacy() {
 
         <h2>6. Contact Us</h2>
         <p>
-          If you have questions about this Privacy Policy, please contact us at hello@Orofex.com.
+          If you have questions about this Privacy Policy, please contact us at contact@orofex.com.
         </p>
       </div>
     </div>

@@ -63,7 +63,7 @@
 }
 
 .rating-star.active {
-  color: var(--neon-cyan, var(--color-primary));
+  color: var(--gold-accent, var(--color-primary));
   transform: scale(1.1);
 }
 
@@ -82,7 +82,7 @@
 
 .rating-popup-comment:focus {
   outline: none;
-  border-color: var(--neon-cyan, var(--color-primary));
+  border-color: var(--gold-accent, var(--color-primary));
 }
 
 .rating-popup-submit {

@@ -5,6 +5,8 @@ export const categories = [
     slug: 'web-design',
     icon: '🎨',
     description: 'Custom, animated websites and landing pages',
+    gradient: 'linear-gradient(135deg, #FF3EA5 0%, #B026FF 100%)',
+    glowColor: '#FF3EA5',
   },
   {
     id: 2,
@@ -12,6 +14,8 @@ export const categories = [
     slug: 'software',
     icon: '💻',
     description: 'Custom software solutions built for your business needs',
+    gradient: 'linear-gradient(135deg, #3E7BFA 0%, #00D4FF 100%)',
+    glowColor: '#3E7BFA',
   },
   {
     id: 3,
@@ -19,6 +23,8 @@ export const categories = [
     slug: 'saas',
     icon: '☁️',
     description: 'Scalable cloud-based platforms and subscription products',
+    gradient: 'linear-gradient(135deg, #00E58F 0%, #00C2A8 100%)',
+    glowColor: '#00E58F',
   },
   {
     id: 4,
@@ -26,6 +32,8 @@ export const categories = [
     slug: 'ai',
     icon: '🤖',
     description: 'Intelligent AI-powered tools and automation systems',
+    gradient: 'linear-gradient(135deg, #00F0FF 0%, #6C5CE7 100%)',
+    glowColor: '#00F0FF',
   },
   {
     id: 5,
@@ -33,6 +41,8 @@ export const categories = [
     slug: 'mobile-apps',
     icon: '📱',
     description: 'Native and cross-platform mobile applications',
+    gradient: 'linear-gradient(135deg, #FF8A3E 0%, #FF3E5E 100%)',
+    glowColor: '#FF8A3E',
   },
   {
     id: 6,
@@ -40,5 +50,7 @@ export const categories = [
     slug: 'tools',
     icon: '🛠️',
     description: 'Productivity tools and developer utilities',
+    gradient: 'linear-gradient(135deg, #FFD23E 0%, #FF9F1C 100%)',
+    glowColor: '#FFD23E',
   },
 ]

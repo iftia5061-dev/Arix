@@ -1,5 +1,6 @@
 .software-page {
   min-height: 60vh;
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 50%, #0f1620 100%);
 }
 
 .software-hero {
@@ -9,13 +10,14 @@
 
 .software-hero-title {
   font-size: 42px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 16px;
+  font-weight: 700;
 }
 
 .software-hero-subtitle {
   font-size: 16px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   max-width: 580px;
   margin: 0 auto;
   line-height: 1.6;
@@ -39,30 +41,39 @@
   align-items: center;
   gap: 8px;
   padding: 12px 22px;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.8) 0%, rgba(15, 22, 32, 0.9) 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  border-image-slice: 1;
+  color: #a0aec0;
   font-size: 14px;
   font-weight: 600;
   border-radius: 30px;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .software-tab-btn:hover {
-  border-color: var(--border-hover);
-  color: var(--text-main);
+  border-image: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-image-slice: 1;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
 }
 
 .software-tab-btn.active {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-image: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-image-slice: 1;
+  color: #0f1620;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
 .software-tab-description {
   text-align: center;
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   max-width: 500px;
   margin: 0 auto 44px;
 }
@@ -78,23 +89,26 @@
 
 .software-card {
   position: relative;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.8) 0%, rgba(15, 22, 32, 0.9) 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  border-image-slice: 1;
   border-radius: 16px;
   padding: 32px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .software-card:hover {
   transform: translateY(-6px);
-  border-color: var(--border-hover);
 }
 
 .software-card.highlighted {
-  border-color: var(--color-primary);
-  background-color: var(--card-hover);
+  border-image: linear-gradient(135deg, #06b6d4 0%, #a855f7 50%, #ec4899 100%);
+  border-image-slice: 1;
   transform: scale(1.03);
 }
 
@@ -107,8 +121,8 @@
   top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--gradient-brand);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 600;
   padding: 6px 14px;
@@ -118,8 +132,9 @@
 
 .software-card-name {
   font-size: 20px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .software-card-price {
@@ -132,19 +147,20 @@
 .software-price-bdt {
   font-size: 28px;
   font-weight: 700;
-  color: var(--text-main);
+  color: #06b6d4;
 }
 
 .software-price-usd {
   font-size: 13px;
-  color: var(--text-muted);
+  color: #718096;
 }
 
 .software-delivery {
   display: inline-block;
   font-size: 12px;
-  color: var(--color-success);
+  color: #10b981;
   margin-bottom: 24px;
+  font-weight: 500;
 }
 
 .software-features {
@@ -160,12 +176,34 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: var(--text-main);
+  color: #ffffff;
 }
 
 .software-features li span {
-  color: var(--color-success);
+  color: #10b981;
   font-weight: 700;
+}
+
+.software-btn-new {
+  display: block;
+  text-align: center;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: #0f1620;
+  color: #ffffff;
+  border: 2px solid #06b6d4;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.software-btn-new:hover {
+  background: #06b6d4;
+  color: #0f1620;
+  border-color: #06b6d4;
 }
 
 .software-btn-primary,
@@ -176,33 +214,33 @@
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .software-btn-primary {
-  background-color: var(--color-primary);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #0f1620;
 }
 
 .software-btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #0891b2 0%, #9333ea 100%);
 }
 
 .software-btn-secondary {
   background-color: transparent;
-  color: var(--text-main);
-  border: 1px solid var(--border-hover);
+  color: #ffffff;
+  border: 2px solid rgba(6, 182, 212, 0.3);
 }
 
 .software-btn-secondary:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.1);
 }
 
 .software-reseller {
   padding: 80px 24px 120px;
-  background-color: var(--bg-secondary);
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 100%);
   text-align: center;
 }
 
@@ -213,13 +251,14 @@
 
 .software-reseller h2 {
   font-size: 26px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 12px;
+  font-weight: 700;
 }
 
 .software-reseller p {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   line-height: 1.6;
   margin-bottom: 28px;
 }
@@ -227,15 +266,17 @@
 .software-reseller-btn {
   display: inline-block;
   padding: 14px 32px;
-  background: var(--gradient-brand);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #0f1620;
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
 .software-reseller-btn:hover {
-  opacity: 0.9;
   transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(6, 182, 212, 0.5);
 }

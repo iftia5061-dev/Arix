@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 
 function lerp(current, target, factor) {
   return current + (target - current) * factor
@@ -7,7 +7,6 @@ function lerp(current, target, factor) {
 
 function IcosahedronShape() {
   const meshRef = useRef(null)
-  const { viewport } = useThree()
   const mouse = useRef({ x: 0, y: 0 })
 
   // Track mouse position within the canvas
@@ -31,7 +30,7 @@ function IcosahedronShape() {
       <meshStandardMaterial
         color="#00F0FF"
         emissive="#00F0FF"
-        emissiveIntensity={0.4}
+        emissiveIntensity={0.25}
         wireframe
       />
     </mesh>
@@ -41,10 +40,10 @@ function IcosahedronShape() {
 function GyroModel() {
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '260px' }}>
-      <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 4], fov: 45 }} gl={{ preserveDrawingBuffer: true, antialias: true, powerPreference: 'high-performance' }}>
         <ambientLight intensity={0.3} />
-        <pointLight position={[3, 2, 3]} color="#00F0FF" intensity={1.2} />
-        <pointLight position={[-3, -2, -2]} color="#B026FF" intensity={1.2} />
+        <pointLight position={[3, 2, 3]} color="#00F0FF" intensity={0.8} />
+        <pointLight position={[-3, -2, -2]} color="#B026FF" intensity={0.8} />
         <IcosahedronShape />
       </Canvas>
     </div>

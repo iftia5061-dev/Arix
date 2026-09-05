@@ -24,8 +24,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--neon-cyan);
-  box-shadow: 0 0 8px var(--neon-cyan);
+  background: #666666;
 }
 
 .product-marquee-rows {
@@ -87,9 +86,8 @@
 }
 
 .marquee-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--glass-border-hover);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  background: #252525;
+  border-color: #444444;
   transform: translateY(-4px);
 }
 

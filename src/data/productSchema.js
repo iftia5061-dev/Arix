@@ -30,13 +30,28 @@ const priceToCents = (value) => {
 const validStoredAmount = (value) => Number.isInteger(value) && value > 0 && value <= 100000000
 
 export const PRODUCT_CATEGORIES = [
-  { value: 'software', label: 'Software' },
-  { value: 'saas', label: 'SaaS' },
-  { value: 'ai', label: 'AI' },
-  { value: 'mobile-apps', label: 'Mobile apps' },
-  { value: 'tools', label: 'Tools' },
-  { value: 'web-design', label: 'Web design' },
+  { value: 'software', label: 'Software', icon: '💻', gradient: 'linear-gradient(135deg, #2563EB 0%, #1E40AF 100%)', glowColor: '#2563EB' },
+  { value: 'saas', label: 'SaaS', icon: '☁️', gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)', glowColor: '#059669' },
+  { value: 'ai', label: 'AI', icon: '🤖', gradient: 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%)', glowColor: '#7C3AED' },
+  { value: 'mobile-apps', label: 'Mobile Apps', icon: '📱', gradient: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)', glowColor: '#DC2626' },
+  { value: 'tools', label: 'Tools', icon: '🛠️', gradient: 'linear-gradient(135deg, #D97706 0%, #92400E 100%)', glowColor: '#D97706' },
+  { value: 'web-design', label: 'Web Design', icon: '🎨', gradient: 'linear-gradient(135deg, #DB2777 0%, #9D174D 100%)', glowColor: '#DB2777' },
 ]
+
+export const getCategoryGradient = (categoryValue) => {
+  const category = PRODUCT_CATEGORIES.find(cat => cat.value === categoryValue)
+  return category ? category.gradient : 'linear-gradient(135deg, #2563EB 0%, #1E40AF 100%)'
+}
+
+export const getCategoryGlowColor = (categoryValue) => {
+  const category = PRODUCT_CATEGORIES.find(cat => cat.value === categoryValue)
+  return category ? category.glowColor : '#2563EB'
+}
+
+export const getCategoryIcon = (categoryValue) => {
+  const category = PRODUCT_CATEGORIES.find(cat => cat.value === categoryValue)
+  return category ? category.icon : '💻'
+}
 
 export const PRODUCT_STATUSES = ['draft', 'published', 'archived']
 export const PRODUCT_TYPES = ['sale', 'showcase']

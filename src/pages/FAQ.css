@@ -1,5 +1,6 @@
 .faq-page {
   min-height: 60vh;
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 50%, #0f1620 100%);
 }
 
 .faq-hero {
@@ -9,13 +10,14 @@
 
 .faq-hero-title {
   font-size: 44px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 16px;
+  font-weight: 700;
 }
 
 .faq-hero-subtitle {
   font-size: 16px;
-  color: var(--text-secondary);
+  color: #a0aec0;
 }
 
 .faq-list {
@@ -31,20 +33,26 @@
 }
 
 .faq-item {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.8) 0%, rgba(15, 22, 32, 0.9) 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  border-image-slice: 1;
   border-radius: 12px;
   padding: 22px 24px;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .faq-item:hover {
-  border-color: var(--border-hover);
+  border-image: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-image-slice: 1;
 }
 
 .faq-item.open {
-  border-color: var(--color-primary);
+  border-image: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-image-slice: 1;
 }
 
 .faq-question {
@@ -53,19 +61,19 @@
   justify-content: space-between;
   font-size: 15px;
   font-weight: 600;
-  color: var(--text-main);
+  color: #ffffff;
   gap: 16px;
 }
 
 .faq-toggle {
   font-size: 20px;
-  color: var(--color-primary);
+  color: #06b6d4;
   flex-shrink: 0;
 }
 
 .faq-answer {
   margin-top: 16px;
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   line-height: 1.7;
 }

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { webDesignPackages } from '../data/webDesignPackages'
+import { buildOrderLink, getOrderPlanId } from '../data/pricingLookup'
 import './WebDesign.css'
 
 function WebDesign() {
@@ -60,15 +61,24 @@ function WebDesign() {
               </ul>
 
               <Link
-                to="/contact"
-                className={pkg.highlighted ? 'webdesign-btn-primary btn-neon-primary' : 'webdesign-btn-secondary btn-neon-secondary'}
+                to={buildOrderLink(getOrderPlanId({ category: 'web-design', tier: pkg.name }))}
+                className={pkg.highlighted ? 'webdesign-btn-primary' : 'webdesign-btn-secondary'}
+                aria-label="Order Now - Choose web design package"
               >
-                Get Started
+                Order Now
               </Link>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Mobile Sticky CTA */}
+      <div className="mobile-sticky-cta webdesign-mobile-cta">
+        <div className="mobile-sticky-cta-content">
+          <span className="mobile-sticky-cta-info">Choose your web design package</span>
+          <Link to="/contact" className="mobile-sticky-cta-btn">Order Now</Link>
+        </div>
+      </div>
 
       <section className="webdesign-reseller">
         <div className="webdesign-reseller-container">

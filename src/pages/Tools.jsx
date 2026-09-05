@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toolsCategories } from '../data/toolsPackages'
+import { buildOrderLink, getOrderPlanId } from '../data/pricingLookup'
 import './Tools.css'
 
 function Tools() {
@@ -56,10 +57,10 @@ function Tools() {
               </ul>
 
               <Link
-                to="/contact"
-                className={pkg.highlighted ? 'tools-btn-primary btn-neon-primary' : 'tools-btn-secondary btn-neon-secondary'}
+                to={buildOrderLink(getOrderPlanId({ category: 'tools', subService: activeCategory.id, tier: pkg.name }))}
+                className="tools-btn-new"
               >
-                Subscribe
+                Get Started
               </Link>
             </div>
           ))}

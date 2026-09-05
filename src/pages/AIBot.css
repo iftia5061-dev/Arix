@@ -1,5 +1,6 @@
 .aibot-page {
   min-height: 60vh;
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 50%, #0f1620 100%);
 }
 
 .aibot-hero {
@@ -16,22 +17,24 @@
   display: inline-block;
   font-size: 13px;
   font-weight: 600;
-  color: var(--color-primary);
-  background-color: rgba(91, 140, 255, 0.1);
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.1);
   padding: 6px 16px;
   border-radius: 20px;
   margin-bottom: 20px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
 }
 
 .aibot-hero-title {
   font-size: 40px;
   line-height: 1.25;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .aibot-highlight {
-  background: var(--gradient-brand);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 50%, #ec4899 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -39,7 +42,7 @@
 
 .aibot-hero-subtitle {
   font-size: 15px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   line-height: 1.6;
   margin-bottom: 32px;
 }
@@ -47,29 +50,32 @@
 .aibot-hero-btn {
   display: inline-block;
   padding: 14px 32px;
-  background: var(--gradient-brand);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #0f1620;
   font-size: 15px;
   font-weight: 600;
   border-radius: 10px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
 .aibot-hero-btn:hover {
-  opacity: 0.9;
   transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(6, 182, 212, 0.5);
 }
 
 .aibot-section-title {
   font-size: 30px;
   text-align: center;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 44px;
+  font-weight: 700;
 }
 
 .aibot-packages {
   padding: 60px 24px;
-  background-color: var(--bg-secondary);
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 100%);
 }
 
 .aibot-packages-grid {
@@ -83,23 +89,26 @@
 
 .aibot-card {
   position: relative;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.8) 0%, rgba(15, 22, 32, 0.9) 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  border-image-slice: 1;
   border-radius: 16px;
   padding: 32px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .aibot-card:hover {
   transform: translateY(-6px);
-  border-color: var(--border-hover);
 }
 
 .aibot-card.highlighted {
-  border-color: var(--color-primary);
-  background-color: var(--card-hover);
+  border-image: linear-gradient(135deg, #06b6d4 0%, #a855f7 50%, #ec4899 100%);
+  border-image-slice: 1;
   transform: scale(1.03);
 }
 
@@ -112,8 +121,8 @@
   top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--gradient-brand);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 600;
   padding: 6px 14px;
@@ -123,13 +132,14 @@
 
 .aibot-card-name {
   font-size: 20px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .aibot-card-description {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   line-height: 1.6;
   margin-bottom: 20px;
   min-height: 60px;
@@ -145,19 +155,20 @@
 .aibot-price-bdt {
   font-size: 30px;
   font-weight: 700;
-  color: var(--text-main);
+  color: #06b6d4;
 }
 
 .aibot-price-usd {
   font-size: 13px;
-  color: var(--text-muted);
+  color: #718096;
 }
 
 .aibot-delivery {
   display: inline-block;
   font-size: 12px;
-  color: var(--color-success);
+  color: #10b981;
   margin-bottom: 24px;
+  font-weight: 500;
 }
 
 .aibot-features {
@@ -176,21 +187,43 @@
 }
 
 .aibot-features .feature-yes {
-  color: var(--text-main);
+  color: #ffffff;
 }
 
 .aibot-features .feature-yes span {
-  color: var(--color-success);
+  color: #10b981;
   font-weight: 700;
 }
 
 .aibot-features .feature-no {
-  color: var(--text-muted);
+  color: #718096;
 }
 
 .aibot-features .feature-no span {
-  color: var(--text-muted);
+  color: #718096;
   font-weight: 700;
+}
+
+.aibot-btn-new {
+  display: block;
+  text-align: center;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: #0f1620;
+  color: #ffffff;
+  border: 2px solid #06b6d4;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.aibot-btn-new:hover {
+  background: #06b6d4;
+  color: #0f1620;
+  border-color: #06b6d4;
 }
 
 .aibot-btn-primary,
@@ -201,33 +234,34 @@
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .aibot-btn-primary {
-  background-color: var(--color-primary);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #0f1620;
 }
 
 .aibot-btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #0891b2 0%, #9333ea 100%);
 }
 
 .aibot-btn-secondary {
   background-color: transparent;
-  color: var(--text-main);
-  border: 1px solid var(--border-hover);
+  color: #ffffff;
+  border: 2px solid rgba(6, 182, 212, 0.3);
 }
 
 .aibot-btn-secondary:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.1);
 }
 
 .aibot-reseller {
   padding: 80px 24px 120px;
   text-align: center;
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 100%);
 }
 
 .aibot-reseller-container {
@@ -237,13 +271,14 @@
 
 .aibot-reseller h2 {
   font-size: 26px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 12px;
+  font-weight: 700;
 }
 
 .aibot-reseller p {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   line-height: 1.6;
   margin-bottom: 28px;
 }
@@ -251,17 +286,19 @@
 .aibot-reseller-btn {
   display: inline-block;
   padding: 14px 32px;
-  background: var(--gradient-brand);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  color: #0f1620;
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
 .aibot-reseller-btn:hover {
-  opacity: 0.9;
   transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(6, 182, 212, 0.5);
 }
 
 @media (max-width: 900px) {

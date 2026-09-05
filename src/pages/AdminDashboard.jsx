@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore'
 import { db } from '../firebase'
 import { zipToInlineHtml } from '../utils/zipToHtml'
 import { useAuth } from '../context/authStore'
@@ -8,6 +8,7 @@ import {
   normalizeProduct, PRICING_TYPES, PRODUCT_CATEGORIES, PRODUCT_STATUSES,
   PRODUCT_TYPES, productToForm, slugify,
 } from '../data/productSchema'
+import { formatOrderPlanPrice, orderPlanSeeds } from '../data/pricingLookup'
 import './AdminDashboard.css'
 
 function AdminDashboard() {
@@ -16,6 +17,11 @@ function AdminDashboard() {
   const [products, setProducts] = useState([])
   const [loadingProducts, setLoadingProducts] = useState(false)
   const [ratings, setRatings] = useState([])
+  const [orders, setOrders] = useState([])
+  const [loadingOrders, setLoadingOrders] = useState(false)
+  const [orderPlanIds, setOrderPlanIds] = useState(new Set())
+  const [loadingOrderPlans, setLoadingOrderPlans] = useState(false)
+  const [seedingOrderPlans, setSeedingOrderPlans] = useState(false)
   const [formData, setFormData] = useState(emptyProductForm)
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
@@ -87,6 +93,33 @@ function AdminDashboard() {
     })
   }, [accessStatus])
 
+  useEffect(() => {
+    if (accessStatus !== 'granted') return undefined
+    setLoadingOrders(true)
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'))
+    return onSnapshot(q, (snapshot) => {
+      setOrders(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
+      setLoadingOrders(false)
+    }, (error) => {
+      console.error('Could not load orders:', error)
+      setMessage('Orders could not be loaded. Check the Firestore rules and your admin role.')
+      setLoadingOrders(false)
+    })
+  }, [accessStatus])
+
+  useEffect(() => {
+    if (accessStatus !== 'granted') return undefined
+    setLoadingOrderPlans(true)
+    return onSnapshot(collection(db, 'orderPlans'), (snapshot) => {
+      setOrderPlanIds(new Set(snapshot.docs.map((item) => item.id)))
+      setLoadingOrderPlans(false)
+    }, (error) => {
+      console.error('Could not load order plans:', error)
+      setMessage('Order plans could not be loaded. Check the Firestore rules and your admin role.')
+      setLoadingOrderPlans(false)
+    })
+  }, [accessStatus])
+
   const averageRating = ratings.length > 0
     ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
     : null
@@ -107,6 +140,34 @@ function AdminDashboard() {
     setEditingId(null)
     clearPreviewHtml()
     if (clearMessage) setMessage('')
+  }
+
+  const seedMissingOrderPlans = async () => {
+    const missingPlans = orderPlanSeeds.filter((plan) => !orderPlanIds.has(plan.id))
+    if (missingPlans.length === 0) {
+      setMessage('All current service plans are already saved in the database.')
+      return
+    }
+
+    setSeedingOrderPlans(true)
+    setMessage('')
+    try {
+      const batch = writeBatch(db)
+      missingPlans.forEach((plan) => {
+        batch.set(doc(db, 'orderPlans', plan.id), {
+          ...plan,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        })
+      })
+      await batch.commit()
+      setMessage(`${missingPlans.length} service plans were saved to the database.`)
+    } catch (error) {
+      console.error('Order plan seed error:', error)
+      setMessage('Service plans could not be saved. Check the Firestore rules and try again.')
+    } finally {
+      setSeedingOrderPlans(false)
+    }
   }
 
   const handleSubmit = async (event) => {
@@ -166,6 +227,20 @@ function AdminDashboard() {
     }
   }
 
+  const handleOrderStatusChange = async (order, newStatus) => {
+    try {
+      await setDoc(doc(db, 'orders', order.id), {
+        ...order,
+        status: newStatus,
+        updatedAt: serverTimestamp(),
+      }, { merge: true })
+      setMessage(`Order status updated to "${newStatus}".`)
+    } catch (error) {
+      console.error('Order status update error:', error)
+      setMessage('Order status could not be updated. Check the Firestore rules and try again.')
+    }
+  }
+
   if (!user) return <div className="admin-gate"><h1>Admin access required</h1><p>Sign in with your authorized Google account to manage products.</p><button onClick={loginWithGoogle} className="admin-login-btn">Sign in with Google</button></div>
   if (accessStatus === 'checking') return <div className="admin-gate"><p>Checking admin permission…</p></div>
   if (accessStatus !== 'granted') return <div className="admin-gate"><h1>Access denied</h1><p>{user.email} is not an Orofex admin. An owner must add this user to the Firestore <code>admins</code> collection first.</p></div>
@@ -217,6 +292,17 @@ function AdminDashboard() {
     <section className="admin-list-card">
       <h2>All products ({products.length})</h2>
       {loadingProducts ? <p className="admin-empty">Loading…</p> : products.length === 0 ? <p className="admin-empty">No products yet. Start with a draft and publish when it is ready.</p> : <div className="admin-product-list">{products.map((product) => { const productReadiness = getProductReadiness(product); return <article key={product.id} className="admin-product-item"><div className="admin-product-image">{product.coverImage ? <img src={product.coverImage} alt="" /> : <span>{product.name.slice(0, 2).toUpperCase()}</span>}</div><div className="admin-product-info"><h3>{product.name || 'Untitled product'}</h3><p><span className={`admin-status ${product.status}`}>{product.status}</span> {product.productType === 'showcase' ? 'showcase · Built by Orofex' : `${product.category} · ${formatPrice(product.pricing) || 'No price'}`}</p>{product.status === 'published' && !productReadiness.ready && <small>Not public: {productReadiness.missing.join(', ')}</small>}</div><div className="admin-product-actions"><button type="button" onClick={() => handleEdit(product)}>Edit</button><button type="button" onClick={() => handleDelete(product)} className="admin-delete-btn">Delete</button></div></article> })}</div>}
+    </section>
+
+    <section className="admin-list-card admin-plan-database-card">
+      <h2>Service plan database</h2>
+      <p className="admin-plan-database-copy">{loadingOrderPlans ? 'Checking service plans…' : `${orderPlanIds.size} of ${orderPlanSeeds.length} current service plans are available for verified orders.`}</p>
+      <button type="button" className="admin-plan-sync-btn" onClick={seedMissingOrderPlans} disabled={loadingOrderPlans || seedingOrderPlans}>{seedingOrderPlans ? 'Saving plans…' : 'Save missing service plans'}</button>
+    </section>
+
+    <section className="admin-list-card admin-orders-card">
+      <h2>Orders ({orders.length})</h2>
+      {loadingOrders ? <p className="admin-empty">Loading…</p> : orders.length === 0 ? <p className="admin-empty">No customer orders yet.</p> : <div className="admin-order-list">{orders.map((order) => <article key={order.id} className="admin-order-item"><div className="admin-order-info"><h3>{order.customerName || 'Unnamed customer'}</h3><p>{order.planName ? `${order.categoryLabel} · ${order.planName}` : `${order.categoryLabel || 'Custom project'} · Custom quote`}</p><p>{formatOrderPlanPrice(order)} · {order.timelineDays || '—'} days</p><small>{order.customerEmail || 'No email'} · {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'Just now'}</small></div><div className="admin-order-status-wrapper"><select className="admin-order-status-select" data-status={order.status || 'pending'} value={order.status || 'pending'} onChange={(e) => handleOrderStatusChange(order, e.target.value)}><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></div></article>)}</div>}
     </section>
 
     <section className="admin-list-card">

@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ProductVisual from './ProductVisual'
-import { formatPrice, isSaleProduct, supportsLivePreview } from '../../data/productSchema'
+import { formatPrice, isSaleProduct, supportsLivePreview, getCategoryGradient, getCategoryGlowColor, getCategoryIcon } from '../../data/productSchema'
 import CheckoutButton from '../products/CheckoutButton'
 import DemoAction from '../products/DemoAction'
 import './ProductPreviewModal.css'
 
 function ProductPreviewModal({ product, onClose }) {
-  const [activeImage, setActiveImage] = useState(0)
   const images = product.images.length > 0 ? product.images : [product.coverImage]
-
-  useEffect(() => {
-    setActiveImage(0)
-  }, [product.id])
+  const categoryGradient = getCategoryGradient(product.category)
+  const categoryGlowColor = getCategoryGlowColor(product.category)
+  const categoryIcon = getCategoryIcon(product.category)
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -22,50 +20,38 @@ function ProductPreviewModal({ product, onClose }) {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [onClose])
 
-  const activeProduct = { ...product, coverImage: images[activeImage] || product.coverImage }
+  const activeProduct = { ...product, coverImage: images[0] || product.coverImage }
   const saleProduct = isSaleProduct(product)
   const demoBehavior = saleProduct ? (supportsLivePreview(product) ? 'preview' : null) : 'direct'
 
   return (
     <div className="preview-modal-overlay" onMouseDown={onClose} role="presentation">
-      <section className="preview-modal blur-pop-enter" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title" onMouseDown={(event) => event.stopPropagation()}>
+      <section
+        className="preview-modal blur-pop-enter"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="preview-modal-title"
+        onMouseDown={(event) => event.stopPropagation()}
+        style={{
+          '--category-gradient': categoryGradient,
+          '--category-glow': categoryGlowColor,
+        }}
+      >
         <button className="preview-modal-close" type="button" onClick={onClose} aria-label="Close quick view">×</button>
 
         <div className="preview-modal-media">
           <ProductVisual product={activeProduct} />
         </div>
 
-        {images.length > 1 && (
-          <div className="preview-modal-thumbnails" aria-label="Product screenshots">
-            {images.map((image, index) => (
-              <button
-                type="button"
-                key={image}
-                className={index === activeImage ? 'active' : ''}
-                onClick={() => setActiveImage(index)}
-                aria-label={`Show screenshot ${index + 1}`}
-              >
-                <img src={image} alt="" loading="lazy" decoding="async" />
-              </button>
-            ))}
-          </div>
-        )}
-
         <div className="preview-modal-body">
           <div className="preview-modal-heading">
             <div>
-              <span className="preview-modal-platform">{product.platforms.join(' · ')}</span>
+              <span className="preview-modal-category">{categoryIcon} {product.category}</span>
               <h2 id="preview-modal-title">{product.name}</h2>
             </div>
             <strong>{saleProduct ? formatPrice(product.pricing) : 'Built by Orofex'}</strong>
           </div>
           <p>{product.shortDescription}</p>
-
-          {product.features.length > 0 && (
-            <ul className="preview-modal-features">
-              {product.features.slice(0, 4).map((feature) => <li key={feature}>✓ {feature}</li>)}
-            </ul>
-          )}
 
           <div className="preview-modal-actions">
             {demoBehavior && <DemoAction demoUrl={product.links.demoUrl} previewHtml={product.links.previewHtml} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior={demoBehavior} className="preview-btn-primary" />}

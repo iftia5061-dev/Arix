@@ -1,60 +1,218 @@
 .why-Orofex {
-  padding: 80px 24px;
-  background-color: var(--bg-secondary);
+  padding: var(--section-padding) 24px;
+  background-color: #0B0F1A;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
 }
 
 .why-Orofex-container {
+  position: relative;
+  z-index: 1;
   max-width: 1280px;
   margin: 0 auto;
 }
 
+.why-Orofex-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.why-Orofex-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #06b6d4;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
 .why-Orofex-title {
-  font-size: 32px;
-  text-align: center;
-  color: var(--text-main);
-  margin-bottom: 48px;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 40px;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.why-Orofex-grid {
+.why-Orofex-subtitle {
+  font-size: 16px;
+  color: #a0aec0;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.why-Orofex-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-}
-
-.why-Orofex-card {
-  text-align: center;
-  padding: 32px 24px;
-}
-
-.why-Orofex-icon-wrap {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 18px;
-  display: flex;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
   align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 240, 255, 0.15), rgba(176, 38, 255, 0.08));
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 0 18px rgba(0, 240, 255, 0.15);
-}
-
-.why-Orofex-icon {
-  font-size: 28px;
-}
-
-.why-Orofex-name {
-  font-size: 17px;
-  color: var(--text-main);
-  margin-bottom: 10px;
 }
 
 .why-Orofex-description {
-  font-size: 14px;
-  color: var(--text-secondary);
+  padding: 20px;
+}
+
+.why-Orofex-section-title {
+  font-size: 24px;
+  color: #ffffff;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.why-Orofex-text {
+  font-size: 15px;
+  color: #a0aec0;
   line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.why-Orofex-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.why-Orofex-stat {
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.8) 0%, rgba(15, 22, 32, 0.9) 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #3b82f6 0%, #ec4899 100%);
+  border-image-slice: 1;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.why-Orofex-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #06b6d4;
+  margin-bottom: 8px;
+}
+
+.why-Orofex-stat-label {
+  font-size: 14px;
+  color: #a0aec0;
+  font-weight: 500;
+}
+
+.why-Orofex-values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.why-Orofex-value-card {
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.9) 0%, rgba(15, 22, 32, 0.95) 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #3b82f6 0%, #ec4899 100%);
+  border-image-slice: 1;
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.why-Orofex-values.visible .why-Orofex-value-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.why-Orofex-value-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+  border-radius: 18px;
+  z-index: 0;
+  transition: all 0.4s ease;
+}
+
+.why-Orofex-value-card:hover {
+  transform: translateY(-8px) rotateX(3deg) rotateY(-3deg);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(6, 182, 212, 0.3),
+    inset 0 0 30px rgba(6, 182, 212, 0.1);
+}
+
+.why-Orofex-value-card:hover::before {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+}
+
+.why-Orofex-value-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.why-Orofex-value-title {
+  font-size: 20px;
+  color: #ffffff;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+}
+
+.why-Orofex-value-description {
+  font-size: 15px;
+  color: #a0aec0;
+  line-height: 1.6;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .why-Orofex-content {
+    grid-template-columns: 1fr;
+  }
+
+  .why-Orofex-values {
+    grid-template-columns: 1fr;
+  }
+
+  .why-Orofex-title {
+    font-size: 32px;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

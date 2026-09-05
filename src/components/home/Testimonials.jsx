@@ -1,12 +1,15 @@
 import { testimonials } from '../../data/testimonials'
 import useTilt from '../../hooks/useTilt'
+import useSpotlight from '../../hooks/useSpotlight'
+import { mergeRefs } from '../../utils/mergeRefs'
 import './Testimonials.css'
 
 function TestimonialCard({ item }) {
   const tiltRef = useTilt(4)
+  const spotlightRef = useSpotlight()
 
   return (
-    <div ref={tiltRef} className="testimonial-card glass-panel elevate-hover">
+    <div ref={mergeRefs(tiltRef, spotlightRef)} className="testimonial-card glass-panel elevate-hover">
       <span className="testimonial-quote-mark">"</span>
       <p className="testimonial-quote">{item.quote}</p>
       <div className="testimonial-author">

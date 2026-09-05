@@ -1,38 +1,51 @@
 :root {
   /* Backgrounds (kept for the space animation — do not touch) */
-  --bg-primary: #070A12;
-  --bg-secondary: #0D1220;
-  --bg-footer: #05070D;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-footer: #050505;
 
-  /* --- NEW: Neon Glassmorphism Design System --- */
-  --surface: #0D0D14;
-  --neon-cyan: #00F0FF;
-  --neon-purple: #B026FF;
-  --neon-pink: #FF2E9F;
+  /* --- NEW: Modern Premium Cyber Design System --- */
+  --surface: #0B0F17;
+  --card-bg: #1a2535;
+  --card-hover: #263545;
+  --border-color: #2d3a4a;
+  --border-hover: #3d4a5a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  --accent: #00D8FF;
+  --accent-hover: #00b8e6;
+
+  /* Spacing */
+  --section-padding: 40px;
+  --item-gap: 28px;
+  --border-radius: 20px;
+
+  /* Animations */
+  --transition-duration: 0.3s;
+  --scale-hover: 1.02;
+
+  /* Legacy colors (kept for backward compatibility) */
+  --neon-pink: #FF2D7A;
+  --neon-purple: #A855F7;
+  --neon-blue: #3B82F6;
+  --neon-cyan: #06B6D4;
+  --neon-emerald: #10B981;
+  --neon-violet: #8B5CF6;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-border-hover: rgba(0, 240, 255, 0.5);
+  --glass-border-hover: rgba(168, 85, 247, 0.5);
 
-  /* Gradient using the new accents */
-  --gradient-brand: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-  --gradient-radial-bg: radial-gradient(ellipse at top, rgba(176, 38, 255, 0.15) 0%, transparent 55%);
-
-  /* Cards (old system kept for backward compatibility where not yet migrated) */
-  --card-bg: #111827;
-  --card-hover: #151D2E;
+  /* Gradient using the new premium colors */
+  --gradient-brand: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  --gradient-radial-bg: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.15) 0%, transparent 55%);
 
   /* Brand Colors (old — will be phased out as components migrate) */
-  --color-primary: var(--neon-cyan);
-  --color-secondary: var(--neon-purple);
+  --color-primary: var(--neon-purple);
+  --color-secondary: var(--neon-pink);
 
-  /* Text */
-  --text-main: #F8FAFC;
-  --text-secondary: #A7B0C0;
-  --text-muted: #667085;
-
-  /* Borders */
-  --border-color: #1E293B;
-  --border-hover: #334155;
+  /* Text (legacy) */
+  --text-main: #f5f5f5;
 
   /* Status */
   --color-success: #22C55E;

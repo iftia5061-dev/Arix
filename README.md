@@ -1,6 +1,6 @@
 # ARIX
 
-ARIX is a Firebase Spark-compatible product showcase and storefront. Firebase is used only for Auth and Firestore. Gumroad is the sole payment and digital-delivery provider.
+ARIX is a Firebase Spark-compatible product showcase and storefront. Firebase is used only for Auth and Firestore. Gumroad handles payment and digital delivery for instantly purchasable products.
 
 ## Payment flow
 
@@ -9,6 +9,17 @@ ARIX product → Buy Now → Gumroad product page → customer pays → Gumroad 
 ```
 
 The frontend never calls a payment API, Cloud Function, webhook, or success-page access check. A Buy Now link opens the product's `links.checkoutUrl` in a new tab.
+
+## Custom service orders
+
+```text
+Service plan → Order Now → verified Firestore plan → pending order → Admin Dashboard
+```
+
+- Package links contain only a plan ID; they never contain a price.
+- The Contact page reads the current plan and price from `orderPlans` in Firestore immediately before writing an order.
+- Firestore rules compare every saved plan/price field to that same `orderPlans` document, so a manipulated client or URL cannot change the submitted price.
+- A plain `/contact` request remains a custom quote with no price attached.
 
 ## Product data
 
@@ -23,12 +34,15 @@ All product normalization, validation, form conversion, price formatting, and pu
 
 1. In Firestore, create `admins/{Firebase Auth UID}` with `{ "role": "admin" }`.
 2. Deploy the Firestore rules.
-3. Sign in at `/admin` and add products. Drafts remain private; publishing shows a precise list of missing fields.
-4. Before publishing a sale product, open its Gumroad URL manually and confirm it is the correct product.
+3. Sign in at `/admin` and select **Save missing service plans** once. The action creates the current package records in `orderPlans` without overwriting existing database prices.
+4. Add products. Drafts remain private; publishing shows a precise list of missing fields.
+5. Before publishing a sale product, open its Gumroad URL manually and confirm it is the correct product.
 
 ## Firestore access
 
 - Visitors can read only public products.
+- Visitors can read active service plans and create validated orders and ratings; they cannot read orders.
+- Admins can view all orders and service plans.
 - Admins can list, create, edit, delete, publish, and unpublish all products, including drafts.
 - A signed-in user can access only `users/{uid}` for their own UID.
 

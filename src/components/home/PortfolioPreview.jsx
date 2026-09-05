@@ -1,13 +1,23 @@
 import { Link } from 'react-router-dom'
 import { portfolioItems } from '../../data/portfolio'
 import useTilt from '../../hooks/useTilt'
+import useSpotlight from '../../hooks/useSpotlight'
+import { mergeRefs } from '../../utils/mergeRefs'
 import './PortfolioPreview.css'
 
 function PortfolioCard({ item }) {
   const tiltRef = useTilt(5)
+  const spotlightRef = useSpotlight()
 
   return (
-    <div ref={tiltRef} className="portfolio-card glass-panel glow-hover">
+    <div 
+      ref={mergeRefs(tiltRef, spotlightRef)}
+      className="portfolio-card glass-panel glow-hover"
+      style={{
+        '--portfolio-gradient': item.gradient,
+        '--portfolio-glow': item.glowColor,
+      }}
+    >
       <div className="portfolio-image">{item.image}</div>
       <div className="portfolio-overlay">
         <span className="portfolio-category">{item.category}</span>

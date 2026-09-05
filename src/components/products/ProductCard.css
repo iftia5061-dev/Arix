@@ -1,55 +1,113 @@
-/* --- Neon Glassmorphism upgrade --- */
+/* --- Premium Product Card Design --- */
 .marketplace-product-card {
-  /* glassmorphism base */
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border) !important;
+  background: linear-gradient(135deg, rgba(26, 37, 53, 0.95) 0%, rgba(15, 22, 32, 0.98) 100%);
+  border: 2px solid transparent;
+  border-image: var(--category-gradient);
+  border-image-slice: 1;
+  border-radius: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  border-radius: 16px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.marketplace-product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--category-gradient);
+  opacity: 0.08;
+  border-radius: 18px;
+  z-index: 0;
+  transition: all 0.4s ease;
+}
+
+.marketplace-product-card::after {
+  content: '';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 25px;
+  background: radial-gradient(ellipse at center, var(--category-glow) 0%, transparent 70%);
+  filter: blur(12px);
+  opacity: 0.3;
+  z-index: 0;
+  transition: all 0.4s ease;
 }
 
 .marketplace-product-card:hover {
-  border-color: var(--glass-border-hover) !important;
+  transform: translateY(-10px) rotateX(3deg) rotateY(-3deg);
   box-shadow:
-    0 0 24px rgba(0, 240, 255, 0.15),
-    0 0 48px rgba(176, 38, 255, 0.08);
+    0 20px 50px rgba(0, 0, 0, 0.6),
+    0 0 40px var(--category-glow),
+    inset 0 0 30px var(--category-glow);
+}
+
+.marketplace-product-card:hover::after {
+  bottom: -40px;
+  width: 100%;
+  height: 40px;
+  background: radial-gradient(ellipse at center, var(--category-glow) 0%, transparent 70%);
+  opacity: 0.5;
+}
+
+.marketplace-product-card:hover::before {
+  opacity: 0.15;
 }
 
 .marketplace-product-media {
   position: relative;
   display: block;
   aspect-ratio: 16 / 9;
-  background: var(--bg-secondary);
+  background: linear-gradient(135deg, #1a2535 0%, #0f1620 100%);
   overflow: hidden;
+  transition: transform 0.4s ease;
+}
+
+.marketplace-product-card:hover .marketplace-product-media {
+  transform: scale(1.05) rotate(-5deg) rotateX(5deg);
 }
 
 .marketplace-product-media .product-visual-image {
-  transition: transform .35s ease;
+  transition: transform 0.4s ease;
+  animation: imageFloat 4s ease-in-out infinite;
 }
 
-.marketplace-product-card:hover .marketplace-product-media .product-visual-image {
-  transform: scale(1.03);
+@keyframes imageFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
 }
 
 .marketplace-product-category {
   position: absolute;
   top: 12px;
   left: 12px;
-  padding: 4px 9px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(7, 10, 18, .78);
-  color: var(--text-main);
-  font-size: .68rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  font-size: .75rem;
   font-weight: 700;
   line-height: 1.2;
   text-transform: capitalize;
-  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
+  border: 1px solid var(--category-glow);
+  box-shadow: 0 0 12px var(--category-glow);
 }
 
 .marketplace-product-content {
@@ -57,6 +115,8 @@
   flex: 1;
   flex-direction: column;
   padding: 20px;
+  position: relative;
+  z-index: 10;
 }
 
 .marketplace-product-heading {
@@ -66,13 +126,25 @@
   gap: 12px;
 }
 
-.marketplace-product-heading h3 { font-size: 1.08rem; font-family: var(--font-heading); }
-.marketplace-product-heading h3 a:hover { color: var(--color-primary); }
-.marketplace-product-heading span { color: var(--text-muted); font-size: .72rem; text-align: right; }
+.marketplace-product-heading h3 {
+  font-size: 1.08rem;
+  font-family: var(--font-heading);
+  color: #ffffff;
+}
+
+.marketplace-product-heading h3 a:hover {
+  color: #06b6d4;
+}
+
+.marketplace-product-heading span {
+  color: #718096;
+  font-size: .72rem;
+  text-align: right;
+}
 
 .marketplace-product-content > p {
   margin: 10px 0 18px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   font-size: .875rem;
   line-height: 1.55;
   flex: 1;
@@ -83,35 +155,69 @@
   justify-content: space-between;
   gap: 12px;
   padding-top: 14px;
-  border-top: 1px solid var(--border-color);
-  color: var(--color-primary);
-  font-size: .9rem;
+  border-top: 2px solid var(--category-glow);
+  color: var(--category-glow);
+  font-size: .95rem;
+  font-weight: 700;
 }
 
-.marketplace-product-action-label { color: var(--text-muted); font-size: .75rem; }
+.marketplace-product-action-label {
+  color: #718096;
+  font-size: .75rem;
+}
 
 .marketplace-product-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-top: 16px;
+  position: relative;
+  z-index: 10;
 }
 
 .marketplace-product-actions button,
 .marketplace-product-actions a {
-  padding: 9px 8px;
-  border: 1px solid var(--border-hover);
+  padding: 12px 16px;
+  border: 2px solid #06b6d4;
   border-radius: 8px;
-  color: var(--text-main);
-  font-size: .75rem;
+  color: #ffffff;
+  font-size: .8rem;
   font-weight: 600;
   text-align: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  background: #0f1620;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.marketplace-product-primary-action { grid-column: 1 / -1; background: var(--gradient-brand); border-color: transparent !important; }
 .marketplace-product-actions button:hover,
-.marketplace-product-actions a:nth-child(2):hover { border-color: var(--color-primary); }
+.marketplace-product-actions a:hover {
+  background: #06b6d4;
+  color: #0f1620;
+  border-color: #06b6d4;
+  transform: translateY(-2px);
+}
+
+.marketplace-product-primary-action {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  border-color: transparent !important;
+  color: #0f1620;
+  cursor: pointer;
+  pointer-events: auto;
+  font-weight: 700;
+}
+
+.marketplace-product-primary-action:hover {
+  transform: scale(1.02);
+  background: linear-gradient(135deg, #0891b2 0%, #9333ea 100%);
+}
 
 @media (max-width: 430px) {
-  .marketplace-product-actions { grid-template-columns: 1fr; }
+  .marketplace-product-actions {
+    grid-template-columns: 1fr;
+  }
 }

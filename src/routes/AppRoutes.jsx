@@ -19,6 +19,7 @@ const Terms = lazy(() => import('../pages/Terms'))
 const NotFound = lazy(() => import('../pages/NotFound'))
 const WebDesign = lazy(() => import('../pages/WebDesign'))
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard'))
+const UserDashboard = lazy(() => import('../pages/UserDashboard'))
 const AIBot = lazy(() => import('../pages/AIBot'))
 const Software = lazy(() => import('../pages/Software'))
 const Tools = lazy(() => import('../pages/Tools'))
@@ -32,6 +33,7 @@ function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/web-design" element={<WebDesign />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/ai-bot" element={<AIBot />} />
             <Route path="/software" element={<Software />} />
             <Route path="/tools" element={<Tools />} />

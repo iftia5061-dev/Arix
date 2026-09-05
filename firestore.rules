@@ -2,6 +2,7 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
     function signedIn() {
       return request.auth != null;
     }
@@ -16,58 +17,171 @@ service cloud.firestore {
       return value is string && value.size() > 0;
     }
 
+    function nonEmptyStringAtMost(value, maxLength) {
+      return nonEmptyString(value) && value.size() <= maxLength;
+    }
+
     function hasPublishedContent(data) {
       return data.status == 'published'
         && data.visibility == 'public'
-        && data.keys().hasAll(['name', 'slug', 'productType', 'platforms', 'shortDescription', 'description', 'coverImage', 'features', 'links'])
+        && data.keys().hasAll([
+          'name', 'slug', 'productType', 'platforms',
+          'shortDescription', 'description', 'coverImage',
+          'features', 'links'
+        ])
         && nonEmptyString(data.name)
         && nonEmptyString(data.slug)
         && nonEmptyString(data.shortDescription)
         && nonEmptyString(data.description)
         && nonEmptyString(data.coverImage)
-        && data.platforms is list && data.platforms.size() > 0
-        && data.features is list && data.features.size() > 0
-        && data.links is map
-        // Web, Website and SaaS products need a live demo. Software, tools
-        // and apps use their screenshots, so an empty demo URL is valid.
-        && ((data.category == 'web-design' || data.category == 'saas'
-          || data.platforms.hasAny(['Web', 'web', 'Website', 'website', 'Browser', 'browser']))
-          ? nonEmptyString(data.links.demoUrl)
-          : true);
+        && data.platforms is list
+        && data.platforms.size() > 0
+        && data.features is list
+        && data.features.size() > 0
+        && data.links is map;
     }
 
     function validPublicProduct(data) {
       return hasPublishedContent(data)
         && (
-          (data.productType == 'showcase'
+          (
+            data.productType == 'showcase'
             && !data.keys().hasAny(['pricing', 'gumroad'])
-            && !data.links.keys().hasAny(['checkoutUrl']))
-          || (data.productType == 'sale'
+            && !data.links.keys().hasAny(['checkoutUrl'])
+          )
+          ||
+          (
+            data.productType == 'sale'
             && data.keys().hasAll(['pricing'])
             && data.pricing is map
-            && data.pricing.amount is int && data.pricing.amount > 0
+            && data.pricing.amount is int
+            && data.pricing.amount > 0
             && nonEmptyString(data.pricing.currency)
-            && (data.pricing.type == 'one-time' || data.pricing.type == 'subscription' || data.pricing.type == 'lifetime')
-            && nonEmptyString(data.links.checkoutUrl))
+            && (
+              data.pricing.type == 'one-time'
+              || data.pricing.type == 'subscription'
+              || data.pricing.type == 'lifetime'
+            )
+            && nonEmptyString(data.links.checkoutUrl)
+          )
         );
     }
 
+    function validOrderBase() {
+      return request.resource.data.keys().hasAll([
+          'customerName', 'customerEmail', 'category', 'categoryLabel',
+          'planId', 'planName', 'subService', 'subServiceLabel',
+          'priceAmount', 'priceCurrency', 'priceDisplay', 'billingPeriod',
+          'isStartingAt', 'delivery', 'timelineDays', 'roadmap', 'status',
+          'source', 'createdAt', 'updatedAt'
+        ])
+        && nonEmptyStringAtMost(request.resource.data.customerName, 120)
+        && nonEmptyStringAtMost(request.resource.data.customerEmail, 254)
+        && nonEmptyStringAtMost(request.resource.data.category, 80)
+        && nonEmptyStringAtMost(request.resource.data.categoryLabel, 120)
+        && request.resource.data.timelineDays is int
+        && request.resource.data.timelineDays > 0
+        && request.resource.data.timelineDays <= 3650
+        && nonEmptyStringAtMost(request.resource.data.roadmap, 10000)
+        && request.resource.data.status == 'pending'
+        && request.resource.data.source == 'website';
+    }
+
+    function validPlanOrder() {
+      let plan = get(/databases/$(database)/documents/orderPlans/$(request.resource.data.planId)).data;
+      return plan.active == true
+        && request.resource.data.planName == plan.name
+        && request.resource.data.category == plan.category
+        && request.resource.data.categoryLabel == plan.categoryLabel
+        && request.resource.data.subService == plan.subService
+        && request.resource.data.subServiceLabel == plan.subServiceLabel
+        && request.resource.data.priceAmount == plan.priceAmount
+        && request.resource.data.priceCurrency == plan.priceCurrency
+        && request.resource.data.priceDisplay == plan.priceDisplay
+        && request.resource.data.billingPeriod == plan.billingPeriod
+        && request.resource.data.isStartingAt == plan.isStartingAt
+        && request.resource.data.delivery == plan.delivery;
+    }
+
+    function validCustomOrder() {
+      return request.resource.data.planId == null
+        && request.resource.data.planName == null
+        && request.resource.data.subService == null
+        && request.resource.data.subServiceLabel == null
+        && request.resource.data.priceAmount == null
+        && request.resource.data.priceCurrency == null
+        && request.resource.data.priceDisplay == null
+        && request.resource.data.billingPeriod == null
+        && request.resource.data.isStartingAt == false
+        && request.resource.data.delivery == null;
+    }
+
+    function validNewOrder() {
+      return validOrderBase()
+        && ((request.resource.data.planId is string && validPlanOrder())
+          || validCustomOrder());
+    }
+
     match /products/{productId} {
+
+      // Visitor শুধু public product দেখতে পারবে।
+      // Admin draft, published ও archived সব দেখতে পারবে।
       allow get, list: if resource.data.visibility == 'public' || isAdmin();
+
+      // শুধু admin product add/edit করতে পারবে।
+      // Public product publish করার সময় demo link/preview HTML
+      // আর বাধ্যতামূলক নয়।
       allow create, update: if isAdmin()
-        && (request.resource.data.visibility != 'public' || validPublicProduct(request.resource.data));
+        && (
+          request.resource.data.visibility != 'public'
+          || validPublicProduct(request.resource.data)
+        );
+
       allow delete: if isAdmin();
     }
 
-    // Create this document manually in Firebase Console for each administrator:
-    // admins/{Firebase Auth UID}  { role: 'admin' }
+    // Firebase Console-এ admins/{Firebase Auth UID} document বানান:
+    // { role: "admin" }
     match /admins/{userId} {
       allow get: if signedIn() && request.auth.uid == userId;
       allow create, update, delete: if isAdmin();
     }
 
+    // User শুধু নিজের data access করতে পারবে।
     match /users/{userId} {
-      allow get, create, update, delete: if signedIn() && request.auth.uid == userId;
+      allow get, create, update, delete: if signedIn()
+        && request.auth.uid == userId;
+    }
+
+    // Public site-wide stats (e.g. total signups) — anyone can read,
+    // but a signed-in user can only ever increment it by exactly 1
+    // (never decrease it or change any other field).
+    match /stats/public {
+      allow get: if true;
+
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['signups'])
+        && request.resource.data.signups == resource.data.signups + 1;
+    }
+
+    match /orderPlans/{planId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow create: if validNewOrder();
+      allow get, list: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /ratings/{ratingId} {
+      allow create: if request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5;
+      allow read: if isAdmin();
+      allow update, delete: if false;
     }
   }
 }

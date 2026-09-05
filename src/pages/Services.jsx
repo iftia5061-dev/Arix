@@ -10,12 +10,12 @@ function ServiceDetails({ service }) {
         <span className="service-details-icon" aria-hidden="true">{service.icon}</span>
         <h1>{service.name}</h1>
         <p>{service.description}</p>
-        <Link to="/contact" className="services-cta-btn btn-neon-primary">Get a Quote</Link>
+        <Link to="/contact" className="services-cta-btn btn-neon-primary" aria-label="Get a Quote - Request custom service">Order Now</Link>
       </section>
       <section className="service-details-content">
         <h2>How Orofex can help</h2>
         <p>We plan, design, build, and support a solution around your business goals, users, and workflow.</p>
-        <Link to="/contact" className="service-list-link">Discuss your project →</Link>
+        <Link to="/contact" className="service-list-link">Order Now →</Link>
       </section>
     </main>
   )
@@ -51,7 +51,7 @@ function Services() {
       <section className="services-cta">
         <h2>Have a project in mind?</h2>
         <p>Let&apos;s discuss how Orofex can bring your idea to life.</p>
-        <Link to="/contact" className="services-cta-btn btn-neon-primary">Start a Project</Link>
+        <Link to="/contact" className="services-cta-btn btn-neon-primary">Order Now</Link>
       </section>
     </main>
   )

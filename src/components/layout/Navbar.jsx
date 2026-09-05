@@ -1,11 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/authStore'
 import './Navbar.css'
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { user, loginWithGoogle, logout } = useAuth()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const closeMenu = () => setIsMenuOpen(false)
 
@@ -27,7 +36,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
           <span className="navbar-logo-letter">O</span>
@@ -43,7 +52,8 @@ function Navbar() {
           <li><Link to="/products" onClick={closeMenu}>Products</Link></li>
           <li><Link to="/pricing" onClick={closeMenu}>Pricing</Link></li>
           <li><Link to="/about" onClick={closeMenu}>About</Link></li>
-          <li><Link to="/contact" onClick={closeMenu}>Contact</Link></li>
+          <li><Link to="/contact" onClick={closeMenu} className="navbar-order-link">Order Now</Link></li>
+          {user && <li><Link to="/dashboard" onClick={closeMenu} className="navbar-dashboard-link">My Orders</Link></li>}
 
           <li className="navbar-cta-mobile">
             {user ? (
@@ -66,6 +76,7 @@ function Navbar() {
                   {user.displayName?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
+              <span className="navbar-user-name">{user.displayName || user.email}</span>
               <button onClick={handleLogout} className="navbar-logout-btn">
                 Logout
               </button>

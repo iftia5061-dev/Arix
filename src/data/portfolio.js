@@ -6,6 +6,8 @@ export const portfolioItems = [
     image: '📊',
     description: 'A real-time financial analytics dashboard built for a fintech startup, helping them track revenue, expenses, and forecasts in one place.',
     technologies: ['React', 'Node.js', 'PostgreSQL'],
+    gradient: 'linear-gradient(135deg, #00E58F 0%, #00C2A8 100%)',
+    glowColor: '#00E58F',
   },
   {
     id: 2,
@@ -14,6 +16,8 @@ export const portfolioItems = [
     image: '🛍️',
     description: 'A cross-platform e-commerce mobile app with seamless checkout, order tracking, and personalized recommendations.',
     technologies: ['React Native', 'Node.js', 'MongoDB'],
+    gradient: 'linear-gradient(135deg, #FF8A3E 0%, #FF3E5E 100%)',
+    glowColor: '#FF8A3E',
   },
   {
     id: 3,
@@ -22,6 +26,8 @@ export const portfolioItems = [
     image: '🏥',
     description: 'An AI-powered assistant for a healthcare provider, automating patient intake and answering common medical queries.',
     technologies: ['Python', 'AI/ML', 'FastAPI'],
+    gradient: 'linear-gradient(135deg, #00F0FF 0%, #6C5CE7 100%)',
+    glowColor: '#00F0FF',
   },
   {
     id: 4,
@@ -30,6 +36,8 @@ export const portfolioItems = [
     image: '🎓',
     description: 'An online learning platform with course management, video streaming, and progress tracking for students and instructors.',
     technologies: ['React', 'Node.js', 'AWS'],
+    gradient: 'linear-gradient(135deg, #3E7BFA 0%, #B026FF 100%)',
+    glowColor: '#3E7BFA',
   },
   {
     id: 5,
@@ -38,6 +46,8 @@ export const portfolioItems = [
     image: '💻',
     description: 'A desktop-class invoicing and billing software built for small businesses to manage clients, invoices, and payments in one place.',
     technologies: ['Electron', 'React', 'SQLite'],
+    gradient: 'linear-gradient(135deg, #3E7BFA 0%, #00D4FF 100%)',
+    glowColor: '#3E7BFA',
   },
   {
     id: 6,
@@ -46,6 +56,8 @@ export const portfolioItems = [
     image: '🛠️',
     description: 'A collection of browser-based developer tools for formatting, converting, and debugging code without leaving the tab.',
     technologies: ['React', 'TypeScript', 'Vite'],
+    gradient: 'linear-gradient(135deg, #FFD23E 0%, #FF9F1C 100%)',
+    glowColor: '#FFD23E',
   },
   {
     id: 7,
@@ -54,5 +66,7 @@ export const portfolioItems = [
     image: '🎨',
     description: 'A fully custom, animation-rich marketing website built to elevate a lifestyle brand\'s online presence.',
     technologies: ['React', 'Framer Motion', 'Tailwind'],
+    gradient: 'linear-gradient(135deg, #FF3EA5 0%, #B026FF 100%)',
+    glowColor: '#FF3EA5',
   },
 ]

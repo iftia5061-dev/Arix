@@ -24,7 +24,7 @@
 .admin-form-group small { color: var(--text-muted); font-size: .7rem; line-height: 1.35; }
 .admin-form-group input, .admin-form-group textarea, .admin-form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--glass-border); border-radius: 10px; background: var(--surface); box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), inset -2px -2px 6px rgba(255, 255, 255, 0.02); color: var(--text-main); font: inherit; font-size: .82rem; transition: box-shadow 0.2s ease, border-color 0.2s ease; }
 .admin-form-group textarea { resize: vertical; }
-.admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: 0; border-color: var(--neon-cyan); box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(0, 240, 255, 0.15); }
+.admin-form-group input:focus, .admin-form-group textarea:focus, .admin-form-group select:focus { outline: 0; border-color: var(--gold-accent); box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(212, 175, 55, 0.15); }
 .admin-checkbox { display: flex; align-items: center; gap: 8px; margin: 3px 0 18px; color: var(--text-secondary); font-size: .8rem; }
 .admin-checkbox input { accent-color: var(--color-primary); }
 .admin-submit-btn { width: 100%; padding: 13px; border-radius: 9px; background: var(--gradient-brand); color: var(--text-main); font-weight: 700; }
@@ -51,7 +51,7 @@
 .admin-avg-rating {
   font-size: 14px;
   font-weight: 400;
-  color: var(--neon-cyan, var(--color-primary));
+  color: var(--gold-accent, var(--color-primary));
 }
 
 .admin-rating-list {
@@ -69,7 +69,7 @@
 }
 
 .admin-rating-stars {
-  color: var(--neon-cyan, var(--color-primary));
+  color: var(--gold-accent, var(--color-primary));
   font-size: 16px;
   margin-bottom: 6px;
 }
@@ -83,4 +83,125 @@
 .admin-rating-meta {
   font-size: 11px;
   color: var(--text-muted);
+}
+
+.admin-plan-database-copy {
+  margin: 14px 0;
+  color: var(--text-secondary);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+.admin-plan-sync-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gold-accent, var(--color-primary));
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.admin-plan-sync-btn:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.admin-order-list {
+  display: grid;
+  gap: 11px;
+  margin-top: 20px;
+}
+
+.admin-order-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 11px;
+  background: var(--bg-primary);
+}
+
+.admin-order-info {
+  min-width: 0;
+}
+
+.admin-order-info h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: .87rem;
+}
+
+.admin-order-info p,
+.admin-order-info small {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: .72rem;
+  line-height: 1.35;
+}
+
+.admin-order-status {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, .14);
+  color: var(--color-warning);
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.admin-order-status-wrapper {
+  flex: 0 0 auto;
+}
+
+.admin-order-status-select {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-main);
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-order-status-select:focus {
+  outline: none;
+  border-color: var(--gold-accent);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.admin-order-status-select option {
+  background: var(--surface);
+  color: var(--text-main);
+}
+
+.admin-order-status-select[data-status="pending"] {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.admin-order-status-select[data-status="in-progress"] {
+  border-color: var(--gold-accent);
+  color: var(--gold-accent);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.admin-order-status-select[data-status="completed"] {
+  border-color: var(--color-success);
+  color: var(--color-success);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.admin-order-status-select[data-status="cancelled"] {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background: rgba(239, 68, 68, 0.1);
 }

@@ -1,15 +1,11 @@
 import { Link } from 'react-router-dom'
 import { pricingPlans } from '../data/pricing'
-import useTilt from '../hooks/useTilt'
 import './Pricing.css'
 
 function PricingCard({ plan }) {
-  const tiltRef = useTilt(5)
-
   return (
     <div
-      ref={tiltRef}
-      className={`pricing-card glass-panel elevate-hover ${plan.highlighted ? 'highlighted glow-active' : ''}`}
+      className={`pricing-card glass-panel ${plan.highlighted ? 'highlighted glow-active' : ''}`}
     >
       {plan.highlighted && <span className="pricing-badge">Most Popular</span>}
 
@@ -32,7 +28,8 @@ function PricingCard({ plan }) {
 
       <Link
         to="/contact"
-        className={plan.highlighted ? 'pricing-btn-primary btn-neon-primary' : 'pricing-btn-secondary btn-neon-secondary'}
+        className="pricing-btn-new"
+        aria-label="Get Started - Choose pricing plan"
       >
         Get Started
       </Link>
@@ -59,8 +56,16 @@ function Pricing() {
       </section>
 
       <section className="pricing-faq-note">
-        <p>Have questions about our pricing? <Link to="/contact">Contact us</Link> and we'll help you find the right plan.</p>
+        <p>Have questions about our pricing? <Link to="/contact">Order Now</Link> and we'll help you find the right plan.</p>
       </section>
+
+      {/* Mobile Sticky CTA */}
+      <div className="mobile-sticky-cta pricing-mobile-cta">
+        <div className="mobile-sticky-cta-content">
+          <span className="mobile-sticky-cta-info">Choose your pricing plan</span>
+          <Link to="/contact" className="mobile-sticky-cta-btn">Get Started</Link>
+        </div>
+      </div>
     </div>
   )
 }

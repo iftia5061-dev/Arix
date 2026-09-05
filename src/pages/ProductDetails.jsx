@@ -105,19 +105,59 @@ function ProductDetails() {
         </section>
 
         <div className="product-details-content">
-          <section id="product"><h2>Product</h2><p>{product.description}</p></section>
-          <section id="screenshots" className="product-screenshots-section"><h2>Screenshots</h2><div className="product-screenshots-grid">{images.map((image, index) => <img key={image} src={image} alt={`${product.name} screenshot ${index + 1}`} loading="lazy" decoding="async" />)}</div></section>
-          {product.features.length > 0 && <section id="features"><h2>Features</h2><ul className="product-features-grid">{product.features.map((feature) => <li key={feature}>✓ {feature}</li>)}</ul></section>}
-          <section id="platforms"><h2>Platforms</h2><p>{product.platforms.join(', ')}</p></section>
-          {product.requirements.length > 0 && <section id="requirements"><h2>Requirements</h2><ul className="product-standard-list">{product.requirements.map((requirement) => <li key={requirement}>{requirement}</li>)}</ul></section>}
-          {product.included.length > 0 && <section id="included"><h2>What&apos;s Included</h2><ul className="product-standard-list">{product.included.map((item) => <li key={item}>{item}</li>)}</ul></section>}
-          {product.license && <section id="license"><h2>License</h2><p>{product.license}</p></section>}
-          {saleProduct && <section id="pricing"><h2>Pricing</h2><div className="product-info-grid"><div><p className="product-price-large">{formatPrice(product.pricing)}</p><p>{pricingLabel(product.pricing)}</p></div></div></section>}
-          {product.faq.length > 0 && <section id="faq"><h2>FAQ</h2><div className="product-faq-list">{product.faq.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div></section>}
+          <section id="product" className="detail-section">
+            <h2>About This Product</h2>
+            <p>{product.description}</p>
+          </section>
+          <section id="screenshots" className="product-screenshots-section">
+            <h2>Screenshots</h2>
+            <div className="product-screenshots-grid">{images.map((image, index) => <img key={image} src={image} alt={`${product.name} screenshot ${index + 1}`} loading="lazy" decoding="async" />)}</div>
+          </section>
+          {product.features.length > 0 && <section id="features" className="detail-section">
+            <h2>Key Features</h2>
+            <ul className="product-features-grid">{product.features.map((feature) => <li key={feature}>✓ {feature}</li>)}</ul>
+          </section>}
+          <section id="platforms" className="detail-section">
+            <h2>Supported Platforms</h2>
+            <p>{product.platforms.join(', ')}</p>
+          </section>
+          {product.requirements.length > 0 && <section id="requirements" className="detail-section">
+            <h2>System Requirements</h2>
+            <ul className="product-standard-list">{product.requirements.map((requirement) => <li key={requirement}>{requirement}</li>)}</ul>
+          </section>}
+          {product.included.length > 0 && <section id="included" className="detail-section">
+            <h2>What&apos;s Included</h2>
+            <ul className="product-standard-list">{product.included.map((item) => <li key={item}>{item}</li>)}</ul>
+          </section>}
+          {product.license && <section id="license" className="detail-section">
+            <h2>License Information</h2>
+            <p>{product.license}</p>
+          </section>}
+          {saleProduct && <section id="pricing" className="detail-section">
+            <h2>Pricing Details</h2>
+            <div className="product-info-grid"><div><p className="product-price-large">{formatPrice(product.pricing)}</p><p>{pricingLabel(product.pricing)}</p></div></div>
+          </section>}
+          {product.faq.length > 0 && <section id="faq" className="detail-section">
+            <h2>Frequently Asked Questions</h2>
+            <div className="product-faq-list">{product.faq.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div>
+          </section>}
         </div>
 
         {saleProduct ? <section className="product-buy-panel" id="buy"><div><h2>Ready to use {product.name}?</h2><p>{formatPrice(product.pricing)} · Gumroad securely handles payment and delivery.</p></div><div className="product-details-actions"><CheckoutButton checkoutUrl={product.links.checkoutUrl} className="product-action-primary">Buy Now</CheckoutButton>{livePreviewProduct && <DemoAction demoUrl={product.links.demoUrl} previewHtml={product.links.previewHtml} checkoutUrl={product.links.checkoutUrl} productName={product.name} coverImage={product.coverImage} behavior="preview" className="product-action-secondary" />}</div></section> : <section className="product-buy-panel showcase-panel"><div><h2>Built by Orofex</h2><p>This is a showcase project. It is not available for sale or download.</p></div><DemoAction demoUrl={product.links.demoUrl} productName={product.name} behavior="direct" className="product-action-secondary" /></section>}
       </div>
+
+      {/* Mobile Sticky CTA */}
+      {saleProduct && (
+        <div className="mobile-sticky-cta">
+          <div className="mobile-sticky-cta-content">
+            <div className="mobile-sticky-cta-info">
+              <span className="mobile-sticky-cta-name">{product.name}</span>
+              <span className="mobile-sticky-cta-price">{formatPrice(product.pricing)}</span>
+            </div>
+            <CheckoutButton checkoutUrl={product.links.checkoutUrl} className="mobile-sticky-cta-btn">Buy Now</CheckoutButton>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

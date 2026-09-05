@@ -1,5 +1,7 @@
 .legal-page {
   padding: 100px 24px 120px;
+  background: linear-gradient(180deg, #0f1620 0%, #0B0F1A 50%, #0f1620 100%);
+  min-height: 60vh;
 }
 
 .legal-container {
@@ -9,25 +11,27 @@
 
 .legal-container h1 {
   font-size: 36px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-bottom: 8px;
+  font-weight: 700;
 }
 
 .legal-updated {
   font-size: 13px;
-  color: var(--text-muted);
+  color: #a0aec0;
   margin-bottom: 40px;
 }
 
 .legal-container h2 {
   font-size: 19px;
-  color: var(--text-main);
+  color: #ffffff;
   margin-top: 32px;
   margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .legal-container p {
   font-size: 15px;
-  color: var(--text-secondary);
+  color: #a0aec0;
   line-height: 1.7;
 }
