@@ -19,6 +19,7 @@ function AdminDashboard() {
   const [ratings, setRatings] = useState([])
   const [orders, setOrders] = useState([])
   const [loadingOrders, setLoadingOrders] = useState(false)
+  const [orderSearch, setOrderSearch] = useState('')
   const [orderPlanIds, setOrderPlanIds] = useState(new Set())
   const [loadingOrderPlans, setLoadingOrderPlans] = useState(false)
   const [seedingOrderPlans, setSeedingOrderPlans] = useState(false)
@@ -123,6 +124,18 @@ function AdminDashboard() {
   const averageRating = ratings.length > 0
     ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
     : null
+
+  const filteredOrders = useMemo(() => {
+    const term = orderSearch.trim().toLowerCase()
+    if (!term) return orders
+    return orders.filter((order) => (
+      order.id.toLowerCase().includes(term)
+      || String(order.orderNumber || '').includes(term)
+      || (order.customerName || '').toLowerCase().includes(term)
+      || (order.customerEmail || '').toLowerCase().includes(term)
+      || (order.planName || '').toLowerCase().includes(term)
+    ))
+  }, [orders, orderSearch])
 
   const draftProduct = useMemo(() => formToProduct(formData), [formData])
   const readiness = getProductReadiness(draftProduct)
@@ -311,8 +324,15 @@ function AdminDashboard() {
     </section>
 
     <section className="admin-list-card admin-orders-card">
-      <h2>Orders ({orders.length})</h2>
-      {loadingOrders ? <p className="admin-empty">Loading…</p> : orders.length === 0 ? <p className="admin-empty">No customer orders yet.</p> : <div className="admin-order-list">{orders.map((order) => <article key={order.id} className="admin-order-item"><div className="admin-order-info"><h3>{order.customerName || 'Unnamed customer'}</h3><p>{order.planName ? `${order.categoryLabel} · ${order.planName}` : `${order.categoryLabel || 'Custom project'} · Custom quote`}</p><p>{formatOrderPlanPrice(order)} · {order.timelineDays || '—'} days</p><small>{order.customerEmail || 'No email'} · {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'Just now'}</small></div><div className="admin-order-status-wrapper"><select className="admin-order-status-select" data-status={order.status || 'pending'} value={order.status || 'pending'} onChange={(e) => handleOrderStatusChange(order, e.target.value)}><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><button type="button" onClick={() => handleOrderDelete(order)} className="admin-delete-btn admin-order-delete-btn">Delete</button></div></article>)}</div>}
+      <h2>Orders ({filteredOrders.length}{filteredOrders.length !== orders.length ? ` of ${orders.length}` : ''})</h2>
+      <input
+        type="text"
+        className="admin-order-search"
+        placeholder="Search by name, email, plan, or Order ID…"
+        value={orderSearch}
+        onChange={(e) => setOrderSearch(e.target.value)}
+      />
+      {loadingOrders ? <p className="admin-empty">Loading…</p> : filteredOrders.length === 0 ? <p className="admin-empty">{orders.length === 0 ? 'No customer orders yet.' : 'No orders match your search.'}</p> : <div className="admin-order-list">{filteredOrders.map((order) => <article key={order.id} className="admin-order-item"><div className="admin-order-info"><h3>{order.customerName || 'Unnamed customer'}</h3><p>{order.planName ? `${order.categoryLabel} · ${order.planName}` : `${order.categoryLabel || 'Custom project'} · Custom quote`}</p><p>{formatOrderPlanPrice(order)} · {order.timelineDays || '—'} days</p><small>{order.customerEmail || 'No email'} · {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'Just now'}</small><small className="admin-order-id">ID: {order.orderNumber ? `ORD-${order.orderNumber}` : order.id}</small></div><div className="admin-order-status-wrapper"><select className="admin-order-status-select" data-status={order.status || 'pending'} value={order.status || 'pending'} onChange={(e) => handleOrderStatusChange(order, e.target.value)}><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><button type="button" onClick={() => handleOrderDelete(order)} className="admin-delete-btn admin-order-delete-btn">Delete</button></div></article>)}</div>}
     </section>
 
     <section className="admin-list-card">

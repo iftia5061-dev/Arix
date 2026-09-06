@@ -96,7 +96,7 @@ function UserDashboard() {
                   </div>
                   <div className="user-order-detail-item">
                     <span className="user-order-label">Order ID:</span>
-                    <span className="user-order-value">{order.id}</span>
+                    <span className="user-order-value">{order.orderNumber ? `ORD-${order.orderNumber}` : order.id}</span>
                   </div>
                   <div className="user-order-detail-item">
                     <span className="user-order-label">Date:</span>

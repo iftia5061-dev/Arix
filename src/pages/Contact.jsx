@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import emailjs from '@emailjs/browser'
 import { useSearchParams } from 'react-router-dom'
-import { addDoc, collection, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, doc, getDoc, runTransaction, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from '../context/authStore'
 import { formatOrderPlanPrice } from '../data/pricingLookup'
@@ -170,7 +170,16 @@ function Contact() {
         updatedAt: serverTimestamp(),
       }
 
-      const orderRef = await addDoc(collection(db, 'orders'), order)
+      const orderRef = doc(collection(db, 'orders'))
+      const counterRef = doc(db, 'counters', 'orders')
+
+      const orderNumber = await runTransaction(db, async (transaction) => {
+        const counterSnap = await transaction.get(counterRef)
+        const nextNumber = (counterSnap.data()?.value || 1000) + 1
+        transaction.update(counterRef, { value: nextNumber })
+        transaction.set(orderRef, { ...order, orderNumber: nextNumber })
+        return nextNumber
+      })
 
       try {
         await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
@@ -180,7 +189,7 @@ function Contact() {
           message: order.roadmap || 'No description provided',
           description: order.roadmap || 'No description provided',
           project_details: order.roadmap || 'No description provided',
-          order_id: orderRef.id,
+          order_id: `ORD-${orderNumber}`,
           category: order.categoryLabel,
           plan_name: order.planName || 'Custom quote',
           plan_price: formatOrderPlanPrice(order),

@@ -225,3 +225,15 @@
   background: var(--color-error);
   color: white;
 }
+
+.admin-order-search {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.admin-order-id {
+  display: block;
+  opacity: 0.6;
+  font-size: 0.8em;
+}
