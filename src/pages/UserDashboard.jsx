@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useAuth } from '../context/authStore'
 import { formatOrderPlanPrice } from '../data/pricingLookup'
@@ -20,17 +20,19 @@ function UserDashboard() {
     setLoading(true)
     const q = query(
       collection(db, 'orders'),
+      where('customerId', '==', user.uid),
       orderBy('createdAt', 'desc')
     )
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const userOrders = snapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .filter((order) => order.customerEmail === user.email)
+        .filter((order) => order.status !== 'cancelled')
       setOrders(userOrders)
       setLoading(false)
     }, (error) => {
       console.error('Could not load orders:', error)
+      setOrders([])
       setLoading(false)
     })
 

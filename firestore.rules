@@ -69,7 +69,7 @@ service cloud.firestore {
 
     function validOrderBase() {
       return request.resource.data.keys().hasAll([
-          'customerName', 'customerEmail', 'category', 'categoryLabel',
+          'customerId', 'customerName', 'customerEmail', 'category', 'categoryLabel',
           'planId', 'planName', 'subService', 'subServiceLabel',
           'priceAmount', 'priceCurrency', 'priceDisplay', 'billingPeriod',
           'isStartingAt', 'delivery', 'timelineDays', 'roadmap', 'status',
@@ -171,8 +171,15 @@ service cloud.firestore {
 
     match /orders/{orderId} {
       allow create: if validNewOrder();
-      allow get, list: if isAdmin();
-      allow update: if isAdmin();
+
+      // User তার নিজের orders দেখতে পারবে
+      allow get, list: if isAdmin()
+        || (signedIn() && request.auth.uid == resource.data.customerId);
+
+      // Admin শুধু status এবং updatedAt update করতে পারবে
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']);
+
       allow delete: if isAdmin();
     }
 

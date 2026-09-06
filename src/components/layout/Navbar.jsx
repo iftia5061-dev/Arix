@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/authStore'
 import { debounce } from '../../utils/debounce'
+import WelcomeModal from '../common/WelcomeModal'
 import './Navbar.css'
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const { user, loginWithGoogle, logout } = useAuth()
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false)
+  const { user, isAdmin, loginWithGoogle, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = debounce(() => {
@@ -24,7 +26,7 @@ function Navbar() {
       const { isNewUser } = await loginWithGoogle()
       closeMenu()
       if (isNewUser) {
-        alert('Welcome to Orofex! 🎉 Check your inbox for a welcome email (please check Spam/Promotions folder too).')
+        setShowWelcomeModal(true)
       }
     } catch (error) {
       console.error('Login error:', error)
@@ -53,8 +55,9 @@ function Navbar() {
           <li><Link to="/products" onClick={closeMenu}>Products</Link></li>
           <li><Link to="/pricing" onClick={closeMenu}>Pricing</Link></li>
           <li><Link to="/about" onClick={closeMenu}>About</Link></li>
-          <li><Link to="/contact" onClick={closeMenu} className="navbar-order-link">Order Now</Link></li>
-          {user && <li><Link to="/dashboard" onClick={closeMenu} className="navbar-dashboard-link">My Orders</Link></li>}
+          {!isAdmin && <li><Link to="/contact" onClick={closeMenu} className="navbar-order-link">Order Now</Link></li>}
+          {user && !isAdmin && <li><Link to="/dashboard" onClick={closeMenu} className="navbar-dashboard-link">My Orders</Link></li>}
+          {isAdmin && <li><Link to="/admin" onClick={closeMenu} className="navbar-dashboard-link">Admin Panel</Link></li>}
 
           <li className="navbar-cta-mobile">
             {user ? (
@@ -88,9 +91,9 @@ function Navbar() {
             </button>
           )}
 
-          <Link to="/contact" className="navbar-cta">
+          {!isAdmin && <Link to="/contact" className="navbar-cta">
             Get Started
-          </Link>
+          </Link>}
         </div>
 
         <button
@@ -103,6 +106,8 @@ function Navbar() {
           <span></span>
         </button>
       </div>
+
+      <WelcomeModal isOpen={showWelcomeModal} onClose={() => setShowWelcomeModal(false)} />
     </nav>
   )
 }

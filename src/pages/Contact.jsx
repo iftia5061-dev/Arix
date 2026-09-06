@@ -147,6 +147,7 @@ function Contact() {
       if (!category) throw new Error('Please select what you want to build.')
 
       const order = {
+        customerId: user?.uid || null,
         customerName: formData.name.trim(),
         customerEmail: formData.email.trim(),
         category,

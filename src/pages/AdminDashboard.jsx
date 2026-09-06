@@ -230,7 +230,6 @@ function AdminDashboard() {
   const handleOrderStatusChange = async (order, newStatus) => {
     try {
       await setDoc(doc(db, 'orders', order.id), {
-        ...order,
         status: newStatus,
         updatedAt: serverTimestamp(),
       }, { merge: true })
@@ -238,6 +237,17 @@ function AdminDashboard() {
     } catch (error) {
       console.error('Order status update error:', error)
       setMessage('Order status could not be updated. Check the Firestore rules and try again.')
+    }
+  }
+
+  const handleOrderDelete = async (order) => {
+    if (!window.confirm(`Delete order from ${order.customerName || 'customer'}? This cannot be undone.`)) return
+    try {
+      await deleteDoc(doc(db, 'orders', order.id))
+      setMessage('Order deleted successfully.')
+    } catch (error) {
+      console.error('Order delete error:', error)
+      setMessage('Order could not be deleted. Check the Firestore rules and try again.')
     }
   }
 
@@ -302,7 +312,7 @@ function AdminDashboard() {
 
     <section className="admin-list-card admin-orders-card">
       <h2>Orders ({orders.length})</h2>
-      {loadingOrders ? <p className="admin-empty">Loading…</p> : orders.length === 0 ? <p className="admin-empty">No customer orders yet.</p> : <div className="admin-order-list">{orders.map((order) => <article key={order.id} className="admin-order-item"><div className="admin-order-info"><h3>{order.customerName || 'Unnamed customer'}</h3><p>{order.planName ? `${order.categoryLabel} · ${order.planName}` : `${order.categoryLabel || 'Custom project'} · Custom quote`}</p><p>{formatOrderPlanPrice(order)} · {order.timelineDays || '—'} days</p><small>{order.customerEmail || 'No email'} · {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'Just now'}</small></div><div className="admin-order-status-wrapper"><select className="admin-order-status-select" data-status={order.status || 'pending'} value={order.status || 'pending'} onChange={(e) => handleOrderStatusChange(order, e.target.value)}><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></div></article>)}</div>}
+      {loadingOrders ? <p className="admin-empty">Loading…</p> : orders.length === 0 ? <p className="admin-empty">No customer orders yet.</p> : <div className="admin-order-list">{orders.map((order) => <article key={order.id} className="admin-order-item"><div className="admin-order-info"><h3>{order.customerName || 'Unnamed customer'}</h3><p>{order.planName ? `${order.categoryLabel} · ${order.planName}` : `${order.categoryLabel || 'Custom project'} · Custom quote`}</p><p>{formatOrderPlanPrice(order)} · {order.timelineDays || '—'} days</p><small>{order.customerEmail || 'No email'} · {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'Just now'}</small></div><div className="admin-order-status-wrapper"><select className="admin-order-status-select" data-status={order.status || 'pending'} value={order.status || 'pending'} onChange={(e) => handleOrderStatusChange(order, e.target.value)}><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><button type="button" onClick={() => handleOrderDelete(order)} className="admin-delete-btn admin-order-delete-btn">Delete</button></div></article>)}</div>}
     </section>
 
     <section className="admin-list-card">

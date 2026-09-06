@@ -11,10 +11,24 @@ const EMAILJS_PUBLIC_KEY = 'SKa-nGZ4RnuGbNj3D'
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser)
+
+      if (currentUser) {
+        try {
+          const adminDoc = await getDoc(doc(db, 'admins', currentUser.uid))
+          setIsAdmin(adminDoc.exists() && adminDoc.data()?.role === 'admin')
+        } catch (error) {
+          console.error('Admin check error:', error)
+          setIsAdmin(false)
+        }
+      } else {
+        setIsAdmin(false)
+      }
+
       setLoading(false)
     })
     return unsubscribe
@@ -77,7 +91,7 @@ export function AuthProvider({ children }) {
     await signOut(auth)
   }
 
-  const value = { user, loading, loginWithGoogle, logout }
+  const value = { user, loading, isAdmin, loginWithGoogle, logout }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

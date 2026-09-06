@@ -157,6 +157,9 @@
 
 .admin-order-status-wrapper {
   flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .admin-order-status-select {
@@ -204,4 +207,21 @@
   border-color: var(--color-error);
   color: var(--color-error);
   background: rgba(239, 68, 68, 0.1);
+}
+
+.admin-order-delete-btn {
+  padding: 6px 10px;
+  border: 1px solid var(--color-error);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-error);
+  font-size: .7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-order-delete-btn:hover {
+  background: var(--color-error);
+  color: white;
 }
