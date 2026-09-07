@@ -23,6 +23,11 @@ const UserDashboard = lazy(() => import('../pages/UserDashboard'))
 const AIBot = lazy(() => import('../pages/AIBot'))
 const Software = lazy(() => import('../pages/Software'))
 const Tools = lazy(() => import('../pages/Tools'))
+const SupportDashboard = lazy(() => import('../admin/support/SupportDashboard'))
+const OwnerSettings = lazy(() => import('../admin/support/OwnerSettings'))
+const AdminProducts = lazy(() => import('../admin/products/AdminProducts'))
+const AdminOrders = lazy(() => import('../admin/orders/AdminOrders'))
+const AdminRatings = lazy(() => import('../admin/ratings/AdminRatings'))
 
 function AppRoutes() {
   return (
@@ -33,6 +38,11 @@ function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/web-design" element={<WebDesign />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/admin/ratings" element={<AdminRatings />} />
+            <Route path="/admin/support" element={<SupportDashboard />} />
+            <Route path="/admin/settings" element={<OwnerSettings />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/ai-bot" element={<AIBot />} />
             <Route path="/software" element={<Software />} />

@@ -57,7 +57,7 @@ function Hero() {
       setTitleComplete(true)
       setIsTyping(true)
     }
-  }, [currentWordIndex, currentCharIndex, words])
+  }, [currentWordIndex, currentCharIndex])
 
   useEffect(() => {
     if (isTyping && descriptionCharIndex < descriptionText.length) {
@@ -80,7 +80,7 @@ function Hero() {
       }, 3500)
       return () => clearTimeout(descriptionTimeoutRef.current)
     }
-  }, [descriptionCharIndex, descriptionText, isTyping])
+  }, [descriptionCharIndex, isTyping])
 
   return (
     <section className="hero">

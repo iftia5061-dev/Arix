@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, onSnapshot, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore'
 import { db } from '../firebase'
 import { zipToInlineHtml } from '../utils/zipToHtml'
 import { useAuth } from '../context/authStore'
@@ -8,7 +8,7 @@ import {
   normalizeProduct, PRICING_TYPES, PRODUCT_CATEGORIES, PRODUCT_STATUSES,
   PRODUCT_TYPES, productToForm, slugify,
 } from '../data/productSchema'
-import { formatOrderPlanPrice, orderPlanSeeds } from '../data/pricingLookup'
+import { orderPlanSeeds } from '../data/pricingLookup'
 import './AdminDashboard.css'
 
 function AdminDashboard() {
@@ -16,10 +16,6 @@ function AdminDashboard() {
   const [accessStatus, setAccessStatus] = useState('idle')
   const [products, setProducts] = useState([])
   const [loadingProducts, setLoadingProducts] = useState(false)
-  const [ratings, setRatings] = useState([])
-  const [orders, setOrders] = useState([])
-  const [loadingOrders, setLoadingOrders] = useState(false)
-  const [orderSearch, setOrderSearch] = useState('')
   const [orderPlanIds, setOrderPlanIds] = useState(new Set())
   const [loadingOrderPlans, setLoadingOrderPlans] = useState(false)
   const [seedingOrderPlans, setSeedingOrderPlans] = useState(false)
@@ -27,6 +23,19 @@ function AdminDashboard() {
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
   const [saving, setSaving] = useState(false)
+
+  // Check for edit mode from URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const editId = urlParams.get('edit')
+    if (editId && accessStatus === 'granted') {
+      const productToEdit = products.find(p => p.id === editId)
+      if (productToEdit) {
+        setFormData(productToForm(productToEdit))
+        setEditingId(editId)
+      }
+    }
+  }, [accessStatus, products])
 
   // --- Locked website preview (zip upload) state ---
   const [previewZipStatus, setPreviewZipStatus] = useState('idle') // idle | processing | ready | error
@@ -86,30 +95,6 @@ function AdminDashboard() {
 
   useEffect(() => {
     if (accessStatus !== 'granted') return undefined
-    const q = query(collection(db, 'ratings'), orderBy('createdAt', 'desc'))
-    return onSnapshot(q, (snapshot) => {
-      setRatings(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
-    }, (error) => {
-      console.error('Could not load ratings:', error)
-    })
-  }, [accessStatus])
-
-  useEffect(() => {
-    if (accessStatus !== 'granted') return undefined
-    setLoadingOrders(true)
-    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'))
-    return onSnapshot(q, (snapshot) => {
-      setOrders(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
-      setLoadingOrders(false)
-    }, (error) => {
-      console.error('Could not load orders:', error)
-      setMessage('Orders could not be loaded. Check the Firestore rules and your admin role.')
-      setLoadingOrders(false)
-    })
-  }, [accessStatus])
-
-  useEffect(() => {
-    if (accessStatus !== 'granted') return undefined
     setLoadingOrderPlans(true)
     return onSnapshot(collection(db, 'orderPlans'), (snapshot) => {
       setOrderPlanIds(new Set(snapshot.docs.map((item) => item.id)))
@@ -120,22 +105,6 @@ function AdminDashboard() {
       setLoadingOrderPlans(false)
     })
   }, [accessStatus])
-
-  const averageRating = ratings.length > 0
-    ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
-    : null
-
-  const filteredOrders = useMemo(() => {
-    const term = orderSearch.trim().toLowerCase()
-    if (!term) return orders
-    return orders.filter((order) => (
-      order.id.toLowerCase().includes(term)
-      || String(order.orderNumber || '').includes(term)
-      || (order.customerName || '').toLowerCase().includes(term)
-      || (order.customerEmail || '').toLowerCase().includes(term)
-      || (order.planName || '').toLowerCase().includes(term)
-    ))
-  }, [orders, orderSearch])
 
   const draftProduct = useMemo(() => formToProduct(formData), [formData])
   const readiness = getProductReadiness(draftProduct)
@@ -253,23 +222,20 @@ function AdminDashboard() {
     }
   }
 
-  const handleOrderDelete = async (order) => {
-    if (!window.confirm(`Delete order from ${order.customerName || 'customer'}? This cannot be undone.`)) return
-    try {
-      await deleteDoc(doc(db, 'orders', order.id))
-      setMessage('Order deleted successfully.')
-    } catch (error) {
-      console.error('Order delete error:', error)
-      setMessage('Order could not be deleted. Check the Firestore rules and try again.')
-    }
-  }
-
   if (!user) return <div className="admin-gate"><h1>Admin access required</h1><p>Sign in with your authorized Google account to manage products.</p><button onClick={loginWithGoogle} className="admin-login-btn">Sign in with Google</button></div>
   if (accessStatus === 'checking') return <div className="admin-gate"><p>Checking admin permission…</p></div>
   if (accessStatus !== 'granted') return <div className="admin-gate"><h1>Access denied</h1><p>{user.email} is not an Orofex admin. An owner must add this user to the Firestore <code>admins</code> collection first.</p></div>
 
   return <main className="admin-dashboard"><div className="admin-container">
-    <div className="admin-page-heading"><div><h1>Product management</h1><p>For-sale Web, Website, and SaaS products need a live demo URL or an uploaded homepage zip for the protected preview. For-sale apps, software, and tools use screenshots. Showcase product demo links open the live website directly. Gumroad handles payment and delivery.</p></div><span className="admin-role-badge">Admin</span></div>
+    <div className="admin-page-heading"><div><h1>Add Product</h1><p>Create and edit products for your catalog. Use separate pages to manage your product list, orders, and ratings.</p></div><span className="admin-role-badge">Admin</span></div>
+    <div className="admin-nav">
+      <a href="/admin" className="admin-nav-link active">Add Product</a>
+      <a href="/admin/products" className="admin-nav-link">Products</a>
+      <a href="/admin/orders" className="admin-nav-link">Orders</a>
+      <a href="/admin/ratings" className="admin-nav-link">Ratings</a>
+      <a href="/admin/support" className="admin-nav-link">Support Dashboard</a>
+      <a href="/admin/settings" className="admin-nav-link">Settings</a>
+    </div>
     <div className="admin-layout"><section className="admin-form-card">
       <div className="admin-card-heading"><h2>{editingId ? 'Edit product' : 'Add product'}</h2>{editingId && <button type="button" onClick={resetForm}>Cancel edit</button>}</div>
       {message && <p className="admin-message" role="status">{message}</p>}
@@ -313,7 +279,12 @@ function AdminDashboard() {
     </section>
 
     <section className="admin-list-card">
-      <h2>All products ({products.length})</h2>
+      <div className="admin-list-card-header">
+        <h2>All products ({products.length})</h2>
+        <a href="/admin/products" className="admin-orders-link-btn">
+          View Full Product List →
+        </a>
+      </div>
       {loadingProducts ? <p className="admin-empty">Loading…</p> : products.length === 0 ? <p className="admin-empty">No products yet. Start with a draft and publish when it is ready.</p> : <div className="admin-product-list">{products.map((product) => { const productReadiness = getProductReadiness(product); return <article key={product.id} className="admin-product-item"><div className="admin-product-image">{product.coverImage ? <img src={product.coverImage} alt="" /> : <span>{product.name.slice(0, 2).toUpperCase()}</span>}</div><div className="admin-product-info"><h3>{product.name || 'Untitled product'}</h3><p><span className={`admin-status ${product.status}`}>{product.status}</span> {product.productType === 'showcase' ? 'showcase · Built by Orofex' : `${product.category} · ${formatPrice(product.pricing) || 'No price'}`}</p>{product.status === 'published' && !productReadiness.ready && <small>Not public: {productReadiness.missing.join(', ')}</small>}</div><div className="admin-product-actions"><button type="button" onClick={() => handleEdit(product)}>Edit</button><button type="button" onClick={() => handleDelete(product)} className="admin-delete-btn">Delete</button></div></article> })}</div>}
     </section>
 
@@ -321,35 +292,6 @@ function AdminDashboard() {
       <h2>Service plan database</h2>
       <p className="admin-plan-database-copy">{loadingOrderPlans ? 'Checking service plans…' : `${orderPlanIds.size} of ${orderPlanSeeds.length} current service plans are available for verified orders.`}</p>
       <button type="button" className="admin-plan-sync-btn" onClick={seedMissingOrderPlans} disabled={loadingOrderPlans || seedingOrderPlans}>{seedingOrderPlans ? 'Saving plans…' : 'Save missing service plans'}</button>
-    </section>
-
-    <section className="admin-list-card admin-orders-card">
-      <h2>Orders ({filteredOrders.length}{filteredOrders.length !== orders.length ? ` of ${orders.length}` : ''})</h2>
-      <input
-        type="text"
-        className="admin-order-search"
-        placeholder="Search by name, email, plan, or Order ID…"
-        value={orderSearch}
-        onChange={(e) => setOrderSearch(e.target.value)}
-      />
-      {loadingOrders ? <p className="admin-empty">Loading…</p> : filteredOrders.length === 0 ? <p className="admin-empty">{orders.length === 0 ? 'No customer orders yet.' : 'No orders match your search.'}</p> : <div className="admin-order-list">{filteredOrders.map((order) => <article key={order.id} className="admin-order-item"><div className="admin-order-info"><h3>{order.customerName || 'Unnamed customer'}</h3><p>{order.planName ? `${order.categoryLabel} · ${order.planName}` : `${order.categoryLabel || 'Custom project'} · Custom quote`}</p><p>{formatOrderPlanPrice(order)} · {order.timelineDays || '—'} days</p><small>{order.customerEmail || 'No email'} · {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString() : 'Just now'}</small><small className="admin-order-id">ID: {order.orderNumber ? `ORD-${order.orderNumber}` : order.id}</small></div><div className="admin-order-status-wrapper"><select className="admin-order-status-select" data-status={order.status || 'pending'} value={order.status || 'pending'} onChange={(e) => handleOrderStatusChange(order, e.target.value)}><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><button type="button" onClick={() => handleOrderDelete(order)} className="admin-delete-btn admin-order-delete-btn">Delete</button></div></article>)}</div>}
-    </section>
-
-    <section className="admin-list-card">
-      <h2>Visitor Ratings ({ratings.length}){averageRating && <span className="admin-avg-rating"> · Avg: {averageRating} ★</span>}</h2>
-      {ratings.length === 0 ? (
-        <p className="admin-empty">No ratings yet.</p>
-      ) : (
-        <div className="admin-rating-list">
-          {ratings.map((r) => (
-            <article key={r.id} className="admin-rating-item">
-              <div className="admin-rating-stars">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
-              {r.comment && <p className="admin-rating-comment">{r.comment}</p>}
-              <p className="admin-rating-meta">{r.page} · {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : ''}</p>
-            </article>
-          ))}
-        </div>
-      )}
     </section>
 
     </div>

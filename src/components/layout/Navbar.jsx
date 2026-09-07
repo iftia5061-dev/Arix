@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/authStore'
 import { debounce } from '../../utils/debounce'
 import WelcomeModal from '../common/WelcomeModal'
@@ -9,7 +9,21 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showWelcomeModal, setShowWelcomeModal] = useState(false)
+  const [isAuthReady, setIsAuthReady] = useState(false)
+  const [imageError, setImageError] = useState(false)
   const { user, isAdmin, loginWithGoogle, logout } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // Wait for auth to be ready
+    const checkAuth = () => {
+      setIsAuthReady(true)
+    }
+    
+    // Use a small timeout to ensure auth is initialized
+    const timeout = setTimeout(checkAuth, 100)
+    return () => clearTimeout(timeout)
+  }, [])
 
   useEffect(() => {
     const handleScroll = debounce(() => {
@@ -36,6 +50,12 @@ function Navbar() {
   const handleLogout = async () => {
     await logout()
     closeMenu()
+    navigate('/')
+  }
+
+  const handleNavigation = (path) => {
+    closeMenu()
+    navigate(path)
   }
 
   return (
@@ -51,13 +71,13 @@ function Navbar() {
         </Link>
 
         <ul className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
-          <li><Link to="/" onClick={closeMenu}>Home</Link></li>
-          <li><Link to="/products" onClick={closeMenu}>Products</Link></li>
-          <li><Link to="/pricing" onClick={closeMenu}>Pricing</Link></li>
-          <li><Link to="/about" onClick={closeMenu}>About</Link></li>
-          {!isAdmin && <li><Link to="/contact" onClick={closeMenu} className="navbar-order-link">Order Now</Link></li>}
-          {user && !isAdmin && <li><Link to="/dashboard" onClick={closeMenu} className="navbar-dashboard-link">My Orders</Link></li>}
-          {isAdmin && <li><Link to="/admin" onClick={closeMenu} className="navbar-dashboard-link">Admin Panel</Link></li>}
+          <li><button onClick={() => handleNavigation('/')} className="navbar-link-btn">Home</button></li>
+          <li><button onClick={() => handleNavigation('/products')} className="navbar-link-btn">Products</button></li>
+          <li><button onClick={() => handleNavigation('/pricing')} className="navbar-link-btn">Pricing</button></li>
+          <li><button onClick={() => handleNavigation('/about')} className="navbar-link-btn">About</button></li>
+          {!isAdmin && <li><button onClick={() => handleNavigation('/contact')} className="navbar-link-btn navbar-order-link">Order Now</button></li>}
+          {user && !isAdmin && <li><button onClick={() => handleNavigation('/dashboard')} className="navbar-link-btn navbar-dashboard-link">My Orders</button></li>}
+          {isAdmin && <li><button onClick={() => handleNavigation('/admin')} className="navbar-link-btn navbar-dashboard-link">Admin Panel</button></li>}
 
           <li className="navbar-cta-mobile">
             {user ? (
@@ -73,11 +93,16 @@ function Navbar() {
         <div className="navbar-right">
           {user ? (
             <div className="navbar-user">
-              {user.photoURL ? (
-                <img src={user.photoURL} alt={user.displayName} className="navbar-user-avatar" />
+              {user.photoURL && !imageError ? (
+                <img 
+                  src={user.photoURL} 
+                  alt={user.displayName} 
+                  className="navbar-user-avatar"
+                  onError={() => setImageError(true)}
+                />
               ) : (
                 <div className="navbar-user-avatar navbar-user-avatar-fallback">
-                  {user.displayName?.[0]?.toUpperCase() || '?'}
+                  {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
               <span className="navbar-user-name">{user.displayName || user.email}</span>
@@ -91,9 +116,9 @@ function Navbar() {
             </button>
           )}
 
-          {!isAdmin && <Link to="/contact" className="navbar-cta">
+          {!isAdmin && <button onClick={() => handleNavigation('/contact')} className="navbar-cta">
             Get Started
-          </Link>}
+          </button>}
         </div>
 
         <button

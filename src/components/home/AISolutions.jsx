@@ -40,7 +40,7 @@ function TypingBox({ text, delay = 0 }) {
     if (currentIndex < currentText.length) {
       const typingTimeout = setTimeout(() => {
         setDisplayText(currentText.slice(0, currentIndex + 1))
-        setCurrentIndex(currentIndex + 1)
+        setCurrentIndex(prev => prev + 1)
       }, 50)
       return () => clearTimeout(typingTimeout)
     } else {

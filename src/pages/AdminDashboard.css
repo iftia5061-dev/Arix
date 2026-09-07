@@ -9,12 +9,25 @@
 .admin-page-heading h1 { font-size: clamp(1.8rem, 3vw, 2.4rem); }
 .admin-page-heading p { margin-top: 9px; color: var(--text-secondary); font-size: .9rem; }
 .admin-role-badge { height: fit-content; padding: 5px 10px; border: 1px solid rgba(34, 197, 94, .45); border-radius: 999px; color: var(--color-success); font-size: .75rem; font-weight: 700; }
+.admin-nav { display: flex; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+.admin-nav-link { padding: 8px 16px; border-radius: 8px; color: var(--text-secondary); font-size: .9rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; }
+.admin-nav-link:hover { color: var(--color-primary); background: var(--bg-secondary); }
+.admin-nav-link.active { color: var(--text-main); background: var(--gradient-brand); }
 .admin-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(330px, .75fr); align-items: start; gap: 28px; }
 .admin-form-card, .admin-list-card { padding: 28px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; }
 .admin-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
 .admin-card-heading h2, .admin-list-card h2 { font-size: 1.2rem; }
 .admin-card-heading button { color: var(--text-secondary); font-size: .8rem; }
 .admin-card-heading button:hover { color: var(--color-primary); }
+.admin-list-card-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.admin-list-card-header h2 { font-size: 1.2rem; margin: 0; }
+.admin-orders-link-btn { padding: 8px 16px; border-radius: 8px; background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%); border: 1px solid rgba(6, 182, 212, 0.3); color: #22d3ee; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+.admin-orders-link-btn:hover { background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(168, 85, 247, 0.3) 100%); border-color: rgba(6, 182, 212, 0.5); color: #67e8f9; }
+
+@media (max-width: 768px) {
+  .admin-list-card-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .admin-orders-link-btn { width: 100%; }
+}
 .admin-message, .admin-readiness { margin-bottom: 18px; padding: 10px 12px; border-radius: 8px; color: var(--text-secondary); background: var(--bg-secondary); font-size: .82rem; }
 .admin-readiness { color: #fcd34d; background: rgba(245, 158, 11, .09); }
 .admin-form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }

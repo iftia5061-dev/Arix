@@ -15,7 +15,16 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser)
+      if (currentUser) {
+        // Ensure photoURL is properly set from provider data
+        const photoURL = currentUser.photoURL || currentUser.providerData?.[0]?.photoURL
+        setUser({
+          ...currentUser,
+          photoURL: photoURL
+        })
+      } else {
+        setUser(currentUser)
+      }
 
       if (currentUser) {
         try {
@@ -40,12 +49,15 @@ export function AuthProvider({ children }) {
       const existingUser = await getDoc(userRef)
       const isNewUser = !existingUser.exists()
 
+      // Get photoURL from provider data if not available directly
+      const photoURL = firebaseUser.photoURL || firebaseUser.providerData?.[0]?.photoURL
+
       await setDoc(
         userRef,
         {
           name: firebaseUser.displayName,
           email: firebaseUser.email,
-          photoURL: firebaseUser.photoURL,
+          photoURL: photoURL,
           lastLogin: serverTimestamp(),
           ...(isNewUser && { createdAt: serverTimestamp() }),
         },
@@ -61,10 +73,18 @@ export function AuthProvider({ children }) {
 
   async function loginWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider)
-    const isNewUser = await saveUserToFirestore(result.user)
+    
+    // Ensure photoURL is properly set
+    const firebaseUser = result.user
+    const photoURL = firebaseUser.photoURL || firebaseUser.providerData[0]?.photoURL
+    
+    const isNewUser = await saveUserToFirestore({
+      ...firebaseUser,
+      photoURL: photoURL
+    })
 
     if (isNewUser) {
-      sendWelcomeEmail(result.user)
+      sendWelcomeEmail(firebaseUser)
     }
 
     return { user: result.user, isNewUser }

@@ -13,6 +13,12 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'admin';
     }
 
+    function isOwner() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'owner';
+    }
+
     function nonEmptyString(value) {
       return value is string && value.size() > 0;
     }
@@ -189,6 +195,40 @@ service cloud.firestore {
         && request.resource.data.rating <= 5;
       allow read: if isAdmin();
       allow update, delete: if false;
+    }
+
+    // Support conversations for live chat
+    match /conversations/{conversationId} {
+      // Anyone can create a conversation (customer starts chat)
+      allow create: if true;
+
+      // Admin can read all conversations
+      // Customer can only read their own conversations
+      allow get, list: if isAdmin()
+        || (signedIn() && request.auth.uid == resource.data.customerId);
+
+      // Admin can update conversation state and messages
+      // Customer can only update their own messages
+      allow update: if isAdmin()
+        || (signedIn() && request.auth.uid == resource.data.customerId
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['messages', 'updatedAt']));
+
+      // Only admin can delete conversations
+      allow delete: if isAdmin();
+    }
+
+    // Admin status for live chat availability
+    match /supportSettings/{settingId} {
+      // Public settings can be read by anyone
+      allow get, list: if settingId.startsWith('admin-status-') == false;
+
+      // Main settings document - owner only
+      allow get, list: if isOwner();
+      allow create, update: if isOwner();
+
+      // Admin status documents - admin can read/write their own
+      allow get, list: if isAdmin() || (signedIn() && settingId == 'admin-status-' + request.auth.uid);
+      allow create, update: if isAdmin() || (signedIn() && settingId == 'admin-status-' + request.auth.uid);
     }
   }
 }

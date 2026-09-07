@@ -52,7 +52,7 @@ function CategoryCard({ category, index }) {
     if (currentIndex < currentText.length) {
       const typingTimeout = setTimeout(() => {
         setDisplayText(currentText.slice(0, currentIndex + 1))
-        setCurrentIndex(currentIndex + 1)
+        setCurrentIndex(prev => prev + 1)
       }, 50)
       return () => clearTimeout(typingTimeout)
     } else {
@@ -63,7 +63,7 @@ function CategoryCard({ category, index }) {
       }, 4000)
       return () => clearTimeout(switchTimeout)
     }
-  }, [currentIndex, currentDescIndex, descriptions])
+  }, [currentIndex, currentDescIndex])
 
   return (
     <Link

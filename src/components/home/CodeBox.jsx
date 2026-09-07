@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './CodeBox.css'
 
 const codeSnippets = [
@@ -35,6 +35,7 @@ function CodeBox() {
   const [currentSnippet, setCurrentSnippet] = useState(0)
   const [typedCode, setTypedCode] = useState('')
   const [isTyping, setIsTyping] = useState(true)
+  const currentSnippetRef = useRef(0)
 
   useEffect(() => {
     let timeout
@@ -49,7 +50,8 @@ function CodeBox() {
       } else {
         setIsTyping(false)
         timeout = setTimeout(() => {
-          setCurrentSnippet((prev) => (prev + 1) % codeSnippets.length)
+          currentSnippetRef.current = (currentSnippetRef.current + 1) % codeSnippets.length
+          setCurrentSnippet(currentSnippetRef.current)
           setTypedCode('')
           setIsTyping(true)
         }, 3000)
@@ -61,7 +63,7 @@ function CodeBox() {
     }
 
     return () => clearTimeout(timeout)
-  }, [currentSnippet])
+  }, [isTyping])
 
   const syntaxHighlight = (code) => {
     return code
