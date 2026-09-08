@@ -199,18 +199,21 @@ service cloud.firestore {
 
     // Support conversations for live chat
     match /conversations/{conversationId} {
-      // Anyone can create a conversation (customer starts chat)
+      // Allow conversation creation for both authenticated and anonymous users
       allow create: if true;
 
       // Admin can read all conversations
       // Customer can only read their own conversations
       allow get, list: if isAdmin()
-        || (signedIn() && request.auth.uid == resource.data.customerId);
+        || (signedIn() && request.auth.uid == resource.data.customerId)
+        || (!signedIn() && request.auth == null && resource.data.customerId == 'anonymous');
 
       // Admin can update conversation state and messages
-      // Customer can only update their own messages
+      // Customer can only update their own conversation messages
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == resource.data.customerId
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['messages', 'updatedAt']))
+        || (!signedIn() && request.auth == null && resource.data.customerId == 'anonymous'
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['messages', 'updatedAt']));
 
       // Only admin can delete conversations

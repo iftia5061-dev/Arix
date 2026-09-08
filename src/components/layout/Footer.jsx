@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useScrollAnimation } from '../../hooks/useScrollAnimation'
 import { useAuth } from '../../context/authStore'
@@ -8,11 +8,18 @@ function Footer() {
   const [email, setEmail] = useState('')
   const [ref, isVisible] = useScrollAnimation()
   const { user } = useAuth()
+  const navigate = useNavigate()
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault()
     // Handle newsletter signup logic here
     setEmail('')
+  }
+
+  const handleLinkClick = (e, path) => {
+    e.preventDefault()
+    navigate(path)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -43,32 +50,32 @@ function Footer() {
             <div className="footer-col">
               <h4>Company</h4>
               <ul>
-                <li><Link to="/about">About</Link></li>
-                <li><Link to="/blog">Blog</Link></li>
+                <li><Link to="/about" onClick={(e) => handleLinkClick(e, '/about')}>About</Link></li>
+                <li><Link to="/blog" onClick={(e) => handleLinkClick(e, '/blog')}>Blog</Link></li>
               </ul>
             </div>
 
             <div className="footer-col wide">
               <h4>Explore</h4>
               <ul>
-                <li><Link to="/products">Products</Link></li>
-                <li><Link to="/web-design">Web Design</Link></li>
-                <li><Link to="/ai-bot">AI Bot</Link></li>
-                <li><Link to="/software">Software</Link></li>
-                <li><Link to="/tools">Tools</Link></li>
-                <li><Link to="/services">Services</Link></li>
-                <li><Link to="/ai">AI Solutions</Link></li>
-                <li><Link to="/portfolio">Portfolio</Link></li>
-                <li><Link to="/pricing">Pricing</Link></li>
+                <li><Link to="/products" onClick={(e) => handleLinkClick(e, '/products')}>Products</Link></li>
+                <li><Link to="/web-design" onClick={(e) => handleLinkClick(e, '/web-design')}>Web Design</Link></li>
+                <li><Link to="/ai-bot" onClick={(e) => handleLinkClick(e, '/ai-bot')}>AI Bot</Link></li>
+                <li><Link to="/software" onClick={(e) => handleLinkClick(e, '/software')}>Software</Link></li>
+                <li><Link to="/tools" onClick={(e) => handleLinkClick(e, '/tools')}>Tools</Link></li>
+                <li><Link to="/services" onClick={(e) => handleLinkClick(e, '/services')}>Services</Link></li>
+                <li><Link to="/ai" onClick={(e) => handleLinkClick(e, '/ai')}>AI Solutions</Link></li>
+                <li><Link to="/portfolio" onClick={(e) => handleLinkClick(e, '/portfolio')}>Portfolio</Link></li>
+                <li><Link to="/pricing" onClick={(e) => handleLinkClick(e, '/pricing')}>Pricing</Link></li>
               </ul>
             </div>
 
             <div className="footer-col">
               <h4>Support</h4>
               <ul>
-                <li><Link to="/faq">FAQ</Link></li>
-                <li><Link to="/privacy">Privacy Policy</Link></li>
-                <li><Link to="/terms">Terms of Service</Link></li>
+                <li><Link to="/faq" onClick={(e) => handleLinkClick(e, '/faq')}>FAQ</Link></li>
+                <li><Link to="/privacy" onClick={(e) => handleLinkClick(e, '/privacy')}>Privacy Policy</Link></li>
+                <li><Link to="/terms" onClick={(e) => handleLinkClick(e, '/terms')}>Terms of Service</Link></li>
               </ul>
             </div>
           </div>
@@ -79,10 +86,10 @@ function Footer() {
             <p>&copy; {new Date().getFullYear()} Orofex. All rights reserved.</p>
           </div>
           <div className="footer-bottom-right">
-            <Link to="/privacy" className="footer-bottom-link">Privacy Policy</Link>
-            <Link to="/terms" className="footer-bottom-link">Terms of Service</Link>
+            <Link to="/privacy" onClick={(e) => handleLinkClick(e, '/privacy')} className="footer-bottom-link">Privacy Policy</Link>
+            <Link to="/terms" onClick={(e) => handleLinkClick(e, '/terms')} className="footer-bottom-link">Terms of Service</Link>
             {user?.email === 'iftia5061@gmail.com' && (
-              <Link to="/admin" className="footer-admin-link">Admin</Link>
+              <Link to="/admin" onClick={(e) => handleLinkClick(e, '/admin')} className="footer-admin-link">Admin</Link>
             )}
           </div>
         </div>

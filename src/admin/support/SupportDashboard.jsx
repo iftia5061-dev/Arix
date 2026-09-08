@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../context/authStore'
 import { auth } from '../../firebase'
 import { agentStatus } from '../../support/live/agentStatus'
@@ -14,6 +14,8 @@ function SupportDashboard() {
   const [selectedConversation, setSelectedConversation] = useState(null)
   const [adminMessage, setAdminMessage] = useState('')
   const [loading, setLoading] = useState(true)
+  const allConversationsUnsubscribeRef = useRef(null)
+  const selectedConversationUnsubscribeRef = useRef(null)
 
   useEffect(() => {
     if (!user || !isAdmin) {
@@ -21,17 +23,24 @@ function SupportDashboard() {
       return
     }
 
-    // Load initial status
-    setStatus(agentStatus.getStatus())
+    // Load initial status from Firestore
+    agentStatus.loadOwnStatus().then((loadedStatus) => {
+      setStatus(loadedStatus)
+    })
 
     // Listen to all conversations from Firebase
     const unsubscribe = conversationManager.listenToAllConversations((realConversations) => {
       setConversations(realConversations)
       setLoading(false)
     })
+    
+    allConversationsUnsubscribeRef.current = unsubscribe
 
     return () => {
-      if (unsubscribe) unsubscribe()
+      if (allConversationsUnsubscribeRef.current) {
+        allConversationsUnsubscribeRef.current()
+        allConversationsUnsubscribeRef.current = null
+      }
     }
   }, [user, isAdmin])
 
@@ -62,6 +71,15 @@ function SupportDashboard() {
     await conversationManager.closeConversation(conversationId)
   }
 
+  const handleDeleteConversation = async (conversationId) => {
+    try {
+      await conversationManager.deleteConversation(conversationId)
+      setSelectedConversation(null)
+    } catch (error) {
+      console.error('Error deleting conversation:', error)
+    }
+  }
+
   const handleAdminReply = async () => {
     if (!selectedConversation || !adminMessage.trim()) return
 
@@ -78,16 +96,30 @@ function SupportDashboard() {
   }
 
   const handleSelectConversation = (conversation) => {
+    // Clean up previous listener if exists
+    if (selectedConversationUnsubscribeRef.current) {
+      selectedConversationUnsubscribeRef.current()
+      selectedConversationUnsubscribeRef.current = null
+    }
+
     setSelectedConversation(conversation)
+    setActiveTab('chat') // Automatically switch to chat tab when conversation is selected
     
     // Listen to conversation messages
     const unsubscribe = conversationManager.listenToConversation(conversation.id, (convData) => {
       setSelectedConversation(convData)
     })
 
-    return () => {
-      if (unsubscribe) unsubscribe()
+    selectedConversationUnsubscribeRef.current = unsubscribe
+  }
+
+  const handleCloseChat = () => {
+    // Clean up listener
+    if (selectedConversationUnsubscribeRef.current) {
+      selectedConversationUnsubscribeRef.current()
+      selectedConversationUnsubscribeRef.current = null
     }
+    setSelectedConversation(null)
   }
 
   const getConversationsByState = (state) => {
@@ -229,7 +261,7 @@ function SupportDashboard() {
           <div className="conversation-section">
             <h2>Waiting for Admin ({stats.waiting})</h2>
             {getConversationsByState('waiting-admin').map(conv => (
-              <div key={conv.id} className="conversation-card">
+              <div key={conv.id} className="conversation-card" onClick={() => handleSelectConversation(conv)}>
                 <div className="conversation-details">
                   <div className="conversation-customer">{conv.customerName || 'Anonymous'}</div>
                   <div className="conversation-topic">{conv.topic || 'General Support'}</div>
@@ -239,7 +271,10 @@ function SupportDashboard() {
                 </div>
                 <button
                   className="take-over-button"
-                  onClick={() => handleTakeOver(conv.id)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleTakeOver(conv.id)
+                  }}
                 >
                   Take Over
                 </button>
@@ -253,7 +288,7 @@ function SupportDashboard() {
           <div className="conversation-section">
             <h2>Active Human Chats ({stats.human})</h2>
             {getConversationsByState('human').map(conv => (
-              <div key={conv.id} className="conversation-card active">
+              <div key={conv.id} className="conversation-card active" onClick={() => handleSelectConversation(conv)}>
                 <div className="conversation-details">
                   <div className="conversation-customer">{conv.customerName || 'Anonymous'}</div>
                   <div className="conversation-topic">{conv.topic || 'General Support'}</div>
@@ -263,7 +298,10 @@ function SupportDashboard() {
                 </div>
                 <button
                   className="end-chat-button"
-                  onClick={() => handleEndChat(conv.id)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleEndChat(conv.id)
+                  }}
                 >
                   End Chat
                 </button>
@@ -277,7 +315,7 @@ function SupportDashboard() {
           <div className="conversation-section">
             <h2>AI Handled ({stats.bot})</h2>
             {getConversationsByState('bot').map(conv => (
-              <div key={conv.id} className="conversation-card bot">
+              <div key={conv.id} className="conversation-card bot" onClick={() => handleSelectConversation(conv)}>
                 <div className="conversation-details">
                   <div className="conversation-customer">{conv.customerName || 'Anonymous'}</div>
                   <div className="conversation-topic">{conv.topic || 'General Support'}</div>
@@ -285,12 +323,26 @@ function SupportDashboard() {
                     {conv.updatedAt ? new Date(conv.updatedAt.seconds * 1000).toLocaleString() : 'Unknown'}
                   </div>
                 </div>
-                <button
-                  className="take-over-button"
-                  onClick={() => handleTakeOver(conv.id)}
-                >
-                  Take Over
-                </button>
+                <div className="conversation-actions">
+                  <button
+                    className="take-over-button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleTakeOver(conv.id)
+                    }}
+                  >
+                    Take Over
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteConversation(conv.id)
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
             {getConversationsByState('bot').length === 0 && (
@@ -304,17 +356,20 @@ function SupportDashboard() {
         <div className="dashboard-chat">
           <div className="chat-header">
             <h3>Chat with {selectedConversation.customerName || 'Anonymous'}</h3>
-            <button className="close-chat-button" onClick={() => setSelectedConversation(null)}>
+            <button className="close-chat-button" onClick={handleCloseChat}>
               ×
             </button>
           </div>
           <div className="chat-messages">
-            {selectedConversation.messages && selectedConversation.messages.map((msg, index) => (
+            {selectedConversation.messages && selectedConversation.messages
+              .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+              .map((msg, index) => (
               <div key={index} className={`chat-message ${msg.senderType}`}>
                 <div className="message-sender">
                   {msg.senderType === 'customer' && 'Customer'}
                   {msg.senderType === 'admin' && 'You'}
                   {msg.senderType === 'ai' && 'AI'}
+                  {msg.senderType === 'system' && '⚡ System'}
                 </div>
                 <div className="message-text">{msg.text}</div>
                 <div className="message-time">

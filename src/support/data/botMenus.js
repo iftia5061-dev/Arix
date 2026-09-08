@@ -1,15 +1,6 @@
 import { getCategoryProductsMenu } from './productData'
 
 export const MAIN_MENU_OPTIONS = [
-  { id: 'services', label: '🧩 Our Services', icon: '🧩' },
-  { id: 'products', label: '🛍 Products', icon: '🛍' },
-  { id: 'pricing', label: '💰 Pricing', icon: '💰' },
-  { id: 'demo', label: '👁 Product Demo', icon: '👁' },
-  { id: 'buy', label: '💳 How to Buy', icon: '💳' },
-  { id: 'payment-help', label: '💵 Payment Help', icon: '💵' },
-  { id: 'download', label: '📦 Download Help', icon: '📦' },
-  { id: 'order-support', label: '📋 Order Support', icon: '📋' },
-  { id: 'technical', label: '🛠 Technical Support', icon: '🛠' },
   { id: 'custom', label: '🎨 Custom Project', icon: '🎨' },
   { id: 'faq', label: '❓ FAQ', icon: '❓' },
   { id: 'about', label: 'ℹ️ About OROFEX', icon: 'ℹ️' },

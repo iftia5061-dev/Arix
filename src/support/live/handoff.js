@@ -1,4 +1,5 @@
 import { conversationManager } from './conversationManager'
+import { auth } from '../../firebase'
 
 export class HandoffManager {
   constructor() {
@@ -12,13 +13,27 @@ export class HandoffManager {
 
   async requestHumanSupport() {
     if (!this.conversationId) {
-      // Create conversation if not exists
+      // Only create conversation if user is logged in
+      if (!auth.currentUser) {
+        return {
+          success: false,
+          message: 'Please login to connect with support agents.',
+          state: 'bot'
+        }
+      }
+      
       const result = await conversationManager.createConversation({
         topic: 'Support Request',
         message: 'Customer requested human support'
       })
       if (result.success) {
         this.conversationId = result.conversationId
+      } else {
+        return {
+          success: false,
+          message: 'Failed to create conversation. Please try again.',
+          state: 'bot'
+        }
       }
     }
 

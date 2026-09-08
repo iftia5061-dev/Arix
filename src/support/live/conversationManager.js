@@ -1,11 +1,10 @@
-import { doc, setDoc, getDoc, getDocs, updateDoc, onSnapshot, collection, query, where, orderBy, addDoc, serverTimestamp, arrayUnion } from 'firebase/firestore'
+import { doc, setDoc, getDoc, getDocs, updateDoc, onSnapshot, collection, query, where, orderBy, addDoc, serverTimestamp, arrayUnion, deleteDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { auth } from '../../firebase'
 
 class ConversationManager {
   constructor() {
     this.currentConversationId = null
-    this.unsubscribe = null
   }
 
   // Create a new conversation
@@ -100,12 +99,8 @@ class ConversationManager {
 
   // Listen to conversation updates (realtime)
   listenToConversation(conversationId, callback) {
-    if (this.unsubscribe) {
-      this.unsubscribe()
-    }
-
     const docRef = doc(db, 'conversations', conversationId)
-    this.unsubscribe = onSnapshot(docRef, (doc) => {
+    const unsubscribe = onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         callback({ id: doc.id, ...doc.data() })
       }
@@ -113,21 +108,17 @@ class ConversationManager {
       console.error('Error listening to conversation:', error)
     })
 
-    return this.unsubscribe
+    return unsubscribe
   }
 
   // Get all conversations for admin
   listenToAllConversations(callback) {
-    if (this.unsubscribe) {
-      this.unsubscribe()
-    }
-
     const q = query(
       collection(db, 'conversations'),
       orderBy('updatedAt', 'desc')
     )
 
-    this.unsubscribe = onSnapshot(q, (snapshot) => {
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const conversations = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -137,7 +128,7 @@ class ConversationManager {
       console.error('Error listening to conversations:', error)
     })
 
-    return this.unsubscribe
+    return unsubscribe
   }
 
   // Get customer's conversations
@@ -179,25 +170,51 @@ class ConversationManager {
 
   // Admin joins conversation
   async adminJoinConversation(conversationId, adminId) {
-    return this.updateConversation(conversationId, {
+    const result = await this.updateConversation(conversationId, {
       mode: 'human',
       assignedAdmin: adminId
     })
+    
+    // Send system message to notify user that admin has joined
+    if (result.success) {
+      await this.addMessage(conversationId, {
+        senderId: 'system',
+        senderType: 'system',
+        text: '👨‍💼 A support agent has joined the conversation. You can now send your message!'
+      })
+    }
+    
+    return result
   }
 
   // Admin leaves conversation
   async adminLeaveConversation(conversationId) {
-    return this.updateConversation(conversationId, {
+    const result = await this.updateConversation(conversationId, {
       mode: 'bot',
       assignedAdmin: null
     })
+    
+    // Send system message to notify user that admin has left
+    if (result.success) {
+      await this.addMessage(conversationId, {
+        senderId: 'system',
+        senderType: 'system',
+        text: '⚡ The support agent has left the conversation. Returning to AI bot mode.'
+      })
+    }
+    
+    return result
   }
 
-  // Cleanup
-  cleanup() {
-    if (this.unsubscribe) {
-      this.unsubscribe()
-      this.unsubscribe = null
+  // Delete conversation permanently
+  async deleteConversation(conversationId) {
+    try {
+      const docRef = doc(db, 'conversations', conversationId)
+      await deleteDoc(docRef)
+      return { success: true }
+    } catch (error) {
+      console.error('Error deleting conversation:', error)
+      return { success: false, error: error.message }
     }
   }
 }

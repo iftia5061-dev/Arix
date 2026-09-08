@@ -48,12 +48,20 @@ function OwnerSettings() {
 
     checkOwner()
 
+    // Load THIS admin's real online/away/offline status from Firestore.
+    // (agentStatus.getStatus() alone returns a stale in-memory default
+    // of 'offline' on every page reload — this actually reads what was
+    // last saved.)
+    agentStatus.loadOwnStatus().then((loadedStatus) => {
+      setSettings(prev => ({ ...prev, adminStatus: loadedStatus }))
+    })
+
     // Load settings from Firestore
     const settingsRef = doc(db, 'supportSettings', 'main')
     const unsubscribe = onSnapshot(settingsRef, (doc) => {
       if (doc.exists()) {
         const data = doc.data()
-        setSettings({
+        setSettings(prev => ({
           aiEnabled: data.aiEnabled ?? true,
           aiProvider: data.aiProvider ?? 'openai',
           aiModel: data.aiModel ?? 'gpt-3.5-turbo',
@@ -63,12 +71,15 @@ function OwnerSettings() {
           aiOnlyForComplex: data.aiOnlyForComplex ?? true,
           whatsappNumber: data.whatsappNumber ?? '8801910892757',
           showWhatsAppFallback: data.showWhatsAppFallback ?? true,
-          adminStatus: agentStatus.getStatus(),
+          // Keep whatever real admin status we already loaded above —
+          // don't overwrite it with a stale default every time this
+          // settings document changes.
+          adminStatus: prev.adminStatus,
           autoReplyForWaiting: data.autoReplyForWaiting ?? true,
           conversationTimeout: data.conversationTimeout ?? 30,
           welcomeMessage: data.welcomeMessage ?? '👋 Hello! Welcome to OROFEX Support. How can we help you today?',
           botName: data.botName ?? 'OROFEX AI'
-        })
+        }))
       }
       setLoading(false)
     }, (error) => {

@@ -432,6 +432,28 @@ export async function processTextMessage(text) {
 }
 
 export async function handleAdminHandoff() {
+  // Check if user is logged in
+  const { auth } = await import('../../firebase')
+  if (!auth.currentUser) {
+    const whatsappMessage = getPrefilledSupportMessage({
+      conversationState: 'waiting-admin',
+      currentTopic: 'Support Request',
+      lastQuestion: 'I need help with OROFEX products/services'
+    })
+    
+    return {
+      response: {
+        ...SUPPORT_RESPONSES['login-required'],
+        whatsappUrl: getWhatsAppURL(whatsappMessage)
+      },
+      options: [
+        { id: 'whatsapp', label: '📱 Continue on WhatsApp' },
+        { id: 'main', label: '🏠 Main Menu' }
+      ],
+      context: 'main'
+    }
+  }
+
   // Check if any admin is REALLY available right now (real Firestore check,
   // not just this browser's stale local state).
   const isAnyAdminAvailable = await agentStatus.checkAnyAdminAvailable()
@@ -468,7 +490,7 @@ export async function handleAdminHandoff() {
         { id: 'main', label: '🏠 Main Menu' },
         { id: 'whatsapp', label: '📱 WhatsApp' }
       ],
-      context: 'handoff'
+      context: 'handoff' // Set context to 'handoff' to indicate human mode
     }
   }
 

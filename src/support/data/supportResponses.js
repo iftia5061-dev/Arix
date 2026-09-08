@@ -184,6 +184,13 @@ export const SUPPORT_RESPONSES = {
     type: 'human-handoff',
     category: 'live-chat'
   },
+  'login-required': {
+    title: 'Login Required',
+    message: 'Please login to connect with our support agents. Anonymous users can use the AI bot or WhatsApp for support.',
+    action: 'https://wa.me/8801910892757',
+    type: 'login-required',
+    category: 'live-chat'
+  },
   whatsapp: {
     title: 'WhatsApp Support',
     message: 'You can also reach us on WhatsApp for quick support. Click below to start a WhatsApp conversation.',

@@ -46,6 +46,30 @@ export class AgentStatus {
     return this.status
   }
 
+  // Load THIS admin's own persisted status from Firestore (used on
+  // dashboard mount / refresh, since the in-memory `this.status` above
+  // always starts back at 'offline' on every page load).
+  async loadOwnStatus() {
+    const user = auth.currentUser
+    if (!user) return 'offline'
+
+    try {
+      const docRef = doc(db, 'supportSettings', `admin-status-${user.uid}`)
+      const snap = await getDoc(docRef)
+
+      if (snap.exists()) {
+        this.status = snap.data().status || 'offline'
+      } else {
+        this.status = 'offline'
+      }
+    } catch (error) {
+      console.error('Error loading own admin status:', error)
+      this.status = 'offline'
+    }
+
+    return this.status
+  }
+
   isOnline() {
     return this.status === 'online'
   }

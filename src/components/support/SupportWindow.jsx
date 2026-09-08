@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { auth } from '../../firebase'
 import { useAuth } from '../../context/authStore'
@@ -7,7 +7,7 @@ import SupportMessages from './SupportMessages'
 import SupportInput from './SupportInput'
 import { MAIN_MENU_OPTIONS, SERVICES_MENU, PRODUCTS_MENU, PRICING_MENU, ORDER_SUPPORT_MENU } from '../../support/data/botMenus'
 import { SUPPORT_RESPONSES } from '../../support/data/supportResponses'
-import { handleMainMenuClick, handleSubMenuClick, processTextMessage, isConversationInHumanMode, isConversationWaitingForAdmin } from '../../support/rules/ruleEngine'
+import { handleMainMenuClick, handleSubMenuClick, processTextMessage } from '../../support/rules/ruleEngine'
 import { conversationManager } from '../../support/live/conversationManager'
 import { handoffManager } from '../../support/live/handoff'
 import { getProductBySlug } from '../../support/data/productData'
@@ -23,6 +23,10 @@ function SupportWindow({ isOpen, onClose }) {
   const [isAIThinking, setIsAIThinking] = useState(false)
   const [conversationHistory, setConversationHistory] = useState(['main'])
   const [currentProduct, setCurrentProduct] = useState(null)
+  const [conversationId, setConversationId] = useState(null)
+  const [isInHumanMode, setIsInHumanMode] = useState(false)
+  const unsubscribeRef = useRef(null)
+  const previousHumanModeRef = useRef(false)
 
   // Detect product page context
   useEffect(() => {
@@ -35,9 +39,6 @@ function SupportWindow({ isOpen, onClose }) {
       const productSlug = productMatch[1]
       setCurrentProduct(productSlug)
 
-      // Show a generic greeting immediately, then swap in the real
-      // product name once it loads (falls back to the slug if the
-      // lookup fails, so nothing breaks either way).
       const buildGreeting = (displayName) => ({
         id: 1,
         type: 'bot',
@@ -85,22 +86,99 @@ function SupportWindow({ isOpen, onClose }) {
     }
   }, [isOpen, location.pathname])
 
-  // Auto-create conversation when support opens (only if logged in)
+  // Initialize Firebase conversation and listener - ONLY when in human mode
   useEffect(() => {
-    if (isOpen && !currentProduct && user) {
-      // Create conversation for general support
-      const createConv = async () => {
+    if (isOpen && !currentProduct && user && isInHumanMode) {
+      const initConversation = async () => {
+        // Clean up any existing listener
+        if (unsubscribeRef.current) {
+          unsubscribeRef.current()
+          unsubscribeRef.current = null
+        }
+
         const result = await conversationManager.createConversation({
           topic: 'General Support',
           message: 'Customer opened support chat'
         })
+        
         if (result.success) {
+          setConversationId(result.conversationId)
           handoffManager.setConversationId(result.conversationId)
+          
+          // Setup realtime listener for this conversation
+          const unsubscribe = conversationManager.listenToConversation(result.conversationId, (convData) => {
+            if (convData.messages && convData.messages.length > 0) {
+              // Convert Firebase messages to UI format and sort by timestamp
+              const firebaseMessages = convData.messages
+                .map(msg => ({
+                  id: msg.id,
+                  type: msg.senderType === 'admin' ? 'admin' : msg.senderType === 'ai' ? 'bot' : msg.senderType === 'system' ? 'system' : 'user',
+                  text: msg.text,
+                  timestamp: new Date(msg.timestamp)
+                }))
+                .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+              
+              // Replace local messages with Firebase messages to ensure consistency
+              setMessages(firebaseMessages)
+            }
+            
+            // Sync human mode state from Firebase
+            const newMode = convData.mode === 'human'
+            const wasInHumanModeBefore = previousHumanModeRef.current
+            previousHumanModeRef.current = newMode
+            setIsInHumanMode(newMode)
+            
+            // Only sync Firebase messages when in human mode
+            // In bot mode, keep local messages for bot functionality
+            if (newMode) {
+              const firebaseMessages = convData.messages
+                .map(msg => ({
+                  id: msg.id,
+                  type: msg.senderType === 'admin' ? 'admin' : msg.senderType === 'ai' ? 'bot' : msg.senderType === 'system' ? 'system' : 'user',
+                  text: msg.text,
+                  timestamp: new Date(msg.timestamp)
+                }))
+                .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+              
+              setMessages(firebaseMessages)
+            }
+          })
+          
+          unsubscribeRef.current = unsubscribe
         }
       }
-      createConv()
+      
+      initConversation()
     }
-  }, [isOpen, currentProduct, user])
+
+    // Cleanup function
+    return () => {
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current()
+        unsubscribeRef.current = null
+      }
+    }
+  }, [isOpen, currentProduct, user, isInHumanMode])
+
+  // Remove the duplicate admin handoff effect since we handle it through Firebase listener
+
+  // Cleanup when window closes
+  useEffect(() => {
+    if (!isOpen) {
+      // Cleanup listener
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current()
+        unsubscribeRef.current = null
+      }
+      
+      // Reset all states
+      setMessages([])
+      setConversationId(null)
+      setIsInHumanMode(false)
+      setConversationHistory(['main'])
+      setCurrentContext('main')
+    }
+  }, [isOpen])
 
   const handleBack = () => {
     if (conversationHistory.length > 1) {
@@ -141,6 +219,26 @@ function SupportWindow({ isOpen, onClose }) {
 
     let result
 
+    // Handle special option for returning to AI bot
+    if (optionId === 'return-bot') {
+      setIsInHumanMode(false)
+      setCurrentContext('main')
+      setConversationHistory(['main'])
+      
+      const botMessage = {
+        id: messages.length + 1,
+        type: 'bot',
+        title: 'AI Bot Active',
+        text: 'I\'m the OROFEX AI assistant. How can I help you today?',
+        options: MAIN_MENU_OPTIONS,
+        timestamp: new Date()
+      }
+      
+      setMessages([...messages, botMessage])
+      setIsLoading(false)
+      return
+    }
+
     if (currentContext === 'main') {
       result = await handleMainMenuClick(optionId)
     } else {
@@ -171,10 +269,12 @@ function SupportWindow({ isOpen, onClose }) {
   }
 
   const handleSendMessage = async (text) => {
-    // Check if in human mode - if so, send to Firebase and let admin handle
-    if (isConversationInHumanMode()) {
+    // Check if in human mode or handoff context - if so, send to Firebase and let admin handle
+    if (isInHumanMode || currentContext === 'handoff') {
+      if (!conversationId) return
+
       const userMessage = {
-        id: messages.length + 1,
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         type: 'user',
         text,
         timestamp: new Date()
@@ -183,17 +283,15 @@ function SupportWindow({ isOpen, onClose }) {
       setMessages([...messages, userMessage])
 
       // Send to Firebase
-      const conversationId = handoffManager.getHandoffInfo().conversationId
-      if (conversationId) {
-        await conversationManager.addMessage(conversationId, {
-          senderId: auth.currentUser?.uid || 'anonymous',
-          senderType: 'customer',
-          text
-        })
-      }
+      await conversationManager.addMessage(conversationId, {
+        senderId: auth.currentUser?.uid || 'anonymous',
+        senderType: 'customer',
+        text
+      })
       return
     }
 
+    // Normal bot mode - don't involve Firebase
     const userMessage = {
       id: messages.length + 1,
       type: 'user',
@@ -202,16 +300,6 @@ function SupportWindow({ isOpen, onClose }) {
     }
 
     setMessages([...messages, userMessage])
-
-    // Send to Firebase
-    const conversationId = handoffManager.getHandoffInfo().conversationId
-    if (conversationId) {
-      await conversationManager.addMessage(conversationId, {
-        senderId: auth.currentUser?.uid || 'anonymous',
-        senderType: 'customer',
-        text
-      })
-    }
 
     // Check if AI might be needed (no keyword match)
     const lowerText = text.toLowerCase().trim()
@@ -242,15 +330,6 @@ function SupportWindow({ isOpen, onClose }) {
     }
 
     setMessages([...messages, userMessage, botMessage])
-
-    // Send AI response to Firebase if it was AI-generated
-    if (result.isAI && conversationId) {
-      await conversationManager.addMessage(conversationId, {
-        senderId: 'ai',
-        senderType: 'ai',
-        text: result.response.message
-      })
-    }
   }
 
   if (!isOpen) return null
@@ -259,7 +338,7 @@ function SupportWindow({ isOpen, onClose }) {
     <div className="support-window">
       <SupportHeader onClose={onClose} onBack={handleBack} showBackButton={showBackButton} />
       <SupportMessages messages={messages} onOptionClick={handleOptionClick} isLoading={isLoading} isAIThinking={isAIThinking} />
-      <SupportInput onSend={handleSendMessage} disabled={isConversationInHumanMode()} />
+      <SupportInput onSend={handleSendMessage} disabled={false} />
     </div>
   )
 }
