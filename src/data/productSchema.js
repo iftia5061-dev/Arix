@@ -36,6 +36,7 @@ export const PRODUCT_CATEGORIES = [
   { value: 'mobile-apps', label: 'Mobile Apps', icon: '📱', gradient: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)', glowColor: '#DC2626' },
   { value: 'tools', label: 'Tools', icon: '🛠️', gradient: 'linear-gradient(135deg, #D97706 0%, #92400E 100%)', glowColor: '#D97706' },
   { value: 'web-design', label: 'Web Design', icon: '🎨', gradient: 'linear-gradient(135deg, #DB2777 0%, #9D174D 100%)', glowColor: '#DB2777' },
+  { value: 'website', label: 'Website', icon: '🌐', gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)', glowColor: '#0EA5E9' },
 ]
 
 export const getCategoryGradient = (categoryValue) => {

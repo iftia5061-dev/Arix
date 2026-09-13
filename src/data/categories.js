@@ -27,6 +27,15 @@ export const categories = [
     glowColor: '#00E58F',
   },
   {
+    id: 2,
+    name: 'Website',
+    slug: 'website',
+    icon: '🌐',
+    description: 'Multi-page websites, ready to use or customize',
+    gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)',
+    glowColor: '#0EA5E9',
+  },
+  {
     id: 4,
     name: 'AI',
     slug: 'ai',
