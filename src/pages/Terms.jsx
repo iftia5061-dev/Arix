@@ -44,7 +44,7 @@ function Terms() {
 
         <h2>8. Contact Us</h2>
         <p>
-          For questions regarding these Terms of Service, please contact us at contact@orofex.com.
+          For questions regarding these Terms of Service, please contact us at contactorofex@gmail.com.
         </p>
       </div>
     </div>

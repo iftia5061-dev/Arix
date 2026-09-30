@@ -8,7 +8,7 @@ export const SUPPORT_RESPONSES = {
   },
   contact: {
     title: 'Contact Us',
-    message: 'You can contact us through our contact form, email us at contact@orofex.com, or reach us on WhatsApp. We\'ll get back to you as soon as possible.',
+    message: 'You can contact us through our contact form, email us at contactorofex@gmail.com, or reach us on WhatsApp. We\'ll get back to you as soon as possible.',
     action: 'https://www.orofex.xyz/contact',
     category: 'company'
   },
@@ -164,7 +164,7 @@ export const SUPPORT_RESPONSES = {
   // ===== TECHNICAL SUPPORT =====
   technical: {
     title: 'Technical Support',
-    message: 'For technical issues, please provide details about your problem and we\'ll help you resolve it quickly. You can also email us at contact@orofex.com',
+    message: 'For technical issues, please provide details about your problem and we\'ll help you resolve it quickly. You can also email us at contactorofex@gmail.com',
     action: 'https://www.orofex.xyz/contact',
     category: 'technical-support'
   },

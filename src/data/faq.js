@@ -17,7 +17,7 @@ export const faqs = [
   {
     id: 4,
     question: 'Can I get a refund for my purchase?',
-    answer: 'Refund policies vary by product. Please refer to the specific product page or contact our support team at contact@orofex.com for detailed refund information.',
+    answer: 'Refund policies vary by product. Please refer to the specific product page or contact our support team at contactorofex@gmail.com for detailed refund information.',
   },
   {
     id: 5,
@@ -47,6 +47,6 @@ export const faqs = [
   {
     id: 10,
     question: 'How do I contact Orofex support?',
-    answer: 'You can reach our support team by emailing contact@orofex.com. We typically respond within 24-48 business hours.',
+    answer: 'You can reach our support team by emailing contactorofex@gmail.com. We typically respond within 24-48 business hours.',
   },
 ]

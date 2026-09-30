@@ -34,7 +34,7 @@ function Privacy() {
 
         <h2>6. Contact Us</h2>
         <p>
-          If you have questions about this Privacy Policy, please contact us at contact@orofex.com.
+          If you have questions about this Privacy Policy, please contact us at contactorofex@gmail.com.
         </p>
       </div>
     </div>
